@@ -138,25 +138,40 @@ svg {
 #content svg {
   display: block;
   margin: 0 auto;
-  background-color: #E3ECE0;
+  background: linear-gradient(to bottom, #EDF5EA 0%, #F3F8F0 50%, #EDF5EA 100%);
   width: 100%;
   height: auto;
 }
 
 .outline {
-  fill: #8BAA87;
-  stroke: #6B8E6F;
+  fill: #A5C5A1;
+  stroke: #82A686;
 }
 
 .mesh {
   fill: none;
   stroke-width: 0.5px;
-  stroke: #CCCCCC;
+  stroke: #C8D7C4;
 }
 
 .fade {
-  opacity: 0.3;
-  filter: grayscale(70%);
+  opacity: 0.4;
+  filter: sepia(30%) hue-rotate(60deg) saturate(0.6) brightness(1.1);
+}
+
+/* Park Images */
+image.place {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+image.place:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 8px rgba(130, 166, 134, 0.8));
+}
+
+image.place.fade:hover {
+  filter: sepia(30%) hue-rotate(60deg) saturate(0.6) brightness(1.1) drop-shadow(0 0 8px rgba(130, 166, 134, 0.6));
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -175,13 +190,35 @@ svg {
   will-change: transform;
 }
 
+.tooltip__content {
+  position: relative;
+  display: inline-block;
+  filter: drop-shadow(8px 8px 10px gray);
+}
+
 .tooltip img {
   display: block;
   max-width: min(360px, 90vw);
   max-height: 90vh;
-  width: 150%;
-  height: 150%;
-  filter: drop-shadow(8px 8px 10px gray);
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+}
+
+.tooltip__name {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 }
 
 .tooltip.flip-x {

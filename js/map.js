@@ -86,30 +86,90 @@ Promise.all([
 
   // Create tooltip
   const tooltip = d3.select('body').append('div').attr('class', 'tooltip');
-  const tipImg = tooltip.append('img').attr('alt', 'preview');
+  const tooltipContent = tooltip.append('div').attr('class', 'tooltip__content');
+  const tipImg = tooltipContent.append('img').attr('alt', 'preview');
+  const tipName = tooltipContent.append('div').attr('class', 'tooltip__name');
+
+  // Track touch state for mobile
+  let touchActive = false;
+  let currentTouchTarget = null;
 
   // Add hover handlers
   images
     .on('mouseover', (event, d) => {
-      tipImg.attr('src', `img/np/${d.parkCode}.png`);
-      tooltip.style('display', 'block');
+      if (!touchActive) {
+        tipImg.attr('src', `img/np/${d.parkCode}.png`);
+        tipName.text(d.name);
+        tooltip.style('display', 'block');
+      }
     })
     .on('mousemove', (event) => {
-      const pad = 0;
+      if (!touchActive) {
+        const pad = 0;
+        const tipNode = tooltip.node();
+        const tipW = tipNode.offsetWidth;
+        const tipH = tipNode.offsetHeight;
+
+        let x = event.clientX + pad;
+        let y = event.clientY + pad;
+
+        // Determine whether we need to flip horizontally/vertically
+        const flipX = (x + tipW > window.innerWidth - pad);
+        const flipY = (y + tipH > window.innerHeight - pad);
+
+        // Set CSS variables for positioning
+        tooltip.style('--tx', `${x}px`).style('--ty', `${y}px`);
+        tooltip.classed('flip-x', flipX).classed('flip-y', flipY).style('display', 'block');
+      }
+    })
+    .on('mouseout', () => {
+      if (!touchActive) {
+        tooltip.style('display', 'none');
+      }
+    })
+    .on('touchstart', (event, d) => {
+      event.preventDefault();
+      touchActive = true;
+
+      // If tapping the same element, hide tooltip
+      if (currentTouchTarget === event.currentTarget) {
+        tooltip.style('display', 'none');
+        currentTouchTarget = null;
+        touchActive = false;
+        return;
+      }
+
+      // Show tooltip for new element
+      currentTouchTarget = event.currentTarget;
+      tipImg.attr('src', `img/np/${d.parkCode}.png`);
+      tipName.text(d.name);
+
+      const touch = event.touches[0];
+      const pad = 10;
       const tipNode = tooltip.node();
+
+      // Show tooltip first to get dimensions
+      tooltip.style('display', 'block');
+
       const tipW = tipNode.offsetWidth;
       const tipH = tipNode.offsetHeight;
 
-      let x = event.clientX + pad;
-      let y = event.clientY + pad;
+      let x = touch.clientX + pad;
+      let y = touch.clientY + pad;
 
-      // Determine whether we need to flip horizontally/vertically
       const flipX = (x + tipW > window.innerWidth - pad);
       const flipY = (y + tipH > window.innerHeight - pad);
 
-      // Set CSS variables for positioning
       tooltip.style('--tx', `${x}px`).style('--ty', `${y}px`);
-      tooltip.classed('flip-x', flipX).classed('flip-y', flipY).style('display', 'block');
-    })
-    .on('mouseout', () => tooltip.style('display', 'none'));
+      tooltip.classed('flip-x', flipX).classed('flip-y', flipY);
+    });
+
+  // Hide tooltip when tapping outside
+  d3.select('body').on('touchstart', function(event) {
+    if (!event.target.closest('image.place')) {
+      tooltip.style('display', 'none');
+      currentTouchTarget = null;
+      touchActive = false;
+    }
+  });
 });
