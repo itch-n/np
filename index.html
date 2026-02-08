@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- SEO -->
+  <title>National Parks</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="./favicon.ico" sizes="any"/>
+
+  <!-- Socials -->
+  <meta property="og:title" content="National Parks"/>
+  <meta property="og:description" content="Interactive map visualization of U.S. National Parks"/>
+  <meta property="og:type" content="website"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./css/style.css"/>
+
+  <!-- D3 Libraries -->
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
+  <script src="https://unpkg.com/geo-albers-usa-territories@0.1.0/dist/geo-albers-usa-territories.js"></script>
+
+  <!-- Map Visualization -->
+  <script src="./js/map.js" defer></script>
+</head>
+
+<body>
+
+<header class="top">
+  <div class="top__left">
+    <img class="top__avatar" src="./img/avatar.png" alt="National Parks"/>
+    <span class="top__brand">National Parks</span>
+  </div>
+</header>
+
+<section>
+  <div class="boxed">
+    <div class="wrapper">
+      <div id="content"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <p class="footer-right">
+    🏕️ Trees are dope
+  </p>
+</footer>
+
+</body>
+
+</html>

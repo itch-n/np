@@ -1,0 +1,9 @@
+{
+  "name": "nationalparksviz",
+  "version": "0.0.1",
+  "description": "Interactive map visualization of U.S. National Parks",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8080"
+  }
+}

@@ -1,0 +1,380 @@
+[
+  {
+    "name": "Acadia National Park",
+    "parkCode": "acad",
+    "latitude": "44.409286",
+    "longitude": "-68.247501"
+  },
+  {
+    "name": "Arches National Park",
+    "parkCode": "arch",
+    "latitude": "38.72261844",
+    "longitude": "-109.5863666"
+  },
+  {
+    "name": "Badlands National Park",
+    "parkCode": "badl",
+    "latitude": "43.68584846",
+    "longitude": "-102.482942"
+  },
+  {
+    "name": "Big Bend National Park",
+    "parkCode": "bibe",
+    "latitude": "29.29817767",
+    "longitude": "-103.2297897"
+  },
+  {
+    "name": "Biscayne National Park",
+    "parkCode": "bisc",
+    "latitude": "25.490587",
+    "longitude": "-80.21023851"
+  },
+  {
+    "name": "Black Canyon Of The Gunnison National Park",
+    "parkCode": "blca",
+    "latitude": "38.57779869",
+    "longitude": "-107.7242756"
+  },
+  {
+    "name": "Bryce Canyon National Park",
+    "parkCode": "brca",
+    "latitude": "37.58399144",
+    "longitude": "-112.1826689"
+  },
+  {
+    "name": "Canyonlands National Park",
+    "parkCode": "cany",
+    "latitude": "38.24555783",
+    "longitude": "-109.8801624"
+  },
+  {
+    "name": "Capitol Reef National Park",
+    "parkCode": "care",
+    "latitude": "38.2821653131",
+    "longitude": "-111.247048378"
+  },
+  {
+    "name": "Carlsbad Caverns National Park",
+    "parkCode": "cave",
+    "latitude": "32.14089463",
+    "longitude": "-104.5529688"
+  },
+  {
+    "name": "Channel Islands National Park",
+    "parkCode": "chis",
+    "latitude": "33.98680093",
+    "longitude": "-119.9112735"
+  },
+  {
+    "name": "Congaree National Park",
+    "parkCode": "cong",
+    "latitude": "33.79187523",
+    "longitude": "-80.74867805"
+  },
+  {
+    "name": "Crater Lake National Park",
+    "parkCode": "crla",
+    "latitude": "42.94065854",
+    "longitude": "-122.1338414"
+  },
+  {
+    "name": "Cuyahoga Valley National Park",
+    "parkCode": "cuva",
+    "latitude": "41.26093905",
+    "longitude": "-81.57116722"
+  },
+  {
+    "name": "Death Valley National Park",
+    "parkCode": "deva",
+    "latitude": "36.48753731",
+    "longitude": "-117.134395"
+  },
+  {
+    "name": "Denali National Park & Preserve",
+    "parkCode": "dena",
+    "latitude": "63.29777484",
+    "longitude": "-151.0526568"
+  },
+  {
+    "name": "Dry Tortugas National Park",
+    "parkCode": "drto",
+    "latitude": "24.628741",
+    "longitude": "-82.87319"
+  },
+  {
+    "name": "Everglades National Park",
+    "parkCode": "ever",
+    "latitude": "25.37294225",
+    "longitude": "-80.88200301"
+  },
+  {
+    "name": "Gates Of The Arctic National Park & Preserve",
+    "parkCode": "gaar",
+    "latitude": "67.75961636",
+    "longitude": "-153.2917758"
+  },
+  {
+    "name": "Gateway Arch National Park",
+    "parkCode": "jeff",
+    "latitude": "38.6258069",
+    "longitude": "-90.1892508"
+  },
+  {
+    "name": "Glacier Bay National Park & Preserve",
+    "parkCode": "glba",
+    "latitude": "58.80086718",
+    "longitude": "-136.8407579"
+  },
+  {
+    "name": "Glacier National Park",
+    "parkCode": "glac",
+    "latitude": "48.68414678",
+    "longitude": "-113.8009306"
+  },
+  {
+    "name": "Grand Canyon National Park",
+    "parkCode": "grca",
+    "latitude": "36.0001165336",
+    "longitude": "-112.121516363"
+  },
+  {
+    "name": "Grand Teton National Park",
+    "parkCode": "grte",
+    "latitude": "43.81853565",
+    "longitude": "-110.7054666"
+  },
+  {
+    "name": "Great Basin National Park",
+    "parkCode": "grba",
+    "latitude": "38.94617378",
+    "longitude": "-114.2579782"
+  },
+  {
+    "name": "Great Sand Dunes National Park & Preserve",
+    "parkCode": "grsa",
+    "latitude": "37.79256812",
+    "longitude": "-105.5919572"
+  },
+  {
+    "name": "Great Smoky Mountains National Park",
+    "parkCode": "grsm",
+    "latitude": "35.60116374",
+    "longitude": "-83.50818326"
+  },
+  {
+    "name": "Guadalupe Mountains National Park",
+    "parkCode": "gumo",
+    "latitude": "31.92304462",
+    "longitude": "-104.885527"
+  },
+  {
+    "name": "Haleakalā National Park",
+    "parkCode": "hale",
+    "latitude": "20.70693015",
+    "longitude": "-156.1591775"
+  },
+  {
+    "name": "Hawaiʻi Volcanoes National Park",
+    "parkCode": "havo",
+    "latitude": "19.3355036",
+    "longitude": "-155.4700257"
+  },
+  {
+    "name": "Hot Springs National Park",
+    "parkCode": "hosp",
+    "latitude": "34.52414366",
+    "longitude": "-93.06332936"
+  },
+  {
+    "name": "Indiana Dunes National Park",
+    "parkCode": "indu",
+    "latitude": "41.63765525",
+    "longitude": "-87.09647445"
+  },
+  {
+    "name": "Isle Royale National Park",
+    "parkCode": "isro",
+    "latitude": "48.01145819",
+    "longitude": "-88.82780657"
+  },
+  {
+    "name": "Joshua Tree National Park",
+    "parkCode": "jotr",
+    "latitude": "33.91418525",
+    "longitude": "-115.8398125"
+  },
+  {
+    "name": "Katmai National Park & Preserve",
+    "parkCode": "katm",
+    "latitude": "58.62235668",
+    "longitude": "-155.0126574"
+  },
+  {
+    "name": "Kenai Fjords National Park",
+    "parkCode": "kefj",
+    "latitude": "59.81804414",
+    "longitude": "-150.106502"
+  },
+  {
+    "name": "Kobuk Valley National Park",
+    "parkCode": "kova",
+    "latitude": "67.35631336",
+    "longitude": "-159.2002293"
+  },
+  {
+    "name": "Lake Clark National Park & Preserve",
+    "parkCode": "lacl",
+    "latitude": "60.57405857",
+    "longitude": "-153.55535"
+  },
+  {
+    "name": "Lassen Volcanic National Park",
+    "parkCode": "lavo",
+    "latitude": "40.49354575",
+    "longitude": "-121.4075993"
+  },
+  {
+    "name": "Mammoth Cave National Park",
+    "parkCode": "maca",
+    "latitude": "37.19760458",
+    "longitude": "-86.13090198"
+  },
+  {
+    "name": "Mesa Verde National Park",
+    "parkCode": "meve",
+    "latitude": "37.23908345",
+    "longitude": "-108.4624032"
+  },
+  {
+    "name": "Mount Rainier National Park",
+    "parkCode": "mora",
+    "latitude": "46.86075416",
+    "longitude": "-121.7043885"
+  },
+  {
+    "name": "National Park of American Samoa",
+    "parkCode": "npsa",
+    "latitude": "-14.22865935",
+    "longitude": "-169.8503777"
+  },
+  {
+    "name": "New River Gorge National Park & Preserve",
+    "parkCode": "neri",
+    "latitude": "37.86878554",
+    "longitude": "-80.99956002"
+  },
+  {
+    "name": "North Cascades National Park",
+    "parkCode": "noca",
+    "latitude": "48.71171756",
+    "longitude": "-121.2069423"
+  },
+  {
+    "name": "Olympic National Park",
+    "parkCode": "olym",
+    "latitude": "47.80392754",
+    "longitude": "-123.6663848"
+  },
+  {
+    "name": "Petrified Forest National Park",
+    "parkCode": "pefo",
+    "latitude": "34.98387664",
+    "longitude": "-109.7877678"
+  },
+  {
+    "name": "Pinnacles National Park",
+    "parkCode": "pinn",
+    "latitude": "36.49029208",
+    "longitude": "-121.1813607"
+  },
+  {
+    "name": "Redwood National and State Parks",
+    "parkCode": "redw",
+    "latitude": "41.37237268",
+    "longitude": "-124.0318129"
+  },
+  {
+    "name": "Rocky Mountain National Park",
+    "parkCode": "romo",
+    "latitude": "40.3556924",
+    "longitude": "-105.6972879"
+  },
+  {
+    "name": "Saguaro National Park",
+    "parkCode": "sagu",
+    "latitude": "32.20909636",
+    "longitude": "-110.7574974"
+  },
+  {
+    "name": "Kings Canyon National Park",
+    "parkCode": "kica",
+    "latitude": "36.71277299",
+    "longitude": "-118.587429"
+  },
+  {
+    "name": "Sequoia National Park",
+    "parkCode": "sequ",
+    "latitude": "36.71277299",
+    "longitude": "-118.587429"
+  },
+  {
+    "name": "Shenandoah National Park",
+    "parkCode": "shen",
+    "latitude": "38.49236644",
+    "longitude": "-78.46907715"
+  },
+  {
+    "name": "Theodore Roosevelt National Park",
+    "parkCode": "thro",
+    "latitude": "47.17777274",
+    "longitude": "-103.4300083"
+  },
+  {
+    "name": "Virgin Islands National Park",
+    "parkCode": "viis",
+    "latitude": "18.34279656",
+    "longitude": "-64.74194451"
+  },
+  {
+    "name": "Voyageurs National Park",
+    "parkCode": "voya",
+    "latitude": "48.48370609",
+    "longitude": "-92.8382913"
+  },
+  {
+    "name": "White Sands National Park",
+    "parkCode": "whsa",
+    "latitude": "32.77907858",
+    "longitude": "-106.3333461"
+  },
+  {
+    "name": "Wind Cave National Park",
+    "parkCode": "wica",
+    "latitude": "43.58012365",
+    "longitude": "-103.4394709"
+  },
+  {
+    "name": "Wrangell - St Elias National Park & Preserve",
+    "parkCode": "wrst",
+    "latitude": "61.4182147",
+    "longitude": "-142.6028439"
+  },
+  {
+    "name": "Yellowstone National Park",
+    "parkCode": "yell",
+    "latitude": "44.59824417",
+    "longitude": "-110.5471695"
+  },
+  {
+    "name": "Yosemite National Park",
+    "parkCode": "yose",
+    "latitude": "37.84883288",
+    "longitude": "-119.5571873"
+  },
+  {
+    "name": "Zion National Park",
+    "parkCode": "zion",
+    "latitude": "37.29839254",
+    "longitude": "-113.0265138"
+  }
+]
