@@ -4,7 +4,7 @@ const height = 500;
 
 // Featured parks that should be highlighted (not faded)
 const featuredParks = ["bibe", "kica", "sequ", "yose", "jotr", "havo", "hale",
-  "deva", "mora", "glac", "zion", "brca", "care"];
+  "deva", "mora", "glac", "zion", "brca", "care", "sagu"];
 
 // Initialize projection
 const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
@@ -49,7 +49,7 @@ Promise.all([
     if (!coords) return null;
     return {
       ...d,
-      r: 20,
+      r: 25,
       px: coords[0],
       py: coords[1],
       x: coords[0],
@@ -64,7 +64,7 @@ Promise.all([
     .force('collide', d3.forceCollide().radius(d => d.r + 2))
     .stop();
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 5; i++) {
     sim.tick();
   }
 

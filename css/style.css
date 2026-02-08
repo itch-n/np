@@ -138,20 +138,20 @@ svg {
 #content svg {
   display: block;
   margin: 0 auto;
-  background-color: #DCDBDC;
+  background-color: #E3ECE0;
   width: 100%;
   height: auto;
 }
 
 .outline {
-  fill: #FCFCFD;
-  stroke: #ccc;
+  fill: #8BAA87;
+  stroke: #6B8E6F;
 }
 
 .mesh {
   fill: none;
   stroke-width: 0.5px;
-  stroke: #999;
+  stroke: #CCCCCC;
 }
 
 .fade {
