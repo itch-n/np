@@ -6,6 +6,9 @@ const height = 500;
 const featuredParks = ["bibe", "kica", "sequ", "yose", "jotr", "havo", "hale",
   "deva", "mora", "glac", "zion", "brca", "care", "sagu"];
 
+const osParks = ["dena", "gaar", "glba", "katm", "npsa", "hale", "havo",
+  "kefj", "lacl", "wrst", "kova", "viis"];
+
 // Initialize projection
 const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
   .scale(width)
@@ -47,9 +50,10 @@ Promise.all([
   const nodes = places.map(d => {
     const coords = projection([+d.longitude, +d.latitude]);
     if (!coords) return null;
+    radius = (osParks.includes(d.parkCode)) ? 12 : 16;
     return {
       ...d,
-      r: 25,
+      r: radius,
       px: coords[0],
       py: coords[1],
       x: coords[0],
@@ -61,10 +65,10 @@ Promise.all([
   const sim = d3.forceSimulation(nodes)
     .force('x', d3.forceX(d => d.px))
     .force('y', d3.forceY(d => d.py))
-    .force('collide', d3.forceCollide().radius(d => d.r + 2))
+    .force('collide', d3.forceCollide().radius(d => d.r))
     .stop();
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 4; i++) {
     sim.tick();
   }
 
@@ -165,7 +169,7 @@ Promise.all([
     });
 
   // Hide tooltip when tapping outside
-  d3.select('body').on('touchstart', function(event) {
+  d3.select('body').on('touchstart', function (event) {
     if (!event.target.closest('image.place')) {
       tooltip.style('display', 'none');
       currentTouchTarget = null;
