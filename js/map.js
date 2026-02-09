@@ -307,18 +307,33 @@ function setupMouseInteractions(images, tooltip, tipImg, tipName, touchState) {
 function setupTouchInteractions(images, tooltip, tipImg, tipName, touchState) {
   images.on('touchstart', (event, d) => {
     event.preventDefault();
+    event.stopPropagation();
+
     touchState.active = true;
+    const currentImage = d3.select(event.currentTarget);
 
     // Toggle tooltip if tapping same element
     if (touchState.currentTarget === event.currentTarget) {
       hideTooltip(tooltip);
+      currentImage.attr('transform', null); // Remove scale
       touchState.currentTarget = null;
       touchState.active = false;
       return;
     }
 
+    // Reset previous image transform
+    if (touchState.currentTarget) {
+      d3.select(touchState.currentTarget).attr('transform', null);
+    }
+
     // Show tooltip for new element
     touchState.currentTarget = event.currentTarget;
+
+    // Add scale transform for visual feedback
+    const x = +currentImage.attr('x') + (+currentImage.attr('width') / 2);
+    const y = +currentImage.attr('y') + (+currentImage.attr('height') / 2);
+    currentImage.attr('transform', `translate(${x}, ${y}) scale(1.15) translate(${-x}, ${-y})`);
+
     showTooltip(tooltip, tipImg, tipName, d);
 
     const touch = event.touches[0];
@@ -327,12 +342,25 @@ function setupTouchInteractions(images, tooltip, tipImg, tipName, touchState) {
   });
 
   // Hide tooltip when tapping outside
-  d3.select('body').on('touchstart', function (event) {
+  d3.select('body').on('touchstart.tooltip', function (event) {
     if (!event.target.closest('image.place')) {
       hideTooltip(tooltip);
+      if (touchState.currentTarget) {
+        d3.select(touchState.currentTarget).attr('transform', null);
+      }
       touchState.currentTarget = null;
       touchState.active = false;
     }
+  });
+
+  // Prevent mouse events from firing after touch
+  d3.select('body').on('touchend.tooltip', function() {
+    // Keep touchState.active true for a short period to block mouse events
+    setTimeout(() => {
+      if (touchState.active && tooltip.style('display') !== 'none') {
+        touchState.active = false;
+      }
+    }, 500);
   });
 }
 

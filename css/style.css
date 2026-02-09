@@ -133,6 +133,25 @@ p {
 /* ------------------------------------------------------------------------------- */
 svg {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+image.place {
+  touch-action: none;
+  cursor: pointer;
+}
+
+/* Hover effects only on devices with hover capability (not touch-only) */
+@media (hover: hover) {
+  image.place {
+    transition: transform 0.2s ease;
+  }
+
+  image.place:hover {
+    transform: scale(1.15);
+  }
 }
 
 #content svg {
