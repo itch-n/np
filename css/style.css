@@ -257,7 +257,7 @@ image.place {
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  min-height: 112px;
+  min-height: 96px;
   height: 100%;
 }
 
@@ -268,7 +268,7 @@ image.place {
 
 .year-image-card__image {
   width: 100%;
-  height: 112px;
+  height: 96px;
   object-fit: cover;
   display: block;
 }
@@ -295,16 +295,16 @@ image.place {
 
 .visit-card {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   background: white;
   border-radius: 8px;
-  padding: 16px;
+  padding: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   height: 100%;
   position: relative;
   overflow: hidden;
-  --bg-image-offset: calc(80px + 16px);
+  --bg-image-offset: calc(80px + 8px);
 }
 
 .visit-card::before {
@@ -366,9 +366,9 @@ image.place {
 
 @media (max-width: 600px) {
   .visit-card {
-    padding: 12px;
-    gap: 12px;
-    --bg-image-offset: calc(60px + 12px);
+    padding: 6px;
+    gap: 6px;
+    --bg-image-offset: calc(60px + 6px);
   }
 
   .visit-card__image {
