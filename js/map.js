@@ -250,7 +250,7 @@ function createTooltip() {
  */
 function showTooltip(tooltip, tipImg, tipName, parkData) {
   tipImg.attr('src', `img/np/${parkData.parkCode}.png`);
-  tipName.text(parkData.name);
+  tipName.text(`${parkData.name}, ${parkData.state}`);
   tooltip.style('display', 'block');
 }
 
@@ -413,3 +413,142 @@ Promise.all([
   setupMouseInteractions(images, tooltip, tipImg, tipName, touchState);
   setupTouchInteractions(images, tooltip, tipImg, tipName, touchState);
 });
+
+// ============================================================================
+// Visits Table
+// ============================================================================
+
+/**
+ * Formats a date string to a readable format
+ */
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
+/**
+ * Renders the visits table
+ */
+function renderVisitsTable(visits, parksLookup) {
+  const container = d3.select('#visits-table');
+
+  if (!visits || visits.length === 0) {
+    container.html('<p style="color: #666;">No visits recorded yet.</p>');
+    return;
+  }
+
+  // Sort visits by date (most recent first)
+  const sortedVisits = visits.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Group visits by year
+  const visitsByYear = {};
+  sortedVisits.forEach(visit => {
+    const year = new Date(visit.date).getFullYear();
+    if (!visitsByYear[year]) {
+      visitsByYear[year] = [];
+    }
+    visitsByYear[year].push(visit);
+  });
+
+  // Get years in descending order
+  const years = Object.keys(visitsByYear).sort((a, b) => b - a);
+
+  // Render each year group
+  years.forEach(year => {
+    // Add year group container
+    const yearGroup = container.append('div')
+      .attr('class', 'visits-year-group');
+
+    // Add year heading
+    yearGroup.append('h3')
+      .attr('class', 'visits-year-heading')
+      .text(year);
+
+    // Create grid for this year
+    const grid = yearGroup.append('div')
+      .attr('class', 'visits-grid');
+
+    // Add year image card as first item in grid
+    const yearImageCard = grid.append('div')
+      .attr('class', 'year-image-card');
+
+    yearImageCard.append('img')
+      .attr('class', 'year-image-card__image')
+      .attr('src', `./img/years/${year}.svg`)
+      .attr('alt', `${year} highlight`)
+      .on('error', function() {
+        // Try PNG if SVG doesn't exist
+        const img = d3.select(this);
+        if (img.attr('src').endsWith('.svg')) {
+          img.attr('src', `./img/years/${year}.png`);
+        } else {
+          // Hide the card if neither format exists
+          d3.select(this.parentNode).style('display', 'none');
+        }
+      });
+
+    yearImageCard.append('div')
+      .attr('class', 'year-image-card__label');
+
+    // Create cards for all visits
+    const cards = grid.selectAll('.visit-card')
+      .data(visitsByYear[year])
+      .enter()
+      .append('div')
+      .attr('class', 'visit-card');
+
+    // Add image
+    cards.append('img')
+      .attr('class', 'visit-card__image')
+      .attr('src', d => d.cancellationImage)
+      .attr('alt', d => `${parksLookup[d.parkCode] || d.parkCode} cancellation`)
+      .on('error', function() {
+        d3.select(this).attr('src', 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23eee" width="80" height="80"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-size="12"%3ENo Image%3C/text%3E%3C/svg%3E');
+      });
+
+    // Add content container
+    const content = cards.append('div')
+      .attr('class', 'visit-card__content');
+
+    // Add park name
+    content.append('div')
+      .attr('class', 'visit-card__park')
+      .text(d => parksLookup[d.parkCode] || d.parkCode);
+
+    // Add date
+    content.append('div')
+      .attr('class', 'visit-card__date')
+      .text(d => formatDate(d.date));
+  });
+}
+
+/**
+ * Loads visits data and renders the table
+ */
+function loadVisitsTable() {
+  Promise.all([
+    d3.json('./data/parks.json'),
+    d3.json('./data/visits.json')
+  ])
+    .then(([parks, visits]) => {
+      // Create lookup map: parkCode -> park name with state
+      const parksLookup = {};
+      parks.forEach(park => {
+        parksLookup[park.parkCode] = `${park.name}, ${park.state}`;
+      });
+
+      renderVisitsTable(visits, parksLookup);
+    })
+    .catch(error => {
+      console.log('Error loading data:', error);
+      d3.select('#visits-table').html('<p style="color: #666;">No visits recorded yet.</p>');
+    });
+}
+
+// Load visits table
+loadVisitsTable();
+

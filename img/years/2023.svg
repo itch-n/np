@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <!-- Sunset sky gradient -->
+  <defs>
+    <linearGradient id="sky-2023" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB366;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFA07A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8C66;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="300" fill="url(#sky-2023)" rx="12"/>
+
+  <!-- Sun -->
+  <circle cx="700" cy="80" r="50" fill="#FFE4B5" opacity="0.8"/>
+
+  <!-- Distant mountain layers -->
+  <path d="M 0 140 L 150 100 L 300 120 L 450 90 L 600 110 L 750 95 L 800 105 L 800 300 L 0 300 Z"
+        fill="#A5735C" opacity="0.5"/>
+
+  <path d="M 0 170 L 200 130 L 400 150 L 600 125 L 800 145 L 800 300 L 0 300 Z"
+        fill="#8B5E4A" opacity="0.7"/>
+
+  <!-- Foreground -->
+  <path d="M 0 210 L 300 200 L 500 215 L 800 205 L 800 300 L 0 300 Z"
+        fill="#6B4A3A"/>
+
+  <!-- Desert vegetation silhouettes -->
+  <ellipse cx="150" cy="220" rx="8" ry="20" fill="#4A5E4C" opacity="0.6"/>
+  <ellipse cx="180" cy="215" rx="6" ry="25" fill="#4A5E4C" opacity="0.6"/>
+  <ellipse cx="600" cy="218" rx="10" ry="22" fill="#4A5E4C" opacity="0.6"/>
+
+  <!-- Year text with shadow -->
+  <text x="402" y="102" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#4A3020" text-anchor="middle" opacity="0.3">2023</text>
+  <text x="400" y="100" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2023</text>
+</svg>

@@ -1,0 +1,27 @@
+[
+  {
+    "parkCode": "yose",
+    "date": "2024-07-15",
+    "cancellationImage": "./img/cancellations/240715-yose.svg"
+  },
+  {
+    "parkCode": "grca",
+    "date": "2024-06-22",
+    "cancellationImage": "./img/cancellations/240622-grca.svg"
+  },
+  {
+    "parkCode": "zion",
+    "date": "2024-05-10",
+    "cancellationImage": "./img/cancellations/240510-zion.svg"
+  },
+  {
+    "parkCode": "sequ",
+    "date": "2023-09-12",
+    "cancellationImage": "./img/cancellations/230912-sequ.svg"
+  },
+  {
+    "parkCode": "jotr",
+    "date": "2023-03-20",
+    "cancellationImage": "./img/cancellations/230320-jotr.svg"
+  }
+]

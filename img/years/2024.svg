@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <!-- Forest sky gradient -->
+  <defs>
+    <linearGradient id="sky-2024" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#A8D8EA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C8E6C9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="300" fill="url(#sky-2024)" rx="12"/>
+
+  <!-- Distant forest mountains -->
+  <path d="M 0 130 L 100 120 L 200 110 L 300 125 L 400 105 L 500 120 L 600 100 L 700 115 L 800 110 L 800 300 L 0 300 Z"
+        fill="#8BAA87" opacity="0.6"/>
+
+  <!-- Mid forest layer -->
+  <path d="M 0 170 L 150 160 L 300 170 L 450 155 L 600 165 L 750 158 L 800 165 L 800 300 L 0 300 Z"
+        fill="#6B8E6F" opacity="0.8"/>
+
+  <!-- Foreground meadow -->
+  <path d="M 0 220 L 200 210 L 400 218 L 600 212 L 800 220 L 800 300 L 0 300 Z"
+        fill="#7FA57D"/>
+
+  <!-- Forest trees silhouettes -->
+  <g opacity="0.7">
+    <ellipse cx="80" cy="185" rx="15" ry="35" fill="#4A5E4C"/>
+    <ellipse cx="120" cy="190" rx="12" ry="30" fill="#4A5E4C"/>
+    <ellipse cx="200" cy="195" rx="18" ry="40" fill="#4A5E4C"/>
+    <ellipse cx="350" cy="180" rx="14" ry="33" fill="#4A5E4C"/>
+    <ellipse cx="550" cy="185" rx="16" ry="37" fill="#4A5E4C"/>
+    <ellipse cx="680" cy="190" rx="13" ry="32" fill="#4A5E4C"/>
+    <ellipse cx="750" cy="188" rx="15" ry="35" fill="#4A5E4C"/>
+  </g>
+
+  <!-- Closer tall trees -->
+  <g opacity="0.8">
+    <ellipse cx="50" cy="230" rx="10" ry="25" fill="#3A4E3C"/>
+    <ellipse cx="400" cy="235" rx="12" ry="28" fill="#3A4E3C"/>
+    <ellipse cx="720" cy="232" rx="11" ry="26" fill="#3A4E3C"/>
+  </g>
+
+  <!-- Year text with shadow -->
+  <text x="402" y="102" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#4A5E4C" text-anchor="middle" opacity="0.3">2024</text>
+  <text x="400" y="100" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2024</text>
+</svg>
