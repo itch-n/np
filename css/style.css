@@ -278,23 +278,6 @@ image.place {
   display: block;
 }
 
-.year-image-card__label {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: white;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px 12px;
-  border-radius: 4px;
-  backdrop-filter: blur(4px);
-}
-
-
-
 .visits-grid {
   display: grid;
   grid-template-columns: 1fr;

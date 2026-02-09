@@ -230,6 +230,19 @@ function renderParkImages(map, nodes, config) {
 }
 
 // ============================================================================
+// Utility Functions
+// ============================================================================
+
+/**
+ * Shortens park name by removing "National Park" and variations
+ */
+function shortenParkName(name) {
+  return name
+    .replace(/\s+National Park(?:\s+&\s+Preserve)?$/i, '')
+    .replace(/\s+National\s+and\s+State\s+Parks$/i, '');
+}
+
+// ============================================================================
 // Tooltip Functions
 // ============================================================================
 
@@ -250,7 +263,7 @@ function createTooltip() {
  */
 function showTooltip(tooltip, tipImg, tipName, parkData) {
   tipImg.attr('src', `img/np/${parkData.parkCode}.png`);
-  tipName.text(`${parkData.name}, ${parkData.state}`);
+  tipName.text(`${shortenParkName(parkData.name)}, ${parkData.state}`);
   tooltip.style('display', 'block');
 }
 
@@ -418,6 +431,10 @@ Promise.all([
 // Visits Table
 // ============================================================================
 
+// Constants
+const NO_VISITS_MESSAGE = '<p style="color: #666;">No visits recorded yet.</p>';
+const PLACEHOLDER_IMAGE = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23eee" width="80" height="80"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-size="12"%3ENo Image%3C/text%3E%3C/svg%3E';
+
 /**
  * Formats a date string to a readable format
  */
@@ -437,7 +454,7 @@ function renderVisitsTable(visits, parksLookup) {
   const container = d3.select('#visits-table');
 
   if (!visits || visits.length === 0) {
-    container.html('<p style="color: #666;">No visits recorded yet.</p>');
+    container.html(NO_VISITS_MESSAGE);
     return;
   }
 
@@ -491,9 +508,6 @@ function renderVisitsTable(visits, parksLookup) {
         }
       });
 
-    yearImageCard.append('div')
-      .attr('class', 'year-image-card__label');
-
     // Create cards for all visits
     const cards = grid.selectAll('.visit-card')
       .data(visitsByYear[year])
@@ -505,9 +519,9 @@ function renderVisitsTable(visits, parksLookup) {
     cards.append('img')
       .attr('class', 'visit-card__image')
       .attr('src', d => d.cancellationImage)
-      .attr('alt', d => `${parksLookup[d.parkCode] || d.parkCode} cancellation`)
+      .attr('alt', d => parksLookup[d.parkCode] || d.parkCode)
       .on('error', function() {
-        d3.select(this).attr('src', 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23eee" width="80" height="80"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-size="12"%3ENo Image%3C/text%3E%3C/svg%3E');
+        d3.select(this).attr('src', PLACEHOLDER_IMAGE);
       });
 
     // Add content container
@@ -535,17 +549,17 @@ function loadVisitsTable() {
     d3.json('./data/visits.json')
   ])
     .then(([parks, visits]) => {
-      // Create lookup map: parkCode -> park name with state
+      // Create lookup map: parkCode -> shortened park name with state
       const parksLookup = {};
       parks.forEach(park => {
-        parksLookup[park.parkCode] = `${park.name}, ${park.state}`;
+        parksLookup[park.parkCode] = `${shortenParkName(park.name)}, ${park.state}`;
       });
 
       renderVisitsTable(visits, parksLookup);
     })
     .catch(error => {
       console.log('Error loading data:', error);
-      d3.select('#visits-table').html('<p style="color: #666;">No visits recorded yet.</p>');
+      d3.select('#visits-table').html(NO_VISITS_MESSAGE);
     });
 }
 
