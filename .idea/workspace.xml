@@ -2,7 +2,37 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="142d7c70-6ac5-4a9e-b532-fde70ad5cefc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20210803-havo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20210808-hale.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20240413-jotr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20241215-hale.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20250619-kica.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20250620-sequ.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20250818-yose.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20250912-mora.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20251016-glac.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20251026-care.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20251027-brca.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20251028-zion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20251101-jotr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20251219-deva.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20251226-bibe.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/cancellations/20260123-sagu.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/years/2021.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/years/2025.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/years/2026.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/visits.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/visits.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/cancellations/230320-jotr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/cancellations/230912-sequ.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/cancellations/240510-zion.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/cancellations/240622-grca.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/cancellations/240715-yose.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/years/2022.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2022.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/years/2023.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2023.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/years/2024.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2024.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,28 +50,31 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="39P2OTUjmF8VoF1Zr6RaqTbsmt0" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vcs.patch.path&quot;: &quot;/Users/richard/Downloads&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/img/cancellations" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -90,6 +123,9 @@
       </set>
     </attachedChunks>
   </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="142d7c70-6ac5-4a9e-b532-fde70ad5cefc" name="Changes" comment="" />
@@ -97,7 +133,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1770583352373</updated>
-      <workItem from="1770583353423" duration="12339000" />
+      <workItem from="1770583353423" duration="12519000" />
+      <workItem from="1770657806461" duration="6551000" />
+      <workItem from="1770665114841" duration="622000" />
     </task>
     <servers />
   </component>

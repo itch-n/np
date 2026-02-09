@@ -1,34 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
-  <!-- Sky gradient -->
+  <!-- Mountain trail with hiker -->
   <defs>
     <linearGradient id="sky-2022" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#B0E0E6;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#B8D9F0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E8F0F5;stop-opacity:1" />
     </linearGradient>
   </defs>
 
   <rect width="800" height="300" fill="url(#sky-2022)" rx="12"/>
 
   <!-- Distant mountains -->
-  <path d="M 0 150 L 200 100 L 400 130 L 600 90 L 800 120 L 800 300 L 0 300 Z"
-        fill="#A5C5A1" opacity="0.6"/>
+  <path d="M 0 150 L 200 120 L 400 140 L 600 110 L 800 135 L 800 300 L 0 300 Z"
+        fill="#A5C5A1" opacity="0.5"/>
 
   <!-- Mid mountains -->
-  <path d="M 0 180 L 150 140 L 300 160 L 450 130 L 600 155 L 750 145 L 800 160 L 800 300 L 0 300 Z"
-        fill="#82A686" opacity="0.8"/>
+  <path d="M 0 180 L 150 155 L 300 170 L 450 150 L 600 165 L 750 158 L 800 170 L 800 300 L 0 300 Z"
+        fill="#82A686" opacity="0.7"/>
 
   <!-- Foreground hills -->
-  <path d="M 0 220 L 200 200 L 400 210 L 600 195 L 800 215 L 800 300 L 0 300 Z"
+  <path d="M 0 220 L 200 205 L 400 215 L 600 200 L 800 212 L 800 300 L 0 300 Z"
         fill="#6B8E6F"/>
 
-  <!-- Pine trees -->
+  <!-- Trail -->
+  <path d="M 350 220 Q 380 240 410 255 Q 440 268 470 280"
+        stroke="#A0826D" stroke-width="15" fill="none" opacity="0.4"/>
+
+  <!-- Scattered rocks -->
+  <g opacity="0.6">
+    <ellipse cx="180" cy="230" rx="12" ry="8" fill="#8B7355"/>
+    <ellipse cx="550" cy="240" rx="14" ry="9" fill="#8B7355"/>
+    <ellipse cx="720" cy="235" rx="10" ry="7" fill="#8B7355"/>
+  </g>
+
+  <!-- Alpine trees -->
   <g opacity="0.7">
-    <path d="M 100 240 L 95 220 L 90 240 L 95 225 L 85 240 L 95 210 L 105 240 L 95 225 L 110 240 L 95 220 L 100 240 Z" fill="#4A5E4C"/>
-    <path d="M 250 250 L 245 230 L 240 250 L 245 235 L 235 250 L 245 220 L 255 250 L 245 235 L 260 250 L 245 230 L 250 250 Z" fill="#4A5E4C"/>
-    <path d="M 650 230 L 645 210 L 640 230 L 645 215 L 635 230 L 645 200 L 655 230 L 645 215 L 660 230 L 645 210 L 650 230 Z" fill="#4A5E4C"/>
+    <polygon points="100,235 88,255 112,255" fill="#4A5E4C"/>
+    <polygon points="250,240 236,262 264,262" fill="#4A5E4C"/>
+    <polygon points="680,238 666,260 694,260" fill="#4A5E4C"/>
+  </g>
+
+  <!-- Hiker silhouette -->
+  <g opacity="0.8">
+    <ellipse cx="420" cy="248" rx="4" ry="6" fill="#4A5E4C"/>
+    <line x1="420" y1="254" x2="420" y2="266" stroke="#4A5E4C" stroke-width="3"/>
+    <line x1="420" y1="258" x2="425" y2="263" stroke="#4A5E4C" stroke-width="2"/>
+    <line x1="420" y1="266" x2="416" y2="275" stroke="#4A5E4C" stroke-width="2.5"/>
+    <line x1="420" y1="266" x2="424" y2="275" stroke="#4A5E4C" stroke-width="2.5"/>
+    <!-- Backpack -->
+    <rect x="417" y="252" width="6" height="8" rx="1" fill="#6B5D4F"/>
   </g>
 
   <!-- Year text with shadow -->
-  <text x="402" y="102" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#4A5E4C" text-anchor="middle" opacity="0.3">2022</text>
-  <text x="400" y="100" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2022</text>
+  <text x="402" y="172" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#6B8E6F" text-anchor="middle" opacity="0.3">2022</text>
+  <text x="400" y="170" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2022</text>
 </svg>

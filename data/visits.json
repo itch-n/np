@@ -1,27 +1,98 @@
 [
   {
-    "parkCode": "yose",
-    "date": "2024-07-15",
-    "cancellationImage": "./img/cancellations/240715-yose.svg"
+    "parkCode": "havo",
+    "date": "2021-08-03",
+    "cancellationImage": "img/cancellations/20210803-havo.png",
+    "visitImage": "../img/visits/20210803-havo.svg"
   },
   {
-    "parkCode": "grca",
-    "date": "2024-06-22",
-    "cancellationImage": "./img/cancellations/240622-grca.svg"
-  },
-  {
-    "parkCode": "zion",
-    "date": "2024-05-10",
-    "cancellationImage": "./img/cancellations/240510-zion.svg"
-  },
-  {
-    "parkCode": "sequ",
-    "date": "2023-09-12",
-    "cancellationImage": "./img/cancellations/230912-sequ.svg"
+    "parkCode": "hale",
+    "date": "2021-08-08",
+    "cancellationImage": "img/cancellations/20210808-hale.png",
+    "visitImage": null
   },
   {
     "parkCode": "jotr",
-    "date": "2023-03-20",
-    "cancellationImage": "./img/cancellations/230320-jotr.svg"
+    "date": "2024-04-13",
+    "cancellationImage": "img/cancellations/20240413-jotr.png",
+    "visitImage": null
+  },
+  {
+    "parkCode": "hale",
+    "date": "2024-12-15",
+    "cancellationImage": "img/cancellations/20241215-hale.jpeg",
+    "visitImage": null
+  },
+  {
+    "parkCode": "kica",
+    "date": "2025-06-19",
+    "cancellationImage": "img/cancellations/20250619-kica.png",
+    "visitImage": null
+  },
+  {
+    "parkCode": "sequ",
+    "date": "2025-06-20",
+    "cancellationImage": "img/cancellations/20250620-sequ.png",
+    "visitImage": null
+  },
+  {
+    "parkCode": "yose",
+    "date": "2025-08-17",
+    "cancellationImage": "img/cancellations/20250818-yose.jpeg",
+    "visitImage": "../img/visits/20250817-yose.svg"
+  },
+  {
+    "parkCode": "mora",
+    "date": "2025-09-12",
+    "cancellationImage": "img/cancellations/20250912-mora.jpeg",
+    "visitImage": "../img/visits/20250912-mora.svg"
+  },
+  {
+    "parkCode": "glac",
+    "date": "2025-09-16",
+    "cancellationImage": "img/cancellations/20251016-glac.png",
+    "visitImage": "../img/visits/20250916-glac.svg"
+  },
+  {
+    "parkCode": "care",
+    "date": "2025-10-26",
+    "cancellationImage": "img/cancellations/20251026-care.jpeg",
+    "visitImage": null
+  },
+  {
+    "parkCode": "brca",
+    "date": "2025-10-27",
+    "cancellationImage": "img/cancellations/20251027-brca.png",
+    "visitImage": "../img/visits/20251027-brca.svg"
+  },
+  {
+    "parkCode": "zion",
+    "date": "2025-10-28",
+    "cancellationImage": "img/cancellations/20251028-zion.png",
+    "visitImage": "../img/visits/20251028-zion.svg"
+  },
+  {
+    "parkCode": "jotr",
+    "date": "2025-11-01",
+    "cancellationImage": "img/cancellations/20251101-jotr.png",
+    "visitImage": "../img/visits/20251101-jotr.svg"
+  },
+  {
+    "parkCode": "deva",
+    "date": "2025-12-19",
+    "cancellationImage": "img/cancellations/20251219-deva.jpeg",
+    "visitImage": null
+  },
+  {
+    "parkCode": "bibe",
+    "date": "2025-12-26",
+    "cancellationImage": "img/cancellations/20251226-bibe.png",
+    "visitImage": "../img/visits/20251226-bibe.svg"
+  },
+  {
+    "parkCode": "sagu",
+    "date": "2026-01-23",
+    "cancellationImage": "img/cancellations/20260123-sagu.jpeg",
+    "visitImage": null
   }
 ]

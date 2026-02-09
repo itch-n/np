@@ -1,45 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
-  <!-- Forest sky gradient -->
+  <!-- Meadow with wildflowers -->
   <defs>
     <linearGradient id="sky-2024" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#A8D8EA;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#C8E6C9;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#C8E6C9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EDF5EA;stop-opacity:1" />
     </linearGradient>
   </defs>
 
   <rect width="800" height="300" fill="url(#sky-2024)" rx="12"/>
 
-  <!-- Distant forest mountains -->
-  <path d="M 0 130 L 100 120 L 200 110 L 300 125 L 400 105 L 500 120 L 600 100 L 700 115 L 800 110 L 800 300 L 0 300 Z"
-        fill="#8BAA87" opacity="0.6"/>
+  <!-- Distant rolling hills -->
+  <path d="M 0 160 L 200 145 L 400 155 L 600 140 L 800 150 L 800 300 L 0 300 Z"
+        fill="#A5C5A1" opacity="0.5"/>
 
-  <!-- Mid forest layer -->
-  <path d="M 0 170 L 150 160 L 300 170 L 450 155 L 600 165 L 750 158 L 800 165 L 800 300 L 0 300 Z"
-        fill="#6B8E6F" opacity="0.8"/>
+  <!-- Mid hills -->
+  <path d="M 0 190 L 250 175 L 500 185 L 750 178 L 800 185 L 800 300 L 0 300 Z"
+        fill="#82A686" opacity="0.6"/>
 
-  <!-- Foreground meadow -->
-  <path d="M 0 220 L 200 210 L 400 218 L 600 212 L 800 220 L 800 300 L 0 300 Z"
+  <!-- Meadow -->
+  <path d="M 0 225 L 300 215 L 500 220 L 800 217 L 800 300 L 0 300 Z"
         fill="#7FA57D"/>
 
-  <!-- Forest trees silhouettes -->
-  <g opacity="0.7">
-    <ellipse cx="80" cy="185" rx="15" ry="35" fill="#4A5E4C"/>
-    <ellipse cx="120" cy="190" rx="12" ry="30" fill="#4A5E4C"/>
-    <ellipse cx="200" cy="195" rx="18" ry="40" fill="#4A5E4C"/>
-    <ellipse cx="350" cy="180" rx="14" ry="33" fill="#4A5E4C"/>
-    <ellipse cx="550" cy="185" rx="16" ry="37" fill="#4A5E4C"/>
-    <ellipse cx="680" cy="190" rx="13" ry="32" fill="#4A5E4C"/>
-    <ellipse cx="750" cy="188" rx="15" ry="35" fill="#4A5E4C"/>
+  <!-- Grass texture -->
+  <g opacity="0.4">
+    <line x1="120" y1="230" x2="122" y2="245" stroke="#6B8E6F" stroke-width="1.5"/>
+    <line x1="180" y1="235" x2="182" y2="250" stroke="#6B8E6F" stroke-width="1.5"/>
+    <line x1="250" y1="228" x2="252" y2="243" stroke="#6B8E6F" stroke-width="1.5"/>
+    <line x1="340" y1="232" x2="342" y2="247" stroke="#6B8E6F" stroke-width="1.5"/>
+    <line x1="420" y1="230" x2="422" y2="245" stroke="#6B8E6F" stroke-width="1.5"/>
+    <line x1="510" y1="234" x2="512" y2="249" stroke="#6B8E6F" stroke-width="1.5"/>
+    <line x1="600" y1="231" x2="602" y2="246" stroke="#6B8E6F" stroke-width="1.5"/>
+    <line x1="680" y1="236" x2="682" y2="251" stroke="#6B8E6F" stroke-width="1.5"/>
   </g>
 
-  <!-- Closer tall trees -->
+  <!-- Wildflowers -->
+  <g opacity="0.7">
+    <circle cx="140" cy="243" r="3" fill="#E8C8A8"/>
+    <circle cx="220" cy="238" r="3" fill="#D4A574"/>
+    <circle cx="310" cy="245" r="3" fill="#E8C8A8"/>
+    <circle cx="380" cy="240" r="3" fill="#D4A574"/>
+    <circle cx="470" cy="247" r="3" fill="#E8C8A8"/>
+    <circle cx="560" cy="242" r="3" fill="#D4A574"/>
+    <circle cx="640" cy="248" r="3" fill="#E8C8A8"/>
+    <circle cx="720" cy="244" r="3" fill="#D4A574"/>
+  </g>
+
+  <!-- Lone tree -->
   <g opacity="0.8">
-    <ellipse cx="50" cy="230" rx="10" ry="25" fill="#3A4E3C"/>
-    <ellipse cx="400" cy="235" rx="12" ry="28" fill="#3A4E3C"/>
-    <ellipse cx="720" cy="232" rx="11" ry="26" fill="#3A4E3C"/>
+    <ellipse cx="650" cy="205" rx="28" ry="35" fill="#6B8E6F"/>
+    <rect x="647" y="235" width="6" height="25" fill="#6B5D4F"/>
+  </g>
+
+  <!-- Distant pine -->
+  <g opacity="0.5">
+    <polygon points="180,195 168,215 192,215" fill="#4A5E4C"/>
   </g>
 
   <!-- Year text with shadow -->
-  <text x="402" y="102" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#4A5E4C" text-anchor="middle" opacity="0.3">2024</text>
-  <text x="400" y="100" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2024</text>
+  <text x="402" y="172" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#6B8E6F" text-anchor="middle" opacity="0.3">2024</text>
+  <text x="400" y="170" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2024</text>
 </svg>

@@ -1,35 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
-  <!-- Sunset sky gradient -->
+  <!-- Lakeside camping scene -->
   <defs>
     <linearGradient id="sky-2023" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#FFB366;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#FFA07A;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#FF8C66;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#C8D7C4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EDF5EA;stop-opacity:1" />
     </linearGradient>
   </defs>
 
   <rect width="800" height="300" fill="url(#sky-2023)" rx="12"/>
 
-  <!-- Sun -->
-  <circle cx="700" cy="80" r="50" fill="#FFE4B5" opacity="0.8"/>
+  <!-- Distant shore -->
+  <path d="M 0 145 L 300 135 L 600 140 L 800 138 L 800 300 L 0 300 Z"
+        fill="#A5C5A1" opacity="0.4"/>
 
-  <!-- Distant mountain layers -->
-  <path d="M 0 140 L 150 100 L 300 120 L 450 90 L 600 110 L 750 95 L 800 105 L 800 300 L 0 300 Z"
-        fill="#A5735C" opacity="0.5"/>
+  <!-- Lake -->
+  <ellipse cx="400" cy="190" rx="380" ry="40" fill="#7FA9B8" opacity="0.6"/>
 
-  <path d="M 0 170 L 200 130 L 400 150 L 600 125 L 800 145 L 800 300 L 0 300 Z"
-        fill="#8B5E4A" opacity="0.7"/>
+  <!-- Near shore -->
+  <path d="M 0 215 L 200 205 L 400 212 L 600 208 L 800 215 L 800 300 L 0 300 Z"
+        fill="#82A686"/>
 
-  <!-- Foreground -->
-  <path d="M 0 210 L 300 200 L 500 215 L 800 205 L 800 300 L 0 300 Z"
-        fill="#6B4A3A"/>
+  <!-- Beach/shore -->
+  <path d="M 0 235 L 300 228 L 500 233 L 800 230 L 800 300 L 0 300 Z"
+        fill="#C8D7C4" opacity="0.5"/>
 
-  <!-- Desert vegetation silhouettes -->
-  <ellipse cx="150" cy="220" rx="8" ry="20" fill="#4A5E4C" opacity="0.6"/>
-  <ellipse cx="180" cy="215" rx="6" ry="25" fill="#4A5E4C" opacity="0.6"/>
-  <ellipse cx="600" cy="218" rx="10" ry="22" fill="#4A5E4C" opacity="0.6"/>
+  <!-- Trees along shore -->
+  <g opacity="0.7">
+    <polygon points="80,225 68,245 92,245" fill="#4A5E4C"/>
+    <polygon points="80,232 66,255 94,255" fill="#4A5E4C"/>
+
+    <polygon points="700,220 686,242 714,242" fill="#4A5E4C"/>
+    <polygon points="700,228 684,252 716,252" fill="#4A5E4C"/>
+  </g>
+
+  <!-- Tent -->
+  <g opacity="0.85">
+    <polygon points="350,245 395,245 372.5,220" fill="#8B7355"/>
+    <polygon points="350,245 372.5,220 372.5,245" fill="#A0826D"/>
+    <line x1="372.5" y1="220" x2="372.5" y2="245" stroke="#6B5D4F" stroke-width="2"/>
+  </g>
+
+  <!-- Canoe on shore -->
+  <ellipse cx="550" cy="240" rx="45" ry="8" fill="#6B5D4F" opacity="0.7"/>
+
+  <!-- Campfire smoke -->
+  <g opacity="0.3">
+    <path d="M 320 248 Q 318 240 320 232 Q 322 224 320 216"
+          stroke="#A5C5A1" stroke-width="3" fill="none"/>
+  </g>
 
   <!-- Year text with shadow -->
-  <text x="402" y="102" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#4A3020" text-anchor="middle" opacity="0.3">2023</text>
-  <text x="400" y="100" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2023</text>
+  <text x="402" y="172" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#6B8E6F" text-anchor="middle" opacity="0.3">2023</text>
+  <text x="400" y="170" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2023</text>
 </svg>

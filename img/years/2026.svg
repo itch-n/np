@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <!-- Coastal landscape with forest and water -->
+  <defs>
+    <linearGradient id="sky-2026" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#C8E6C9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4E8D0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="water-2026" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#9BBFB7;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#6FA396;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="300" fill="url(#sky-2026)" rx="12"/>
+
+  <!-- Distant forested hills -->
+  <path d="M 0 150 L 200 140 L 400 145 L 600 138 L 800 142 L 800 300 L 0 300 Z"
+        fill="#82A686" opacity="0.4"/>
+
+  <!-- Mid-distance shoreline -->
+  <path d="M 0 180 L 300 175 L 500 178 L 800 173 L 800 300 L 0 300 Z"
+        fill="#7FA57D" opacity="0.6"/>
+
+  <!-- Water/bay with teal tones -->
+  <path d="M 0 220 L 400 215 L 600 218 L 800 213 L 800 300 L 0 300 Z"
+        fill="url(#water-2026)"/>
+
+  <!-- Deeper water gradient -->
+  <path d="M 0 250 L 500 245 L 800 248 L 800 300 L 0 300 Z"
+        fill="#78A596" opacity="0.4"/>
+
+  <!-- Small waves -->
+  <g opacity="0.3" stroke="#EDF5EA" stroke-width="1.5" fill="none">
+    <path d="M 50 230 Q 70 228 90 230"/>
+    <path d="M 180 228 Q 200 226 220 228"/>
+    <path d="M 320 232 Q 340 230 360 232"/>
+    <path d="M 470 229 Q 490 227 510 229"/>
+    <path d="M 620 233 Q 640 231 660 233"/>
+    <path d="M 730 231 Q 750 229 770 231"/>
+  </g>
+
+  <!-- Rocks in water -->
+  <g opacity="0.6">
+    <ellipse cx="300" cy="242" rx="18" ry="12" fill="#6B8E6F"/>
+    <ellipse cx="480" cy="238" rx="22" ry="14" fill="#6B8E6F"/>
+    <ellipse cx="650" cy="245" rx="15" ry="10" fill="#6B8E6F"/>
+  </g>
+
+  <!-- Coastal trees (left side) -->
+  <g opacity="0.8">
+    <!-- Tall coastal tree 1 -->
+    <rect x="97" y="185" width="6" height="35" fill="#5D4E3F"/>
+    <ellipse cx="100" cy="195" rx="20" ry="28" fill="#6B8E6F"/>
+    <ellipse cx="100" cy="185" rx="15" ry="20" fill="#6B8E6F"/>
+
+    <!-- Tree 2 -->
+    <rect x="157" y="190" width="6" height="30" fill="#5D4E3F"/>
+    <ellipse cx="160" cy="198" rx="18" ry="25" fill="#6B8E6F"/>
+
+    <!-- Tree 3 -->
+    <rect x="47" y="195" width="5" height="25" fill="#5D4E3F"/>
+    <ellipse cx="50" cy="202" rx="15" ry="20" fill="#6B8E6F"/>
+
+    <!-- Coastal pine -->
+    <polygon points="220,205 205,215 235,215" fill="#4A5E4C"/>
+    <polygon points="220,198 210,208 230,208" fill="#4A5E4C"/>
+    <rect x="217" y="215" width="6" height="15" fill="#5D4E3F"/>
+  </g>
+
+  <!-- Coastal trees (right side) -->
+  <g opacity="0.7">
+    <!-- Tree cluster right -->
+    <ellipse cx="720" cy="192" rx="25" ry="30" fill="#6B8E6F"/>
+    <rect x="717" y="188" width="6" height="32" fill="#5D4E3F"/>
+
+    <ellipse cx="680" cy="198" rx="18" ry="24" fill="#6B8E6F"/>
+    <rect x="677" y="195" width="5" height="25" fill="#5D4E3F"/>
+  </g>
+
+  <!-- Small shrubs on shoreline -->
+  <g opacity="0.5">
+    <circle cx="380" cy="208" r="5" fill="#5E7361"/>
+    <circle cx="540" cy="210" r="4" fill="#5E7361"/>
+    <circle cx="420" cy="206" r="4" fill="#5E7361"/>
+  </g>
+
+  <!-- Year text with shadow -->
+  <text x="402" y="172" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#6B8E6F" text-anchor="middle" opacity="0.3">2026</text>
+  <text x="400" y="170" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2026</text>
+</svg>

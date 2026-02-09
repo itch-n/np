@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Mount Rainier with Wildflowers -->
+
+  <defs>
+    <linearGradient id="sky-mora" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87BFDA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C8E6F5;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="mountain-mora" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#E8F0F5;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#8AA0B0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5B6B78;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="400" fill="url(#sky-mora)"/>
+
+  <!-- Clouds -->
+  <ellipse cx="200" cy="70" rx="70" ry="25" fill="white" opacity="0.8"/>
+  <ellipse cx="600" cy="90" rx="90" ry="30" fill="white" opacity="0.7"/>
+
+  <!-- Distant hills -->
+  <path d="M 0,280 L 200,250 L 400,270 L 600,240 L 800,260 L 800,400 L 0,400 Z"
+        fill="#6B8E6B" opacity="0.5"/>
+
+  <!-- Mount Rainier -->
+  <path d="M 200,300 L 400,50 L 600,300 Z" fill="url(#mountain-mora)"/>
+
+  <!-- Snow detail on peak -->
+  <path d="M 400,50 L 380,100 L 420,100 Z" fill="white"/>
+  <path d="M 360,120 L 440,120 L 430,160 L 370,160 Z" fill="#F5F8FA" opacity="0.9"/>
+
+  <!-- Glacier lines -->
+  <path d="M 380,100 Q 350,180 320,260" stroke="white" stroke-width="3" fill="none" opacity="0.6"/>
+  <path d="M 420,100 Q 450,180 480,260" stroke="white" stroke-width="3" fill="none" opacity="0.6"/>
+
+  <!-- Forest at base -->
+  <ellipse cx="400" cy="320" rx="250" ry="40" fill="#2D5016" opacity="0.8"/>
+
+  <!-- Pine trees -->
+  <g opacity="0.9">
+    <polygon points="150,310 138,340 162,340" fill="#234013"/>
+    <polygon points="150,320 136,355 164,355" fill="#234013"/>
+
+    <polygon points="250,305 236,335 264,335" fill="#1F3B11"/>
+    <polygon points="250,315 234,350 266,350" fill="#1F3B11"/>
+
+    <polygon points="550,305 536,335 564,335" fill="#234013"/>
+    <polygon points="550,315 534,350 566,350" fill="#234013"/>
+
+    <polygon points="650,310 636,340 664,340" fill="#1F3B11"/>
+    <polygon points="650,320 634,355 666,355" fill="#1F3B11"/>
+  </g>
+
+  <!-- Wildflower meadow -->
+  <ellipse cx="400" cy="370" rx="300" ry="30" fill="#90C090" opacity="0.7"/>
+
+  <!-- Wildflowers -->
+  <g>
+    <!-- Purple lupines -->
+    <circle cx="280" cy="360" r="3" fill="#8B4789"/>
+    <circle cx="285" cy="365" r="3" fill="#9B5799"/>
+    <circle cx="290" cy="368" r="3" fill="#8B4789"/>
+
+    <circle cx="350" cy="365" r="3" fill="#8B4789"/>
+    <circle cx="356" cy="370" r="3" fill="#9B5799"/>
+
+    <!-- Red paintbrush -->
+    <circle cx="480" cy="363" r="3" fill="#D4424B"/>
+    <circle cx="487" cy="367" r="3" fill="#C4323B"/>
+    <circle cx="493" cy="365" r="3" fill="#D4424B"/>
+
+    <circle cx="540" cy="368" r="3" fill="#D4424B"/>
+    <circle cx="547" cy="372" r="3" fill="#C4323B"/>
+
+    <!-- Yellow flowers -->
+    <circle cx="370" cy="375" r="2.5" fill="#FFD700"/>
+    <circle cx="420" cy="372" r="2.5" fill="#FFC700"/>
+    <circle cx="460" cy="378" r="2.5" fill="#FFD700"/>
+    <circle cx="320" cy="378" r="2.5" fill="#FFC700"/>
+  </g>
+</svg>

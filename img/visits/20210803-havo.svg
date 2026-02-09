@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Hawaii Volcanoes Landscape -->
+
+  <defs>
+    <linearGradient id="sky-havo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B35;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF9F66;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFC299;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="volcano" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A4A4A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2B2B2B;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="lava-glow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#FF4500;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF6347;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+
+  <!-- Dramatic sky -->
+  <rect width="800" height="400" fill="url(#sky-havo)"/>
+
+  <!-- Smoke/steam clouds -->
+  <ellipse cx="300" cy="100" rx="100" ry="40" fill="#555555" opacity="0.4"/>
+  <ellipse cx="500" cy="80" rx="120" ry="50" fill="#666666" opacity="0.3"/>
+
+  <!-- Distant volcanic hills -->
+  <ellipse cx="200" cy="250" rx="150" ry="80" fill="#3A3A3A" opacity="0.6"/>
+  <ellipse cx="600" cy="260" rx="180" ry="90" fill="#3A3A3A" opacity="0.5"/>
+
+  <!-- Main volcano -->
+  <path d="M 200,400 L 400,150 L 600,400 Z" fill="url(#volcano)"/>
+
+  <!-- Crater at top -->
+  <ellipse cx="400" cy="150" rx="60" ry="20" fill="#1A1A1A"/>
+
+  <!-- Lava glow from crater -->
+  <ellipse cx="400" cy="150" rx="50" ry="15" fill="url(#lava-glow)"/>
+
+  <!-- Lava flows -->
+  <path d="M 380,150 Q 360,200 350,250 Q 340,300 330,350 Q 325,375 320,400"
+        stroke="#FF4500" stroke-width="8" fill="none" opacity="0.8"/>
+  <path d="M 420,150 Q 440,200 450,250 Q 460,300 465,350 Q 468,375 470,400"
+        stroke="#FF6347" stroke-width="6" fill="none" opacity="0.7"/>
+
+  <!-- Lava flow glow -->
+  <path d="M 380,150 Q 360,200 350,250 Q 340,300 330,350 Q 325,375 320,400"
+        stroke="#FFD700" stroke-width="3" fill="none" opacity="0.6"/>
+
+  <!-- Volcanic rock formations -->
+  <ellipse cx="150" cy="380" rx="80" ry="30" fill="#2B2B2B" opacity="0.8"/>
+  <ellipse cx="650" cy="385" rx="70" ry="25" fill="#2B2B2B" opacity="0.7"/>
+
+  <!-- Lava field foreground -->
+  <path d="M 0,350 Q 200,340 400,360 Q 600,345 800,355 L 800,400 L 0,400 Z"
+        fill="#1A1A1A"/>
+
+  <!-- Glowing lava cracks -->
+  <path d="M 150,370 Q 200,380 250,375 Q 300,370 350,380"
+        stroke="#FF4500" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M 450,375 Q 500,382 550,378 Q 600,375 650,380"
+        stroke="#FF6347" stroke-width="2" fill="none" opacity="0.5"/>
+
+  <!-- Steam vents -->
+  <ellipse cx="200" cy="365" rx="15" ry="8" fill="white" opacity="0.4"/>
+  <ellipse cx="550" cy="370" rx="12" ry="6" fill="white" opacity="0.3"/>
+</svg>

@@ -7,8 +7,8 @@ const MAP_CONFIG = {
   height: 500,
   simulationIterations: 2,
   parkRadius: {
-    default: 14,
-    overseas: 10
+    lower48: 14,
+    others: 8
   },
   shadow: {
     blur: 2,
@@ -24,9 +24,8 @@ const MAP_CONFIG = {
   }
 };
 
-// Featured parks that should be highlighted (not faded)
-const featuredParks = ["bibe", "kica", "sequ", "yose", "jotr", "havo", "hale",
-  "deva", "mora", "glac", "zion", "brca", "care", "sagu"];
+// Featured parks derived from visits.json
+let featuredParks = new Set();
 
 // Overseas parks (Alaska, Hawaii, Virgin Islands) - smaller radius
 const osParks = ["dena", "gaar", "glba", "katm", "npsa", "hale", "havo",
@@ -172,8 +171,8 @@ function createParkNodes(places, projection, config) {
     if (!coords) return null;
 
     const radius = osParks.includes(d.parkCode)
-      ? config.parkRadius.overseas
-      : config.parkRadius.default;
+      ? config.parkRadius.others
+      : config.parkRadius.lower48;
 
     return {
       ...d,
@@ -202,10 +201,10 @@ function runForceSimulation(nodes, config) {
 }
 
 /**
- * Determines if a park is featured
+ * Determines if a park is featured (visited)
  */
 function isFeatured(parkCode) {
-  return featuredParks.includes(parkCode);
+  return featuredParks.has(parkCode);
 }
 
 /**
@@ -406,8 +405,12 @@ const map = svg.append('g').attr('class', 'map');
 // Load data and render
 Promise.all([
   d3.json("https://unpkg.com/us-atlas@3.0.0/states-10m.json"),
-  d3.json("./data/parks.json")
-]).then(([usa, places]) => {
+  d3.json("./data/parks.json"),
+  d3.json("./data/visits.json")
+]).then(([usa, places, visits]) => {
+  // Populate featured parks from visits data
+  featuredParks = new Set(visits.map(v => v.parkCode));
+
   // Draw map layers
   drawBaseMap(map, usa, path);
   drawStateBorders(map, usa, path);
@@ -440,10 +443,12 @@ const PLACEHOLDER_IMAGE = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/20
  */
 function formatDate(dateString) {
   const date = new Date(dateString);
+  // Use UTC to avoid timezone shifting the date
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   });
 }
 
@@ -480,11 +485,6 @@ function renderVisitsTable(visits, parksLookup) {
     const yearGroup = container.append('div')
       .attr('class', 'visits-year-group');
 
-    // Add year heading
-    yearGroup.append('h3')
-      .attr('class', 'visits-year-heading')
-      .text(year);
-
     // Create grid for this year
     const grid = yearGroup.append('div')
       .attr('class', 'visits-grid');
@@ -498,14 +498,7 @@ function renderVisitsTable(visits, parksLookup) {
       .attr('src', `./img/years/${year}.svg`)
       .attr('alt', `${year} highlight`)
       .on('error', function() {
-        // Try PNG if SVG doesn't exist
-        const img = d3.select(this);
-        if (img.attr('src').endsWith('.svg')) {
-          img.attr('src', `./img/years/${year}.png`);
-        } else {
-          // Hide the card if neither format exists
-          d3.select(this.parentNode).style('display', 'none');
-        }
+        d3.select(this.parentNode).style('display', 'none');
       });
 
     // Create cards for all visits
@@ -513,9 +506,10 @@ function renderVisitsTable(visits, parksLookup) {
       .data(visitsByYear[year])
       .enter()
       .append('div')
-      .attr('class', 'visit-card');
+      .attr('class', 'visit-card')
+      .style('--visit-bg-image', d => (d.visitImage && d.visitImage !== 'null') ? `url('${d.visitImage}')` : 'none');
 
-    // Add image
+    // Add cancellation image
     cards.append('img')
       .attr('class', 'visit-card__image')
       .attr('src', d => d.cancellationImage)
