@@ -5,10 +5,10 @@
 const MAP_CONFIG = {
   width: 900,
   height: 500,
-  simulationIterations: 4,
+  simulationIterations: 2,
   parkRadius: {
-    default: 16,
-    overseas: 12
+    default: 14,
+    overseas: 10
   },
   shadow: {
     blur: 2,
