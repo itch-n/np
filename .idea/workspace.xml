@@ -1,41 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="142d7c70-6ac5-4a9e-b532-fde70ad5cefc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/img/visits/20210803-havo.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20210808-hale.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20240413-jotr.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20241215-hale.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20250619-kica.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20250620-sequ.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20250818-yose.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20250912-mora.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20251016-glac.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20251026-care.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20251027-brca.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20251028-zion.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20251101-jotr.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20251219-deva.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20251226-bibe.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20260123-sagu.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/visits.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/visits.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/visits/20210803-havo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/visits/20250817-yose.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/visits/20250912-mora.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/visits/20250916-glac.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/visits/20251027-brca.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/visits/20251028-zion.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/visits/20251101-jotr.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/visits/20251226-bibe.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2021.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2021.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2022.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2022.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2023.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2023.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2024.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2024.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2025.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2025.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2026.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2026.svg" afterDir="false" />
-    </list>
+    <list default="true" id="142d7c70-6ac5-4a9e-b532-fde70ad5cefc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -144,7 +110,7 @@
       <updated>1770583352373</updated>
       <workItem from="1770583353423" duration="12519000" />
       <workItem from="1770657806461" duration="6551000" />
-      <workItem from="1770665114841" duration="4732000" />
+      <workItem from="1770665114841" duration="5159000" />
     </task>
     <servers />
   </component>

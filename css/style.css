@@ -157,20 +157,20 @@ image.place {
 #content svg {
   display: block;
   margin: 0 auto;
-  background: linear-gradient(to bottom, #EDF5EA 0%, #F3F8F0 50%, #EDF5EA 100%);
+  background: linear-gradient(to bottom, #F5FAF3 0%, #F9FCF7 50%, #F5FAF3 100%);
   width: 100%;
   height: auto;
 }
 
 .outline {
-  fill: #A5C5A1;
-  stroke: #82A686;
+  fill: #C8DCC4;
+  stroke: #B0CAB4;
 }
 
 .mesh {
   fill: none;
   stroke-width: 0.5px;
-  stroke: #C8D7C4;
+  stroke: #DBE7D9;
 }
 
 /* ------------------------------------------------------------------------------- */
