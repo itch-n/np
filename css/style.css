@@ -369,7 +369,7 @@ image.place {
   content: '';
   position: absolute;
   top: -12px;
-  right: -300px;
+  right: -700px;
   bottom: -12px;
   left: 0;
   background: linear-gradient(to right, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 80%, transparent 100%);
