@@ -88,7 +88,7 @@ p {
 .top__left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 5px;
 }
 
 .top__right {
@@ -120,7 +120,6 @@ p {
 .top__avatar {
   width: 60px;
   height: 60px;
-  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -134,7 +133,10 @@ p {
 .top__brand {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #000000;
+  background: linear-gradient(135deg, #5C8B5F 0%, #82A686 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* ------------------------------------------------------------------------------- */
