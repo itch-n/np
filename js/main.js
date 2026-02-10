@@ -5,10 +5,10 @@
 const MAP_CONFIG = {
   width: 900,
   height: 500,
-  simulationIterations: 2,
+  simulationIterations: 5,
   parkRadius: {
     lower48: 14,
-    others: 8
+    others: 10
   },
   shadow: {
     blur: 2,
@@ -17,7 +17,7 @@ const MAP_CONFIG = {
     opacity: 0.3
   },
   fade: {
-    opacity: 0.4,
+    opacity: 0.2,
     hueRotation: 60,
     saturation: 0.6,
     brightness: 1.1

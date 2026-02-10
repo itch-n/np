@@ -14,13 +14,12 @@
   --color-text-secondary: #666;
   --color-text-tertiary: #333;
 
-  --color-bg-primary: #FFFFFF;
-  --color-bg-map: #F5FAF3;
-  --color-bg-map-alt: #F9FCF7;
+  --color-bg-primary: #FCFAF8;
 
-  --color-map-outline: #C8DCC4;
-  --color-map-stroke: #B0CAB4;
-  --color-map-mesh: #DBE7D9;
+  --color-map-water: #F8F4EE;
+  --color-map-land: #EDF5EA;
+  --color-map-nation-boundaries: #82A686;
+  --color-map-state-boundaries: #B8D4BB;
 
   /* Spacing Scale (4px base unit) */
   --spacing-xs: 4px;
@@ -46,6 +45,8 @@
   --transition-fast: 0.2s ease;
   --transition-base: 0.3s ease;
   --transition-slow: 0.4s ease;
+
+  --card-sliding-overlay-color: rgba(255, 255, 255, 0.7);
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -234,20 +235,20 @@ image.place {
 #content svg {
   display: block;
   margin: 0 auto;
-  background: var(--color-bg-map);
+  background: var(--color-map-water);
   width: 100%;
   height: auto;
 }
 
 .outline {
-  fill: var(--color-map-outline);
-  stroke: var(--color-map-stroke);
+  fill: var(--color-map-land);
+  stroke: var(--color-map-nation-boundaries);
 }
 
 .mesh {
   fill: none;
   stroke-width: 0.5px;
-  stroke: var(--color-map-mesh);
+  stroke: var(--color-map-state-boundaries);
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -419,7 +420,7 @@ image.place {
   right: -700px;
   bottom: -12px;
   left: 0;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 80%, transparent 100%);
+  background: linear-gradient(to right, var(--card-sliding-overlay-color) 0%, var(--card-sliding-overlay-color) 80%, transparent 100%);
   z-index: -1;
   transform-origin: right;
   pointer-events: none;
