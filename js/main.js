@@ -17,7 +17,7 @@ const MAP_CONFIG = {
     opacity: 0.3
   },
   fade: {
-    opacity: 0.2,
+    opacity: 0.25,
     hueRotation: 60,
     saturation: 0.6,
     brightness: 1.1

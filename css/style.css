@@ -360,6 +360,12 @@ image.place {
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-base), box-shadow var(--transition-base);
   height: 96px;
+  /* Creates an isolated stacking context to prevent compositing layer changes
+     in one card from causing repaints in other cards. Without this, animating
+     a card can trigger opacity flickering in adjacent cards on mobile devices
+     due to browser compositor optimizations. Alternative of using
+     `transform: translateZ(0)` would work but is less semantic. */
+  isolation: isolate;
 }
 
 .card:hover {
@@ -446,10 +452,21 @@ image.place {
   transform-origin: right;
   pointer-events: none;
   transition: transform var(--transition-base);
+  /* GPU acceleration optimizations to prevent mobile flickering:
+     - will-change: Hints browser to create compositor layer upfront, avoiding
+       mid-animation layer promotion that causes visual glitches
+     - translate3d(0,0,0): Forces GPU compositing from initial render. Simple
+       2D transforms (translateX) use CPU rendering which causes jank when
+       upgrading to GPU during animation. This "null transform" hack ensures
+       consistent hardware acceleration throughout the animation lifecycle. */
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .visit-card:hover .visit-card__wrapper::after {
-  transform: translateX(-100%);
+  /* Use translate3d instead of translateX to maintain consistent GPU compositing.
+     Mixing 2D and 3D transforms would cause the browser to switch rendering modes. */
+  transform: translate3d(-100%, 0, 0);
 }
 
 .visit-card__image {
