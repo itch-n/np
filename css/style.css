@@ -82,12 +82,39 @@ p {
 .top {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .top__left {
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+.top__right {
+  display: flex;
+  align-items: center;
+}
+
+.top__counter {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #82A686;
+  letter-spacing: 0.5px;
+}
+
+.top__counter-visited {
+  font-size: 1.25rem;
+  color: #5C8B5F;
+}
+
+.top__counter-separator {
+  margin: 0 4px;
+  color: #B8D4BB;
+}
+
+.top__counter-total {
+  color: #B8D4BB;
 }
 
 .top__avatar {

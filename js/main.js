@@ -431,6 +431,24 @@ Promise.all([
 });
 
 // ============================================================================
+// Parks Counter
+// ============================================================================
+
+/**
+ * Updates the parks visited counter in the header
+ */
+function updateParksCounter(visits) {
+  if (!visits || visits.length === 0) {
+    d3.select('.top__counter-visited').text('0');
+    return;
+  }
+
+  // Count unique park codes
+  const uniqueParks = new Set(visits.map(v => v.parkCode));
+  d3.select('.top__counter-visited').text(uniqueParks.size);
+}
+
+// ============================================================================
 // Visits Table
 // ============================================================================
 
@@ -548,6 +566,9 @@ function loadVisitsTable() {
       parks.forEach(park => {
         parksLookup[park.parkCode] = `${shortenParkName(park.name)}, ${park.state}`;
       });
+
+      // Update parks counter
+      updateParksCounter(visits);
 
       renderVisitsTable(visits, parksLookup);
     })
