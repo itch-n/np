@@ -211,7 +211,7 @@ function isFeatured(parkCode) {
  * Renders park images on the map
  */
 function renderParkImages(map, nodes, config) {
-  return map.selectAll('image.place')
+  const images = map.selectAll('image.place')
     .data(nodes)
     .enter()
     .append('image')
@@ -226,6 +226,8 @@ function renderParkImages(map, nodes, config) {
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
     });
+
+  return images;
 }
 
 // ============================================================================
@@ -427,6 +429,30 @@ Promise.all([
 
   // Render park images
   const images = renderParkImages(map, nodes, MAP_CONFIG);
+
+  // Wait for all park images to load before animating map in
+  const imageNodes = images.nodes();
+  let loadedCount = 0;
+  const totalImages = imageNodes.length;
+
+  function checkAllImagesLoaded() {
+    loadedCount++;
+    if (loadedCount === totalImages) {
+      // All images loaded, trigger map animation
+      svg.classed('loaded', true);
+    }
+  }
+
+  imageNodes.forEach(img => {
+    if (img.complete) {
+      // Image already loaded (cached)
+      checkAllImagesLoaded();
+    } else {
+      // Wait for image to load
+      img.addEventListener('load', checkAllImagesLoaded);
+      img.addEventListener('error', checkAllImagesLoaded); // Count errors as "loaded" to not block animation
+    }
+  });
 
   // Setup tooltip
   const { tooltip, tipImg, tipName } = createTooltip();

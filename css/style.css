@@ -241,7 +241,15 @@ image.place {
   margin: 0 auto;
   width: 100%;
   height: auto;
-  animation: fadeInSlide 1s ease-out;
+  opacity: 0;
+  /* Use translate3d for consistent GPU compositing from initial render */
+  transform: translate3d(50px, 0, 0);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+#content svg.loaded {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 .outline {
@@ -324,17 +332,6 @@ image.place {
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes fadeInSlide {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
   }
 }
 
