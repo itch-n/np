@@ -366,13 +366,19 @@ function setupTouchInteractions(images, tooltip, tipImg, tipName, touchState) {
   });
 
   // Prevent mouse events from firing after touch
+  // Note: Mobile browsers often fire mouse events 300-500ms after touchend
+  // We use requestAnimationFrame to defer the state reset until after
+  // any synthetic mouse events have been processed
   d3.select('body').on('touchend.tooltip', function() {
-    // Keep touchState.active true for a short period to block mouse events
-    setTimeout(() => {
-      if (touchState.active && tooltip.style('display') !== 'none') {
-        touchState.active = false;
-      }
-    }, 500);
+    // Use requestAnimationFrame for better timing than arbitrary setTimeout
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        // Double RAF ensures we're past any synthetic mouse events
+        if (touchState.active && tooltip.style('display') !== 'none') {
+          touchState.active = false;
+        }
+      });
+    });
   });
 }
 
@@ -458,9 +464,22 @@ const PLACEHOLDER_IMAGE = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/20
 
 /**
  * Formats a date string to a readable format
+ * @param {string} dateString - Date string in ISO format (YYYY-MM-DD)
+ * @returns {string} Formatted date string
  */
 function formatDate(dateString) {
-  const date = new Date(dateString);
+  // Ensure consistent UTC parsing across all browsers
+  // Date-only strings (YYYY-MM-DD) are parsed differently by browsers
+  // Appending 'T00:00:00Z' forces UTC interpretation
+  const normalizedDate = dateString.includes('T') ? dateString : `${dateString}T00:00:00Z`;
+  const date = new Date(normalizedDate);
+
+  // Validate date is valid
+  if (isNaN(date.getTime())) {
+    console.warn(`Invalid date string: ${dateString}`);
+    return dateString; // Return original string if parsing fails
+  }
+
   // Use UTC to avoid timezone shifting the date
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
