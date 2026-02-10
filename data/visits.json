@@ -20,7 +20,7 @@
   {
     "parkCode": "hale",
     "date": "2024-12-15",
-    "cancellationImage": "img/cancellations/20241215-hale.jpeg",
+    "cancellationImage": "img/cancellations/20241215-hale.png",
     "visitImage": "../img/visits/20241215-hale.jpg"
   },
   {
@@ -38,13 +38,13 @@
   {
     "parkCode": "yose",
     "date": "2025-08-17",
-    "cancellationImage": "img/cancellations/20250818-yose.jpeg",
+    "cancellationImage": "img/cancellations/20250818-yose.png",
     "visitImage": "../img/visits/20250818-yose.jpeg"
   },
   {
     "parkCode": "mora",
     "date": "2025-09-12",
-    "cancellationImage": "img/cancellations/20250912-mora.jpeg",
+    "cancellationImage": "img/cancellations/20250912-mora.png",
     "visitImage": "../img/visits/20250912-mora.jpeg"
   },
   {
@@ -56,7 +56,7 @@
   {
     "parkCode": "care",
     "date": "2025-10-26",
-    "cancellationImage": "img/cancellations/20251026-care.jpeg",
+    "cancellationImage": "img/cancellations/20251026-care.png",
     "visitImage": "../img/visits/20251026-care.jpeg"
   },
   {
@@ -80,7 +80,7 @@
   {
     "parkCode": "deva",
     "date": "2025-12-19",
-    "cancellationImage": "img/cancellations/20251219-deva.jpeg",
+    "cancellationImage": "img/cancellations/20251219-deva.png",
     "visitImage": "../img/visits/20251219-deva.jpeg"
   },
   {
@@ -92,7 +92,7 @@
   {
     "parkCode": "sagu",
     "date": "2026-01-23",
-    "cancellationImage": "img/cancellations/20260123-sagu.jpeg",
+    "cancellationImage": "img/cancellations/20260123-sagu.png",
     "visitImage": "../img/visits/20260123-sagu.jpeg"
   }
 ]

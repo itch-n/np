@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(brew install:*)",
+      "Bash(magick:*)",
+      "Bash(for img in *.{png,jpg,jpeg})",
+      "Bash(do [ -f \"$img\" ])",
+      "Bash(done)",
+      "Bash(for img in *.png *.jpeg)",
+      "Bash(for img in *.png)",
+      "Bash(do)"
+    ]
+  }
+}
