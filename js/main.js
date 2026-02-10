@@ -441,17 +441,47 @@ Promise.all([
 // ============================================================================
 
 /**
- * Updates the parks visited counter in the header
+ * Updates the parks visited counter in the header with an animated count-up
  */
 function updateParksCounter(visits) {
+  const counterElement = d3.select('.top__counter-visited');
+
   if (!visits || visits.length === 0) {
-    d3.select('.top__counter-visited').text('0');
+    counterElement.text('0');
     return;
   }
 
   // Count unique park codes
   const uniqueParks = new Set(visits.map(v => v.parkCode));
-  d3.select('.top__counter-visited').text(uniqueParks.size);
+  const targetCount = uniqueParks.size;
+
+  // Animate counter from 0 to target
+  const duration = 1500; // 1.5 seconds
+  const startTime = performance.now();
+
+  function easeInQuad(t) {
+    return t * t;
+  }
+
+  function animateCount(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // Apply ease-in easing
+    const easedProgress = easeInQuad(progress);
+    const currentCount = Math.floor(easedProgress * targetCount);
+
+    counterElement.text(currentCount);
+
+    if (progress < 1) {
+      requestAnimationFrame(animateCount);
+    } else {
+      // Ensure we end exactly at target
+      counterElement.text(targetCount);
+    }
+  }
+
+  requestAnimationFrame(animateCount);
 }
 
 // ============================================================================

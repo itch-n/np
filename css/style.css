@@ -232,12 +232,16 @@ image.place {
   }
 }
 
+#content {
+  background: var(--color-map-water);
+}
+
 #content svg {
   display: block;
   margin: 0 auto;
-  background: var(--color-map-water);
   width: 100%;
   height: auto;
+  animation: fadeInSlide 1s ease-out;
 }
 
 .outline {
@@ -314,6 +318,26 @@ image.place {
 /* ------------------------------------------------------------------------------- */
 /* Visits Table */
 /* ------------------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .visits-year-group {
   margin-bottom: 32px;
 }
@@ -394,6 +418,7 @@ image.place {
   transition: filter var(--transition-base);
   mask-image: linear-gradient(to right, transparent 0px, black 30px);
   -webkit-mask-image: linear-gradient(to right, transparent 0px, black 30px);
+  animation: fadeIn 0.4s ease-out;
 }
 
 .visit-card:hover::before {
@@ -435,6 +460,7 @@ image.place {
   flex-shrink: 0;
   /* Brighten background to white while keeping colors saturated */
   filter: brightness(1.4) contrast(1.15) saturate(1.1);
+  animation: fadeIn 0.4s ease-out;
 }
 
 .visit-card__content {
