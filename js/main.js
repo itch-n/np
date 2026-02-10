@@ -509,7 +509,7 @@ function renderVisitsTable(visits, parksLookup) {
 
     // Add year image card as first item in grid
     const yearImageCard = grid.append('div')
-      .attr('class', 'year-image-card');
+      .attr('class', 'card year-image-card');
 
     yearImageCard.append('img')
       .attr('class', 'year-image-card__image')
@@ -524,11 +524,15 @@ function renderVisitsTable(visits, parksLookup) {
       .data(visitsByYear[year])
       .enter()
       .append('div')
-      .attr('class', 'visit-card')
+      .attr('class', 'card visit-card')
       .style('--visit-bg-image', d => (d.visitImage && d.visitImage !== 'null') ? `url('${d.visitImage}')` : 'none');
 
+    // Add wrapper for image and content
+    const wrapper = cards.append('div')
+      .attr('class', 'visit-card__wrapper');
+
     // Add cancellation image
-    cards.append('img')
+    wrapper.append('img')
       .attr('class', 'visit-card__image')
       .attr('src', d => d.cancellationImage)
       .attr('alt', d => parksLookup[d.parkCode] || d.parkCode)
@@ -537,7 +541,7 @@ function renderVisitsTable(visits, parksLookup) {
       });
 
     // Add content container
-    const content = cards.append('div')
+    const content = wrapper.append('div')
       .attr('class', 'visit-card__content');
 
     // Add park name
