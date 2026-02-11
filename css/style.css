@@ -156,6 +156,34 @@ p {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--color-primary-dark);
+  display: inline-block;
+  transition: transform var(--transition-fast);
+  border-radius: var(--radius-lg);
+  padding: 2px 6px;
+}
+
+/* Subtle flourish animation when counter completes */
+@keyframes counterComplete {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(130, 166, 134, 0);
+  }
+  30% {
+    transform: scale(1.08);
+    box-shadow: 0 0 12px 4px rgba(130, 166, 134, 0.4);
+  }
+  60% {
+    transform: scale(0.98);
+    box-shadow: 0 0 8px 2px rgba(130, 166, 134, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(130, 166, 134, 0);
+  }
+}
+
+.top__counter-visited.complete {
+  animation: counterComplete 0.7s ease-out;
 }
 
 .top__counter-separator {
@@ -190,6 +218,8 @@ p {
 .site-footer {
   font-size: 1rem;
   color: var(--color-text-secondary);
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 1.5s forwards;
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -238,14 +268,11 @@ image.place {
   width: 100%;
   height: auto;
   opacity: 0;
-  /* Use translate3d for consistent GPU compositing from initial render */
-  transform: translate3d(50px, 0, 0);
-  transition: opacity 1s ease-out, transform 1s ease-out;
+  transition: opacity 1s ease-out;
 }
 
 #content svg.loaded {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
 }
 
 .outline {

@@ -13,7 +13,7 @@ const MAP_CONFIG = {
   height: 500,
   simulationIterations: 5,
   parkRadius: {
-    lower48: 14,
+    lower48: 16,
     others: 10
   },
   shadow: {
@@ -121,7 +121,7 @@ function renderParkImages(map, nodes, config) {
     .attr('y', d => d.y - d.r)
     .attr('href', d => `img/np/${d.parkCode}.png`)
     .attr('preserveAspectRatio', 'xMidYMid slice')
-    .attr('filter', d => isFeatured(d.parkCode) ? 'url(#drop-shadow)' : 'url(#inset-shadow)')
+    .attr('filter', d => isFeatured(d.parkCode) ? '' : 'url(#inset-shadow)')
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
     });
@@ -403,6 +403,14 @@ function updateParksCounter(visits) {
     } else {
       // Ensure we end exactly at target
       counterElement.text(targetCount);
+
+      // Trigger flourish animation
+      counterElement.classed('complete', true);
+
+      // Remove class after animation completes to allow re-triggering
+      setTimeout(() => {
+        counterElement.classed('complete', false);
+      }, 700);
     }
   }
 
