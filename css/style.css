@@ -415,11 +415,14 @@ image.place {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: inherit;
+  border-bottom-right-radius: inherit;
+  border-bottom-left-radius: 0;
   z-index: 0;
   filter: blur(1px);
   transition: filter var(--transition-base);
-  animation: fadeIn 0.4s ease-out;
+  animation: fadeIn var(--transition-base);
 }
 
 .visit-card:hover::before {
@@ -470,7 +473,7 @@ image.place {
   height: 80px;
   object-fit: contain;
   flex-shrink: 0;
-  animation: fadeIn 0.4s ease-out;
+  animation: fadeIn var(--transition-base);
 }
 
 .visit-card__content {
