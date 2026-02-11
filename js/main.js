@@ -175,8 +175,19 @@ function positionTooltip(tooltip, x, y, padding = 0) {
   const tipW = tipNode.offsetWidth;
   const tipH = tipNode.offsetHeight;
 
-  const flipX = (x + tipW > window.innerWidth - padding);
-  const flipY = (y + tipH > window.innerHeight - padding);
+  // Use visual viewport when available (accounts for zoom on mobile)
+  const vv = window.visualViewport;
+  const viewportWidth = vv ? vv.width : window.innerWidth;
+  const viewportHeight = vv ? vv.height : window.innerHeight;
+  const offsetX = vv ? vv.offsetLeft : 0;
+  const offsetY = vv ? vv.offsetTop : 0;
+
+  // Adjust coordinates relative to visual viewport
+  const relativeX = x - offsetX;
+  const relativeY = y - offsetY;
+
+  const flipX = (relativeX + tipW > viewportWidth - padding);
+  const flipY = (relativeY + tipH > viewportHeight - padding);
 
   tooltip
     .style('--tx', `${x}px`)
