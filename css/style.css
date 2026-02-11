@@ -415,6 +415,7 @@ image.place {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
   z-index: 0;
   filter: blur(1px);
   transition: filter var(--transition-base);
@@ -468,7 +469,6 @@ image.place {
   width: 80px;
   height: 80px;
   object-fit: contain;
-  border-radius: var(--radius-sm);
   flex-shrink: 0;
   animation: fadeIn 0.4s ease-out;
 }
