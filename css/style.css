@@ -69,7 +69,7 @@ html {
   font-size: 16px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   html {
     font-size: 14px;
   }
@@ -110,7 +110,7 @@ p {
   padding: 20px 0;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1023px) {
   .top,
   .boxed,
   .site-footer {
@@ -118,7 +118,7 @@ p {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .top,
   .site-footer {
     padding: 10px 0;
@@ -195,7 +195,7 @@ p {
   object-fit: cover;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .top__avatar {
     width: 40px;
     height: 40px;
@@ -244,17 +244,6 @@ svg {
 image.place {
   touch-action: none;
   cursor: pointer;
-}
-
-/* Hover effects only on devices with hover capability (not touch-only) */
-@media (hover: hover) {
-  image.place {
-    transition: transform var(--transition-base);
-  }
-
-  image.place:hover {
-    transform: scale(1.15);
-  }
 }
 
 #content {
@@ -368,7 +357,7 @@ image.place {
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-base), box-shadow var(--transition-base);
-  height: 96px;
+  height: 92px;
   /* Creates an isolated stacking context to prevent compositing layer changes
      in one card from causing repaints in other cards. Without this, animating
      a card can trigger opacity flickering in adjacent cards on mobile devices
@@ -393,17 +382,16 @@ image.place {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-lg);
-  margin-bottom: 40px;
   align-items: stretch;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 480px) {
   .visits-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1024px) {
   .visits-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -411,8 +399,8 @@ image.place {
 
 .visit-card {
   display: flex;
-  padding: 8px;
-  --bg-image-offset: calc(80px + 8px + 4px); /* cancellation image width + left padding + a bit more */
+  padding: 6px;
+  --bg-image-offset: calc(80px + 12px); /* cancellation image width + padding */
 }
 
 /* background image container */
@@ -427,12 +415,9 @@ image.place {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: inherit;
   z-index: 0;
   filter: blur(1px);
   transition: filter var(--transition-base);
-  mask-image: linear-gradient(to right, transparent 0px, black 30px);
-  -webkit-mask-image: linear-gradient(to right, transparent 0px, black 30px);
   animation: fadeIn 0.4s ease-out;
 }
 
@@ -443,7 +428,7 @@ image.place {
 /* Wrapper for image and content */
 .visit-card__wrapper {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 6px;
   position: relative;
   z-index: 3;
   flex: 1;
@@ -525,19 +510,26 @@ image.place {
   opacity: 0;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 479px) {
+  .visits-year-group {
+    margin-bottom: 16px;
+  }
+  .visits-grid {
+    gap: 8px;
+  }
+
   .card {
-    height: 72px;
+    height: 52px;
   }
 
   .visit-card {
     padding: 6px;
-    --bg-image-offset: calc(60px + 6px + 2px);  /* cancellation image width + left padding + a bit more */
+    --bg-image-offset: calc(40px + 12px);  /* cancellation image width + left padding + a bit more */
   }
 
   .visit-card__image {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
   }
 
   .visit-card__park {
