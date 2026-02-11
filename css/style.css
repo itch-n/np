@@ -380,21 +380,9 @@ image.place {
 
 .visits-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg);
   align-items: stretch;
-}
-
-@media (min-width: 480px) {
-  .visits-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .visits-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 .visit-card {
@@ -513,7 +501,13 @@ image.place {
   opacity: 0;
 }
 
-@media (max-width: 479px) {
+
+@media (max-width: 1023px) {
+  .visits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767px) {
   .visits-year-group {
     margin-bottom: 16px;
   }
@@ -522,17 +516,17 @@ image.place {
   }
 
   .card {
-    height: 52px;
+    height: 72px;
   }
 
   .visit-card {
     padding: 6px;
-    --bg-image-offset: calc(40px + 12px);  /* cancellation image width + left padding + a bit more */
+    --bg-image-offset: calc(60px + 12px);  /* cancellation image width + left padding + a bit more */
   }
 
   .visit-card__image {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
   }
 
   .visit-card__park {
@@ -541,5 +535,11 @@ image.place {
 
   .visit-card__date {
     font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .visits-grid {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
