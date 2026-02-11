@@ -121,7 +121,9 @@ function renderParkImages(map, nodes, config) {
     .attr('y', d => d.y - d.r)
     .attr('href', d => `img/np/${d.parkCode}.png`)
     .attr('preserveAspectRatio', 'xMidYMid slice')
-    .attr('filter', d => isFeatured(d.parkCode) ? '' : 'url(#inset-shadow)')
+    .attr('filter', 'url(#inset-shadow)') // Start all parks with inset shadow
+    .classed('place', true)
+    .classed('featured', d => isFeatured(d.parkCode)) // Mark featured parks for later reveal
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
     });
@@ -350,6 +352,9 @@ Promise.all([
     if (loadedCount === totalImages) {
       // All images loaded, trigger map animation
       svg.classed('loaded', true);
+
+      // Start chronological reveal animation synchronized with counter
+      animateChronologicalReveal(images, visits);
     }
   }
 
@@ -375,6 +380,62 @@ Promise.all([
 // ============================================================================
 // Parks Counter
 // ============================================================================
+
+/**
+ * Animates chronological reveal of visited parks synchronized with counter
+ */
+function animateChronologicalReveal(images, visits) {
+  if (!visits || visits.length === 0) return;
+
+  // Sort visits chronologically (oldest first)
+  const sortedVisits = [...visits].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  // Get unique park codes in chronological order (first visit only)
+  const seenParks = new Set();
+  const chronologicalParks = sortedVisits
+    .filter(v => {
+      if (seenParks.has(v.parkCode)) return false;
+      seenParks.add(v.parkCode);
+      return true;
+    })
+    .map(v => v.parkCode);
+
+  const totalParks = chronologicalParks.length;
+  const duration = 1500; // Same as counter animation
+  const startTime = performance.now();
+
+  function easeInQuad(t) {
+    return t * t;
+  }
+
+  function animateReveal(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // Apply ease-in easing
+    const easedProgress = easeInQuad(progress);
+    const currentIndex = Math.floor(easedProgress * totalParks);
+
+    // Reveal parks up to current index
+    for (let i = 0; i < currentIndex; i++) {
+      const parkCode = chronologicalParks[i];
+      images.filter(d => d.parkCode === parkCode)
+        .attr('filter', ''); // Remove inset shadow to reveal park
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(animateReveal);
+    } else {
+      // Ensure all parks are revealed at the end
+      chronologicalParks.forEach(parkCode => {
+        images.filter(d => d.parkCode === parkCode)
+          .attr('filter', '');
+      });
+    }
+  }
+
+  requestAnimationFrame(animateReveal);
+}
 
 /**
  * Updates the parks visited counter in the header with an animated count-up
