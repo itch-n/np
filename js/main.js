@@ -30,6 +30,9 @@ const MAP_CONFIG = {
   }
 };
 
+// Animation timing constants
+const ANIMATION_DELAY = 300; // Delay before park reveal animation starts (ms)
+
 // Featured parks derived from visits.json
 let featuredParks = new Set();
 
@@ -121,18 +124,9 @@ function renderParkImages(map, nodes, config) {
     .attr('y', d => d.y - d.r)
     .attr('href', d => `img/np/${d.parkCode}.png`)
     .attr('preserveAspectRatio', 'xMidYMid slice')
-    .attr('filter', d => isFeatured(d.parkCode) ? '' : 'url(#inset-shadow)') // Only non-featured parks get inset shadow
+    .attr('filter', 'url(#inset-shadow)') // ALL parks start with inset shadow
     .classed('place', true)
     .classed('featured', d => isFeatured(d.parkCode)) // Mark featured parks for later reveal
-    .attr('transform', d => {
-      // Start featured parks at scale 0 for pop animation
-      if (isFeatured(d.parkCode)) {
-        const cx = d.x;
-        const cy = d.y;
-        return `translate(${cx}, ${cy}) scale(0) translate(${-cx}, ${-cy})`;
-      }
-      return null;
-    })
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
     });
@@ -362,8 +356,10 @@ Promise.all([
       // All images loaded, trigger map animation
       svg.classed('loaded', true);
 
-      // Start chronological reveal animation synchronized with counter
-      animateChronologicalReveal(images, visits);
+      // Wait before starting chronological reveal animation
+      setTimeout(() => {
+        animateChronologicalReveal(images, visits);
+      }, ANIMATION_DELAY);
     }
   }
 
@@ -451,6 +447,9 @@ function animateChronologicalReveal(images, visits) {
         const cy = parkData.y;
         const startTimeLocal = currentTime;
 
+        // Remove the inset shadow filter immediately
+        parkImage.attr('filter', '');
+
         // Animate this specific park with bounce
         function animateParkPop(time) {
           const localElapsed = time - startTimeLocal;
@@ -478,6 +477,7 @@ function animateChronologicalReveal(images, visits) {
       chronologicalParks.forEach(parkCode => {
         if (!revealed.has(parkCode)) {
           const parkImage = images.filter(d => d.parkCode === parkCode);
+          parkImage.attr('filter', '');
           parkImage.attr('transform', null);
         }
       });
@@ -490,7 +490,7 @@ function animateChronologicalReveal(images, visits) {
 /**
  * Updates the parks visited counter in the header with an animated count-up
  */
-function updateParksCounter(visits) {
+function updateParksCounter(visits, delay = 0) {
   const counterElement = d3.select('.top__counter-visited');
 
   if (!visits || visits.length === 0) {
@@ -502,41 +502,44 @@ function updateParksCounter(visits) {
   const uniqueParks = new Set(visits.map(v => v.parkCode));
   const targetCount = uniqueParks.size;
 
-  // Animate counter from 0 to target
-  const duration = 1500; // 1.5 seconds
-  const startTime = performance.now();
+  // Wait for delay before starting animation
+  setTimeout(() => {
+    // Animate counter from 0 to target
+    const duration = 1500; // 1.5 seconds
+    const startTime = performance.now();
 
-  function easeInQuad(t) {
-    return t * t;
-  }
-
-  function animateCount(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-
-    // Apply ease-in easing
-    const easedProgress = easeInQuad(progress);
-    const currentCount = Math.floor(easedProgress * targetCount);
-
-    counterElement.text(currentCount);
-
-    if (progress < 1) {
-      requestAnimationFrame(animateCount);
-    } else {
-      // Ensure we end exactly at target
-      counterElement.text(targetCount);
-
-      // Trigger flourish animation
-      counterElement.classed('complete', true);
-
-      // Remove class after animation completes to allow re-triggering
-      setTimeout(() => {
-        counterElement.classed('complete', false);
-      }, 700);
+    function easeInQuad(t) {
+      return t * t;
     }
-  }
 
-  requestAnimationFrame(animateCount);
+    function animateCount(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Apply ease-in easing
+      const easedProgress = easeInQuad(progress);
+      const currentCount = Math.floor(easedProgress * targetCount);
+
+      counterElement.text(currentCount);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateCount);
+      } else {
+        // Ensure we end exactly at target
+        counterElement.text(targetCount);
+
+        // Trigger flourish animation
+        counterElement.classed('complete', true);
+
+        // Remove class after animation completes to allow re-triggering
+        setTimeout(() => {
+          counterElement.classed('complete', false);
+        }, 700);
+      }
+    }
+
+    requestAnimationFrame(animateCount);
+  }, delay);
 }
 
 // ============================================================================
@@ -675,8 +678,8 @@ function loadVisitsTable() {
         parksLookup[park.parkCode] = `${shortenParkName(park.name)}, ${park.state}`;
       });
 
-      // Update parks counter
-      updateParksCounter(visits);
+      // Update parks counter with delay to sync with map animation
+      updateParksCounter(visits, ANIMATION_DELAY);
 
       renderVisitsTable(visits, parksLookup);
     })
