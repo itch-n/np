@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="142d7c70-6ac5-4a9e-b532-fde70ad5cefc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/img/cancellations/20241215-hale.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/cancellations/20250818-yose.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/cancellations/20250912-mora.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/cancellations/20251026-care.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/cancellations/20251219-deva.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/cancellations/20260123-sagu.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/visits.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/visits.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/cancellations/20241215-hale.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/cancellations/20250818-yose.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/cancellations/20250912-mora.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/cancellations/20251026-care.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/cancellations/20251219-deva.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/cancellations/20260123-sagu.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
