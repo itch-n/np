@@ -36,105 +36,162 @@ const osParks = ["dena", "gaar", "glba", "katm", "npsa", "hale", "havo",
 // ============================================================================
 
 /**
- * Creates a drop shadow filter for featured park images
+ * Creates a drop shadow filter for featured park images with brown tint and directional lighting
  */
 function createDropShadowFilter(defs, config) {
   const filter = defs.append('filter')
     .attr('id', 'drop-shadow')
-    .attr('height', '130%');
+    .attr('height', '150%')
+    .attr('width', '150%');
 
-  // Blur the source alpha (creates shadow shape)
+  // === OUTER SHADOW (Soft, ambient) ===
+
+  // Blur the source alpha for outer shadow
   filter.append('feGaussianBlur')
     .attr('in', 'SourceAlpha')
-    .attr('stdDeviation', config.shadow.blur);
+    .attr('stdDeviation', '4')
+    .attr('result', 'outerBlur');
 
-  // Offset shadow position
+  // Offset shadow directionally (light from top-left)
   filter.append('feOffset')
-    .attr('dx', config.shadow.offsetX)
-    .attr('dy', config.shadow.offsetY)
-    .attr('result', 'offsetblur');
+    .attr('in', 'outerBlur')
+    .attr('dx', '1')
+    .attr('dy', '5')
+    .attr('result', 'outerOffset');
 
-  // Set shadow opacity
-  filter.append('feComponentTransfer')
-    .append('feFuncA')
-    .attr('type', 'linear')
-    .attr('slope', config.shadow.opacity);
+  // Add brown tint to outer shadow
+  filter.append('feColorMatrix')
+    .attr('in', 'outerOffset')
+    .attr('type', 'matrix')
+    .attr('values', '0.83 0 0 0 0  0 0.77 0 0 0  0 0 0.69 0 0  0 0 0 0.35 0')
+    .attr('result', 'outerShadow');
 
-  // Merge shadow with original graphic
+  // === INNER SHADOW (Sharp, defined) ===
+
+  // Blur the source alpha for inner shadow
+  filter.append('feGaussianBlur')
+    .attr('in', 'SourceAlpha')
+    .attr('stdDeviation', '2')
+    .attr('result', 'innerBlur');
+
+  // Offset shadow directionally (same direction, less distance)
+  filter.append('feOffset')
+    .attr('in', 'innerBlur')
+    .attr('dx', '1')
+    .attr('dy', '3')
+    .attr('result', 'innerOffset');
+
+  // Add brown tint to inner shadow (darker)
+  filter.append('feColorMatrix')
+    .attr('in', 'innerOffset')
+    .attr('type', 'matrix')
+    .attr('values', '0.83 0 0 0 0  0 0.77 0 0 0  0 0 0.69 0 0  0 0 0 0.5 0')
+    .attr('result', 'innerShadow');
+
+  // === COMPOSITE EVERYTHING ===
   const merge = filter.append('feMerge');
-  merge.append('feMergeNode'); // Shadow layer
-  merge.append('feMergeNode').attr('in', 'SourceGraphic'); // Original image
+  merge.append('feMergeNode').attr('in', 'outerShadow');    // Soft outer shadow
+  merge.append('feMergeNode').attr('in', 'innerShadow');    // Sharp inner shadow
+  merge.append('feMergeNode').attr('in', 'SourceGraphic');  // Original image
 }
 
 /**
- * Creates a fade filter with color effects for non-featured park images
- * Applies: drop shadow + sepia + hue rotation + saturation + brightness
+ * Creates an inset shadow filter with solid background
+ * and realistic brown-tinted double shadow for non-featured park images
  */
-function createFadeFilter(defs, config) {
+function createInsetShadowFilter(defs, config) {
   const filter = defs.append('filter')
-    .attr('id', 'fade-shadow')
-    .attr('height', '130%');
+    .attr('id', 'inset-shadow');
 
-  // Drop shadow (same as featured parks)
-  filter.append('feGaussianBlur')
+  // Create solid background (#FCFAF8)
+  filter.append('feFlood')
+    .attr('flood-color', '#FCFAF8')
+    .attr('result', 'whiteBg');
+
+  // Composite background with the image shape
+  filter.append('feComposite')
+    .attr('in', 'whiteBg')
+    .attr('in2', 'SourceAlpha')
+    .attr('operator', 'in')
+    .attr('result', 'whiteShape');
+
+  // === INNER SHADOW (Sharp, darker) ===
+
+  // Invert alpha for inner shadow
+  filter.append('feColorMatrix')
     .attr('in', 'SourceAlpha')
-    .attr('stdDeviation', config.shadow.blur)
-    .attr('result', 'blur');
-
-  filter.append('feOffset')
-    .attr('in', 'blur')
-    .attr('dx', config.shadow.offsetX)
-    .attr('dy', config.shadow.offsetY)
-    .attr('result', 'offsetBlur');
-
-  filter.append('feComponentTransfer')
-    .attr('in', 'offsetBlur')
-    .append('feFuncA')
-    .attr('type', 'linear')
-    .attr('slope', config.shadow.opacity);
-
-  // Color effects: Apply sepia tone (nature theme)
-  filter.append('feColorMatrix')
-    .attr('in', 'SourceGraphic')
     .attr('type', 'matrix')
-    .attr('values', '0.393 0.769 0.189 0 0  0.349 0.686 0.168 0 0  0.272 0.534 0.131 0 0  0 0 0 1 0')
-    .attr('result', 'sepia');
+    .attr('values', '0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1 1')
+    .attr('result', 'innerInverse');
 
-  // Rotate hue to green
+  // Blur for inner shadow (sharper)
+  filter.append('feGaussianBlur')
+    .attr('in', 'innerInverse')
+    .attr('stdDeviation', '3')
+    .attr('result', 'innerBlurred');
+
+  // Offset directionally (light from top-left)
+  filter.append('feOffset')
+    .attr('in', 'innerBlurred')
+    .attr('dx', '1')
+    .attr('dy', '3')
+    .attr('result', 'innerOffset');
+
+  // Clip to shape
+  filter.append('feComposite')
+    .attr('in', 'innerOffset')
+    .attr('in2', 'SourceAlpha')
+    .attr('operator', 'in')
+    .attr('result', 'innerClipped');
+
+  // Add brown tint and darken
   filter.append('feColorMatrix')
-    .attr('in', 'sepia')
-    .attr('type', 'hueRotate')
-    .attr('values', config.fade.hueRotation)
-    .attr('result', 'hue');
+    .attr('in', 'innerClipped')
+    .attr('type', 'matrix')
+    .attr('values', '0.83 0 0 0 0  0 0.77 0 0 0  0 0 0.69 0 0  0 0 0 0.6 0')
+    .attr('result', 'innerShadow');
 
-  // Reduce saturation
+  // === OUTER SHADOW (Soft, subtle) ===
+
+  // Invert alpha for outer shadow
   filter.append('feColorMatrix')
-    .attr('in', 'hue')
-    .attr('type', 'saturate')
-    .attr('values', config.fade.saturation)
-    .attr('result', 'saturate');
+    .attr('in', 'SourceAlpha')
+    .attr('type', 'matrix')
+    .attr('values', '0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1 1')
+    .attr('result', 'outerInverse');
 
-  // Increase brightness
-  const brightness = filter.append('feComponentTransfer')
-    .attr('in', 'saturate')
-    .attr('result', 'brightness');
+  // Blur for outer shadow (softer)
+  filter.append('feGaussianBlur')
+    .attr('in', 'outerInverse')
+    .attr('stdDeviation', '7')
+    .attr('result', 'outerBlurred');
 
-  brightness.append('feFuncR')
-    .attr('type', 'linear')
-    .attr('slope', config.fade.brightness);
+  // Offset directionally (same direction, slightly more)
+  filter.append('feOffset')
+    .attr('in', 'outerBlurred')
+    .attr('dx', '1')
+    .attr('dy', '3')
+    .attr('result', 'outerOffset');
 
-  brightness.append('feFuncG')
-    .attr('type', 'linear')
-    .attr('slope', config.fade.brightness);
+  // Clip to shape
+  filter.append('feComposite')
+    .attr('in', 'outerOffset')
+    .attr('in2', 'SourceAlpha')
+    .attr('operator', 'in')
+    .attr('result', 'outerClipped');
 
-  brightness.append('feFuncB')
-    .attr('type', 'linear')
-    .attr('slope', config.fade.brightness);
+  // Add brown tint and lighten (subtle)
+  filter.append('feColorMatrix')
+    .attr('in', 'outerClipped')
+    .attr('type', 'matrix')
+    .attr('values', '0.83 0 0 0 0  0 0.77 0 0 0  0 0 0.69 0 0  0 0 0 0.3 0')
+    .attr('result', 'outerShadow');
 
-  // Combine shadow with color-adjusted image
+  // === COMPOSITE EVERYTHING ===
   const merge = filter.append('feMerge');
-  merge.append('feMergeNode').attr('in', 'offsetBlur');
-  merge.append('feMergeNode').attr('in', 'brightness');
+  merge.append('feMergeNode').attr('in', 'whiteShape');     // Background
+  merge.append('feMergeNode').attr('in', 'outerShadow');    // Soft outer shadow
+  merge.append('feMergeNode').attr('in', 'innerShadow');    // Sharp inner shadow
 }
 
 // ============================================================================
@@ -221,8 +278,7 @@ function renderParkImages(map, nodes, config) {
     .attr('y', d => d.y - d.r)
     .attr('href', d => `img/np/${d.parkCode}.png`)
     .attr('preserveAspectRatio', 'xMidYMid slice')
-    .attr('filter', d => isFeatured(d.parkCode) ? 'url(#drop-shadow)' : 'url(#fade-shadow)')
-    .attr('opacity', d => isFeatured(d.parkCode) ? 1 : config.fade.opacity)
+    .attr('filter', d => isFeatured(d.parkCode) ? 'url(#drop-shadow)' : 'url(#inset-shadow)')
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
     });
@@ -405,7 +461,7 @@ const svg = d3.select("#content")
 // Create SVG filters
 const defs = svg.append('defs');
 createDropShadowFilter(defs, MAP_CONFIG);
-createFadeFilter(defs, MAP_CONFIG);
+createInsetShadowFilter(defs, MAP_CONFIG);
 
 // Create map group
 const map = svg.append('g').attr('class', 'map');

@@ -37,10 +37,10 @@
   --radius-lg: 12px;
   --radius-full: 50%;
 
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.2);
+  /* Shadows - Brown-tinted with directional lighting from top-left */
+  --shadow-sm: 1px 3px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 1px 4px 14px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 1px 5px 20px rgba(0, 0, 0, 0.2);
 
   /* Transitions */
   --transition-fast: 0.2s ease;
@@ -199,7 +199,7 @@ p {
   border-radius: var(--radius-lg);
   overflow: hidden;
   line-height: 0;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -279,7 +279,7 @@ image.place {
   position: relative;
   display: inline-flex;
   flex-direction: column;
-  filter: drop-shadow(8px 8px 10px gray);
+  box-shadow: var(--shadow-md);
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(4px);
   border-radius: var(--radius-lg);
