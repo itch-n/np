@@ -258,9 +258,8 @@ function animateChronologicalReveal(images, visits) {
     // Single unified RAF loop instead of 40+ concurrent loops (one per park)
     const animatingParks = [];
 
-    function easeOutElastic(t) {
-      const c4 = (2 * Math.PI) / 3;
-      return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
     }
 
     function easeInQuad(t) {
@@ -275,14 +274,20 @@ function animateChronologicalReveal(images, visits) {
         const parkAnim = animatingParks[i];
         const localElapsed = currentTime - parkAnim.startTime;
         const localProgress = Math.min(localElapsed / individualDuration, 1);
-        const scale = easeOutElastic(localProgress);
 
-        parkAnim.park.element.attr('transform',
-          `translate(${parkAnim.cx}, ${parkAnim.cy}) scale(${scale}) translate(${-parkAnim.cx}, ${-parkAnim.cy})`);
+        // Fade + settle effect (wood materializing into place)
+        const eased = easeOutCubic(localProgress);
+        const scale = 0.95 + (0.05 * eased); // Subtle scale 0.95 -> 1.0
+        const opacity = eased; // Fade from 0 to 1
+
+        parkAnim.park.element
+          .attr('transform', `translate(${parkAnim.cx}, ${parkAnim.cy}) scale(${scale}) translate(${-parkAnim.cx}, ${-parkAnim.cy})`)
+          .style('opacity', opacity);
 
         // Remove from array if animation is complete
         if (localProgress >= 1) {
           parkAnim.park.element.attr('transform', null);
+          parkAnim.park.element.style('opacity', null); // Reset opacity
           parkAnim.park.element.style('will-change', 'auto'); // OPTIMIZATION #5: Clean up hint
           animatingParks.splice(i, 1);
         }
@@ -320,8 +325,11 @@ function animateChronologicalReveal(images, visits) {
           // Apply drop shadow filter to make emblem look like solid wood
           park.element.attr('filter', 'url(#drop-shadow)');
 
+          // Set initial opacity for fade-in effect
+          park.element.style('opacity', 0);
+
           // OPTIMIZATION #5: Hint to browser that this element will animate (hardware acceleration)
-          park.element.style('will-change', 'transform');
+          park.element.style('will-change', 'transform, opacity');
 
           // Add to animating parks array
           animatingParks.push({
@@ -351,6 +359,7 @@ function animateChronologicalReveal(images, visits) {
           if (park) {
             park.element.attr('filter', 'url(#drop-shadow)');
             park.element.attr('transform', null);
+            park.element.style('opacity', null); // Reset opacity
           }
         }
 
