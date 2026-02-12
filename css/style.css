@@ -212,7 +212,7 @@ p {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   @media (max-width: 479px) {
-    display: none;
+    font-size: 0.9rem;
   }
 }
 
@@ -306,6 +306,7 @@ image.place {
   max-width: 90vw;
   max-height: 90vh;
   object-fit: contain;
+  filter: drop-shadow(1px 2px 0 #9B7760);
 }
 
 .tooltip__name {

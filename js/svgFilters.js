@@ -3,65 +3,42 @@
 // ============================================================================
 
 /**
- * Creates a drop shadow filter for featured park images with brown tint and directional lighting
+ * Creates a solid shadow effect with brown wood color
+ * Makes emblems look like solid chunks of wood with sharp shadows
  * @param {d3.Selection} defs - D3 selection of the SVG <defs> element
  * @param {Object} config - Configuration object (currently unused but kept for consistency)
  */
 export function createDropShadowFilter(defs, config) {
   const filter = defs.append('filter')
     .attr('id', 'drop-shadow')
-    .attr('height', '150%')
-    .attr('width', '150%');
+    .attr('height', '115%')
+    .attr('width', '115%')
+    .attr('x', '-7.5%')
+    .attr('y', '-7.5%');
 
-  // === OUTER SHADOW (Soft, ambient) ===
-
-  // Blur the source alpha for outer shadow
-  filter.append('feGaussianBlur')
-    .attr('in', 'SourceAlpha')
-    .attr('stdDeviation', '4')
-    .attr('result', 'outerBlur');
-
-  // Offset shadow directionally (light from top-left)
+  // Offset the alpha to create shadow position
   filter.append('feOffset')
-    .attr('in', 'outerBlur')
-    .attr('dx', '1')
-    .attr('dy', '5')
-    .attr('result', 'outerOffset');
-
-  // Add brown tint to outer shadow
-  filter.append('feColorMatrix')
-    .attr('in', 'outerOffset')
-    .attr('type', 'matrix')
-    .attr('values', '0.83 0 0 0 0  0 0.77 0 0 0  0 0 0.69 0 0  0 0 0 0.25 0')
-    .attr('result', 'outerShadow');
-
-  // === INNER SHADOW (Sharp, defined) ===
-
-  // Blur the source alpha for inner shadow
-  filter.append('feGaussianBlur')
     .attr('in', 'SourceAlpha')
-    .attr('stdDeviation', '2')
-    .attr('result', 'innerBlur');
+    .attr('dx', '0.5')
+    .attr('dy', '1')
+    .attr('result', 'offsetAlpha');
 
-  // Offset shadow directionally (same direction, less distance)
-  filter.append('feOffset')
-    .attr('in', 'innerBlur')
-    .attr('dx', '1')
-    .attr('dy', '3')
-    .attr('result', 'innerOffset');
+  // Flood with brown wood color (lighter, more subtle)
+  filter.append('feFlood')
+    .attr('flood-color', '#9B7760')
+    .attr('result', 'brownColor');
 
-  // Add brown tint to inner shadow (darker)
-  filter.append('feColorMatrix')
-    .attr('in', 'innerOffset')
-    .attr('type', 'matrix')
-    .attr('values', '0.83 0 0 0 0  0 0.77 0 0 0  0 0 0.69 0 0  0 0 0 0.35 0')
-    .attr('result', 'innerShadow');
+  // Composite the color with the offset alpha shape
+  filter.append('feComposite')
+    .attr('in', 'brownColor')
+    .attr('in2', 'offsetAlpha')
+    .attr('operator', 'in')
+    .attr('result', 'brownShadow');
 
-  // === COMPOSITE EVERYTHING ===
+  // Stack layers: shadow behind original
   const merge = filter.append('feMerge');
-  merge.append('feMergeNode').attr('in', 'outerShadow');    // Soft outer shadow
-  merge.append('feMergeNode').attr('in', 'innerShadow');    // Sharp inner shadow
-  merge.append('feMergeNode').attr('in', 'SourceGraphic');  // Original image
+  merge.append('feMergeNode').attr('in', 'brownShadow');     // Brown shadow behind
+  merge.append('feMergeNode').attr('in', 'SourceGraphic');   // Original image on top
 }
 
 /**

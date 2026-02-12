@@ -2,7 +2,7 @@
 // Imports
 // ============================================================================
 
-import {createInsetShadowFilter} from './svgFilters.js';
+import {createInsetShadowFilter, createDropShadowFilter} from './svgFilters.js';
 import {createTooltip, setupMouseInteractions, setupTouchInteractions, shortenParkName} from './tooltip.js';
 
 // ============================================================================
@@ -79,7 +79,7 @@ function runForceSimulation(nodes, config) {
   const sim = d3.forceSimulation(nodes)
     .force('x', d3.forceX(d => d.px))
     .force('y', d3.forceY(d => d.py))
-    .force('collide', d3.forceCollide().radius(d => d.r))
+    .force('collide', d3.forceCollide().radius(d => d.r + 1))
     .stop();
 
   for (let i = 0; i < config.simulationIterations; i++) {
@@ -163,6 +163,7 @@ const svg = d3.select("#content")
 // Create SVG filters
 const defs = svg.append('defs');
 createInsetShadowFilter(defs, CONFIG);
+createDropShadowFilter(defs, CONFIG);
 
 // Create map group
 const map = svg.append('g').attr('class', 'map');
@@ -316,8 +317,8 @@ function animateChronologicalReveal(images, visits) {
           const cx = park.data.x;
           const cy = park.data.y;
 
-          // Remove the inset shadow filter to reveal the park
-          park.element.attr('filter', '');
+          // Apply drop shadow filter to make emblem look like solid wood
+          park.element.attr('filter', 'url(#drop-shadow)');
 
           // OPTIMIZATION #5: Hint to browser that this element will animate (hardware acceleration)
           park.element.style('will-change', 'transform');
@@ -348,7 +349,7 @@ function animateChronologicalReveal(images, visits) {
           const parkCode = chronologicalParks[i];
           const park = parkImageMap.get(parkCode);
           if (park) {
-            park.element.attr('filter', '');
+            park.element.attr('filter', 'url(#drop-shadow)');
             park.element.attr('transform', null);
           }
         }

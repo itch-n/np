@@ -4,13 +4,8 @@
     <list default="true" id="142d7c70-6ac5-4a9e-b532-fde70ad5cefc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2021.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2021.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2022.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2023.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2024.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2024.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2025.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2025.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/years/2026.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/years/2026.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/svgFilters.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/svgFilters.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,9 +55,9 @@
       <recent name="$PROJECT_DIR$/img" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/img/visits" />
       <recent name="$PROJECT_DIR$/img/cancellations" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager">
