@@ -437,10 +437,9 @@ image.place {
   content: '';
   position: absolute;
   top: -12px;
-  right: -700px;
   bottom: -12px;
-  left: 0;
-  background: linear-gradient(to right, var(--card-sliding-overlay-color) 0%, var(--card-sliding-overlay-color) 70%, transparent 100%);
+  width: 200%;
+  background: linear-gradient(to right, var(--card-sliding-overlay-color) 0%, var(--card-sliding-overlay-color) 50%, transparent 100%);
   z-index: -1;
   transform-origin: right;
   pointer-events: none;
