@@ -3,12 +3,7 @@
 // ============================================================================
 
 import {createInsetShadowFilter} from './svgFilters.js';
-import {
-  shortenParkName,
-  createTooltip,
-  setupMouseInteractions,
-  setupTouchInteractions
-} from './tooltip.js';
+import {createTooltip, setupMouseInteractions, setupTouchInteractions, shortenParkName} from './tooltip.js';
 
 // ============================================================================
 // Configuration
@@ -217,9 +212,7 @@ Promise.all([
 
   await waitForTransition(svg.node(), 'opacity');
 
-  // Start synchronized animations
   animateChronologicalReveal(images, visits);
-  updateParksCounter(visits);
 
   // Setup tooltip
   const {tooltip, tipImg, tipName} = createTooltip();
@@ -235,194 +228,168 @@ Promise.all([
 
 /**
  * Animates chronological reveal of visited parks synchronized with counter
+ * @returns {Promise} Resolves when animation completes
  */
 function animateChronologicalReveal(images, visits) {
-  if (!visits || visits.length === 0) return;
+  return new Promise(resolve => {
+    const counterElement = d3.select('.top__counter-visited');
 
-  // Sort visits chronologically (oldest first)
-  const sortedVisits = [...visits].sort((a, b) => new Date(a.date) - new Date(b.date));
+    if (!visits || visits.length === 0) {
+      counterElement.text('0');
+      resolve();
+      return;
+    }
 
-  // Get unique park codes in chronological order (first visit only)
-  const seenParks = new Set();
-  const chronologicalParks = sortedVisits
-    .filter(v => {
-      if (seenParks.has(v.parkCode)) return false;
-      seenParks.add(v.parkCode);
-      return true;
-    })
-    .map(v => v.parkCode);
+    // Sort visits chronologically (oldest first)
+    const sortedVisits = [...visits].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  const totalParks = chronologicalParks.length;
-  const duration = CONFIG.animationDuration;
-  const individualDuration = 200; // Duration for each park's bounce animation
-  const startTime = performance.now();
+    // Get unique park codes in chronological order (first visit only)
+    const seenParks = new Set();
+    const chronologicalParks = sortedVisits
+      .filter(v => {
+        if (seenParks.has(v.parkCode)) return false;
+        seenParks.add(v.parkCode);
+        return true;
+      })
+      .map(v => v.parkCode);
 
-  // OPTIMIZATION #3: Map-based O(1) park lookup
-  // Instead of filtering through all images for each park (O(n)), use a Map for instant lookup
-  const parkImageMap = new Map();
-  images.each(function(d) {
-    parkImageMap.set(d.parkCode, {
-      element: d3.select(this),
-      data: d
+    const totalParks = chronologicalParks.length;
+    const duration = CONFIG.animationDuration;
+    const individualDuration = 200; // Duration for each park's bounce animation
+    const startTime = performance.now();
+
+    // OPTIMIZATION #3: Map-based O(1) park lookup
+    // Instead of filtering through all images for each park (O(n)), use a Map for instant lookup
+    const parkImageMap = new Map();
+    images.each(function (d) {
+      parkImageMap.set(d.parkCode, {
+        element: d3.select(this),
+        data: d
+      });
     });
-  });
 
-  // OPTIMIZATION #4: Track last processed index to avoid O(n²) iteration
-  // Instead of checking all parks 0->currentIndex every frame, only process new ones
-  let lastProcessedIndex = 0;
+    // OPTIMIZATION #4: Track last processed index to avoid O(n²) iteration
+    // Instead of checking all parks 0->currentIndex every frame, only process new ones
+    let lastProcessedIndex = 0;
 
-  // OPTIMIZATION #1: Track all currently animating parks in a single array
-  // Single unified RAF loop instead of 40+ concurrent loops (one per park)
-  const animatingParks = [];
+    // OPTIMIZATION #1: Track all currently animating parks in a single array
+    // Single unified RAF loop instead of 40+ concurrent loops (one per park)
+    const animatingParks = [];
 
-  function easeOutElastic(t) {
-    const c4 = (2 * Math.PI) / 3;
-    return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
-  }
-
-  function easeInQuad(t) {
-    return t * t;
-  }
-
-  // OPTIMIZATION #1: Single animation loop that updates ALL animating parks
-  // Batches all park animations into one RAF loop instead of separate loops per park
-  function updateAnimatingParks(currentTime) {
-    // Update all parks that are currently animating
-    for (let i = animatingParks.length - 1; i >= 0; i--) {
-      const parkAnim = animatingParks[i];
-      const localElapsed = currentTime - parkAnim.startTime;
-      const localProgress = Math.min(localElapsed / individualDuration, 1);
-      const scale = easeOutElastic(localProgress);
-
-      parkAnim.park.element.attr('transform',
-        `translate(${parkAnim.cx}, ${parkAnim.cy}) scale(${scale}) translate(${-parkAnim.cx}, ${-parkAnim.cy})`);
-
-      // Remove from array if animation is complete
-      if (localProgress >= 1) {
-        parkAnim.park.element.attr('transform', null);
-        parkAnim.park.element.style('will-change', 'auto'); // OPTIMIZATION #5: Clean up hint
-        animatingParks.splice(i, 1);
-      }
+    function easeOutElastic(t) {
+      const c4 = (2 * Math.PI) / 3;
+      return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
     }
 
-    // Continue if there are still parks animating
-    if (animatingParks.length > 0) {
-      requestAnimationFrame(updateAnimatingParks);
+    function easeInQuad(t) {
+      return t * t;
     }
-  }
 
-  function animateReveal(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
+    // OPTIMIZATION #1: Single animation loop that updates ALL animating parks
+    // Batches all park animations into one RAF loop instead of separate loops per park
+    function updateAnimatingParks(currentTime) {
+      // Update all parks that are currently animating
+      for (let i = animatingParks.length - 1; i >= 0; i--) {
+        const parkAnim = animatingParks[i];
+        const localElapsed = currentTime - parkAnim.startTime;
+        const localProgress = Math.min(localElapsed / individualDuration, 1);
+        const scale = easeOutElastic(localProgress);
 
-    // Apply ease-in easing to the overall progress
-    const easedProgress = easeInQuad(progress);
-    const currentIndex = Math.floor(easedProgress * totalParks);
+        parkAnim.park.element.attr('transform',
+          `translate(${parkAnim.cx}, ${parkAnim.cy}) scale(${scale}) translate(${-parkAnim.cx}, ${-parkAnim.cy})`);
 
-    // OPTIMIZATION #4: Reveal only NEW parks since last frame
-    // Only iterate over parks added since the last frame, not all from the beginning
-    for (let i = lastProcessedIndex; i < currentIndex; i++) {
-      const parkCode = chronologicalParks[i];
-
-      // OPTIMIZATION #3: Get park from lookup map (O(1) instead of O(n) filter)
-      const park = parkImageMap.get(parkCode);
-
-      if (park) {
-        const cx = park.data.x;
-        const cy = park.data.y;
-
-        // Remove the inset shadow filter immediately
-        park.element.attr('filter', '');
-
-        // OPTIMIZATION #5: Hint to browser that this element will animate (hardware acceleration)
-        park.element.style('will-change', 'transform');
-
-        // Add to animating parks array
-        animatingParks.push({
-          park,
-          cx,
-          cy,
-          startTime: currentTime
-        });
-
-        // Start the unified animation loop if not already running
-        if (animatingParks.length === 1) {
-          requestAnimationFrame(updateAnimatingParks);
+        // Remove from array if animation is complete
+        if (localProgress >= 1) {
+          parkAnim.park.element.attr('transform', null);
+          parkAnim.park.element.style('will-change', 'auto'); // OPTIMIZATION #5: Clean up hint
+          animatingParks.splice(i, 1);
         }
       }
+
+      // Continue if there are still parks animating
+      if (animatingParks.length > 0) {
+        requestAnimationFrame(updateAnimatingParks);
+      }
     }
 
-    // Update the last processed index
-    lastProcessedIndex = currentIndex;
+    function animateReveal(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
 
-    if (progress < 1) {
-      requestAnimationFrame(animateReveal);
-    } else {
-      // Ensure all parks are revealed at the end
-      for (let i = lastProcessedIndex; i < totalParks; i++) {
+      // Apply ease-in easing to the overall progress
+      const easedProgress = easeInQuad(progress);
+      const currentIndex = Math.floor(easedProgress * totalParks);
+
+      // Update counter to match number of parks revealed
+      counterElement.text(currentIndex);
+
+      // OPTIMIZATION #4: Reveal only NEW parks since last frame
+      // Only iterate over parks added since the last frame, not all from the beginning
+      for (let i = lastProcessedIndex; i < currentIndex; i++) {
         const parkCode = chronologicalParks[i];
+
+        // OPTIMIZATION #3: Get park from lookup map (O(1) instead of O(n) filter)
         const park = parkImageMap.get(parkCode);
+
         if (park) {
+          const cx = park.data.x;
+          const cy = park.data.y;
+
+          // Remove the inset shadow filter immediately
           park.element.attr('filter', '');
-          park.element.attr('transform', null);
+
+          // OPTIMIZATION #5: Hint to browser that this element will animate (hardware acceleration)
+          park.element.style('will-change', 'transform');
+
+          // Add to animating parks array
+          animatingParks.push({
+            park,
+            cx,
+            cy,
+            startTime: currentTime
+          });
+
+          // Start the unified animation loop if not already running
+          if (animatingParks.length === 1) {
+            requestAnimationFrame(updateAnimatingParks);
+          }
         }
       }
+
+      // Update the last processed index
+      lastProcessedIndex = currentIndex;
+
+      if (progress < 1) {
+        requestAnimationFrame(animateReveal);
+      } else {
+        // Ensure all parks are revealed at the end
+        for (let i = lastProcessedIndex; i < totalParks; i++) {
+          const parkCode = chronologicalParks[i];
+          const park = parkImageMap.get(parkCode);
+          if (park) {
+            park.element.attr('filter', '');
+            park.element.attr('transform', null);
+          }
+        }
+
+        // Ensure counter shows exact final count
+        counterElement.text(totalParks);
+
+        // Trigger flourish animation
+        counterElement.classed('complete', true);
+
+        // Remove class after animation completes to allow re-triggering
+        setTimeout(() => {
+          counterElement.classed('complete', false);
+        }, 700);
+
+        // Animation complete - resolve the promise
+        resolve();
+      }
     }
-  }
 
-  requestAnimationFrame(animateReveal);
-}
-
-/**
- * Updates the parks visited counter in the header with an animated count-up
- */
-function updateParksCounter(visits) {
-  const counterElement = d3.select('.top__counter-visited');
-
-  if (!visits || visits.length === 0) {
-    counterElement.text('0');
-    return;
-  }
-
-  // Count unique park codes
-  const uniqueParks = new Set(visits.map(v => v.parkCode));
-  const targetCount = uniqueParks.size;
-
-  // Animate counter from 0 to target
-  const duration = CONFIG.animationDuration;
-  const startTime = performance.now();
-
-  function easeInQuad(t) {
-    return t * t;
-  }
-
-  function animateCount(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-
-    // Apply ease-in easing
-    const easedProgress = easeInQuad(progress);
-    const currentCount = Math.floor(easedProgress * targetCount);
-
-    counterElement.text(currentCount);
-
-    if (progress < 1) {
-      requestAnimationFrame(animateCount);
-    } else {
-      // Ensure we end exactly at target
-      counterElement.text(targetCount);
-
-      // Trigger flourish animation
-      counterElement.classed('complete', true);
-
-      // Remove class after animation completes to allow re-triggering
-      setTimeout(() => {
-        counterElement.classed('complete', false);
-      }, 700);
-    }
-  }
-
-  requestAnimationFrame(animateCount);
+    requestAnimationFrame(animateReveal);
+  });
 }
 
 // ============================================================================
