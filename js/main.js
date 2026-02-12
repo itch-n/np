@@ -353,13 +353,23 @@ Promise.all([
   function checkAllImagesLoaded() {
     loadedCount++;
     if (loadedCount === totalImages) {
-      // All images loaded, trigger map animation
+      // All images loaded, trigger map fade-in animation
       svg.classed('loaded', true);
 
-      // Wait before starting chronological reveal animation
-      setTimeout(() => {
-        animateChronologicalReveal(images, visits);
-      }, ANIMATION_DELAY);
+      // Wait for map fade-in transition to complete, then start reveal animations
+      svg.node().addEventListener('transitionend', function handleTransitionEnd(e) {
+        // Only respond to the opacity transition on the svg element itself
+        if (e.propertyName === 'opacity' && e.target === svg.node()) {
+          svg.node().removeEventListener('transitionend', handleTransitionEnd);
+
+          // Wait additional delay before starting chronological reveal
+          setTimeout(() => {
+            // Start both animations simultaneously
+            animateChronologicalReveal(images, visits);
+            updateParksCounter(visits);
+          }, ANIMATION_DELAY);
+        }
+      });
     }
   }
 
@@ -678,8 +688,8 @@ function loadVisitsTable() {
         parksLookup[park.parkCode] = `${shortenParkName(park.name)}, ${park.state}`;
       });
 
-      // Update parks counter with delay to sync with map animation
-      updateParksCounter(visits, ANIMATION_DELAY);
+      // Counter will be updated when map animation completes
+      // (see checkAllImagesLoaded function above)
 
       renderVisitsTable(visits, parksLookup);
     })
