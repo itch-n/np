@@ -17,7 +17,8 @@ const CONFIG = {
     lower48: 16,
     others: 10
   },
-  animationDuration: 1500 // Duration in ms for counter and reveal animations
+  animationDuration: 1500, // Duration in ms for counter and reveal animations
+  animationStartDelay: 300 // Delay in ms before starting reveal animation
 };
 
 // ============================================================================
@@ -144,21 +145,6 @@ function waitForImages(images) {
   });
 }
 
-/**
- * Waits for an element's CSS transition to complete
- */
-function waitForTransition(element, propertyName) {
-  return new Promise(resolve => {
-    function handleTransitionEnd(e) {
-      if (e.propertyName === propertyName && e.target === element) {
-        element.removeEventListener('transitionend', handleTransitionEnd);
-        resolve();
-      }
-    }
-
-    element.addEventListener('transitionend', handleTransitionEnd);
-  });
-}
 
 // ============================================================================
 // Main Initialization
@@ -206,20 +192,21 @@ Promise.all([
   // Render park images
   const images = renderParkImages(map, nodes, visits);
 
-  // Animation sequence: wait for images → fade in map → reveal
+  // Animation sequence: wait for images → reveal
   await waitForImages(images);
-  svg.classed('loaded', true);
+  svg.style('opacity', 1);
 
-  await waitForTransition(svg.node(), 'opacity');
-
-  animateChronologicalReveal(images, visits);
-
-  // Setup tooltip
+  // Setup tooltip immediately
   const {tooltip, tipImg, tipName} = createTooltip();
   const touchState = {active: false, currentTarget: null};
 
   setupMouseInteractions(images, tooltip, tipImg, tipName, touchState);
   setupTouchInteractions(images, tooltip, tipImg, tipName, touchState);
+
+  // Wait before starting reveal animation
+  setTimeout(() => {
+    animateChronologicalReveal(images, visits);
+  }, CONFIG.animationStartDelay);
 });
 
 // ============================================================================
