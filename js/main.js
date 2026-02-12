@@ -3,6 +3,12 @@
 // ============================================================================
 
 import {createInsetShadowFilter} from './svgFilters.js';
+import {
+  shortenParkName,
+  createTooltip,
+  setupMouseInteractions,
+  setupTouchInteractions
+} from './tooltip.js';
 
 // ============================================================================
 // Configuration
@@ -117,15 +123,6 @@ function renderParkImages(map, nodes, visits) {
 // ============================================================================
 
 /**
- * Shortens park name by removing "National Park" and variations
- */
-function shortenParkName(name) {
-  return name
-    .replace(/\s+National Park(?:\s+&\s+Preserve)?$/i, '')
-    .replace(/\s+National\s+and\s+State\s+Parks$/i, '');
-}
-
-/**
  * Waits for all images in a D3 selection to load
  */
 function waitForImages(images) {
@@ -165,158 +162,6 @@ function waitForTransition(element, propertyName) {
     }
 
     element.addEventListener('transitionend', handleTransitionEnd);
-  });
-}
-
-// ============================================================================
-// Tooltip Functions
-// ============================================================================
-
-/**
- * Creates tooltip DOM structure
- */
-function createTooltip() {
-  const tooltip = d3.select('body').append('div').attr('class', 'tooltip');
-  const tooltipContent = tooltip.append('div').attr('class', 'tooltip__content');
-  const tipImg = tooltipContent.append('img').attr('alt', 'preview');
-  const tipName = tooltipContent.append('div').attr('class', 'tooltip__name');
-
-  return {tooltip, tipImg, tipName};
-}
-
-/**
- * Shows tooltip with park information
- */
-function showTooltip(tooltip, tipImg, tipName, parkData) {
-  tipImg.attr('src', `img/np/${parkData.parkCode}.png`);
-  tipName.text(`${shortenParkName(parkData.name)}, ${parkData.state}`);
-  tooltip.style('display', 'block');
-}
-
-/**
- * Positions tooltip based on cursor/touch position
- */
-function positionTooltip(tooltip, x, y, padding = 0) {
-  const tipNode = tooltip.node();
-  const tipW = tipNode.offsetWidth;
-  const tipH = tipNode.offsetHeight;
-
-  // Use visual viewport when available (accounts for zoom on mobile)
-  const vv = window.visualViewport;
-  const viewportWidth = vv ? vv.width : window.innerWidth;
-  const viewportHeight = vv ? vv.height : window.innerHeight;
-  const offsetX = vv ? vv.offsetLeft : 0;
-  const offsetY = vv ? vv.offsetTop : 0;
-
-  // Adjust coordinates relative to visual viewport
-  const relativeX = x - offsetX;
-  const relativeY = y - offsetY;
-
-  const flipX = (relativeX + tipW > viewportWidth - padding);
-  const flipY = (relativeY + tipH > viewportHeight - padding);
-
-  tooltip
-    .style('--tx', `${x}px`)
-    .style('--ty', `${y}px`)
-    .classed('flip-x', flipX)
-    .classed('flip-y', flipY);
-}
-
-/**
- * Hides tooltip
- */
-function hideTooltip(tooltip) {
-  tooltip.style('display', 'none');
-}
-
-/**
- * Sets up mouse hover interactions
- */
-function setupMouseInteractions(images, tooltip, tipImg, tipName, touchState) {
-  images
-    .on('mouseover', (event, d) => {
-      if (!touchState.active) {
-        showTooltip(tooltip, tipImg, tipName, d);
-      }
-    })
-    .on('mousemove', (event) => {
-      if (!touchState.active) {
-        positionTooltip(tooltip, event.clientX, event.clientY);
-      }
-    })
-    .on('mouseout', () => {
-      if (!touchState.active) {
-        hideTooltip(tooltip);
-      }
-    });
-}
-
-/**
- * Sets up touch interactions for mobile devices
- */
-function setupTouchInteractions(images, tooltip, tipImg, tipName, touchState) {
-  images.on('touchstart', (event, d) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    touchState.active = true;
-    const currentImage = d3.select(event.currentTarget);
-
-    // Toggle tooltip if tapping same element
-    if (touchState.currentTarget === event.currentTarget) {
-      hideTooltip(tooltip);
-      currentImage.attr('transform', null); // Remove scale
-      touchState.currentTarget = null;
-      touchState.active = false;
-      return;
-    }
-
-    // Reset previous image transform
-    if (touchState.currentTarget) {
-      d3.select(touchState.currentTarget).attr('transform', null);
-    }
-
-    // Show tooltip for new element
-    touchState.currentTarget = event.currentTarget;
-
-    // Add scale transform for visual feedback
-    const x = +currentImage.attr('x') + (+currentImage.attr('width') / 2);
-    const y = +currentImage.attr('y') + (+currentImage.attr('height') / 2);
-    currentImage.attr('transform', `translate(${x}, ${y}) scale(1.15) translate(${-x}, ${-y})`);
-
-    showTooltip(tooltip, tipImg, tipName, d);
-
-    const touch = event.touches[0];
-    tooltip.style('display', 'block'); // Show first to get dimensions
-    positionTooltip(tooltip, touch.clientX, touch.clientY, 10);
-  });
-
-  // Hide tooltip when tapping outside
-  d3.select('body').on('touchstart.tooltip', function (event) {
-    if (!event.target.closest('image.place')) {
-      hideTooltip(tooltip);
-      if (touchState.currentTarget) {
-        d3.select(touchState.currentTarget).attr('transform', null);
-      }
-      touchState.currentTarget = null;
-      touchState.active = false;
-    }
-  });
-
-  // Prevent mouse events from firing after touch
-  // Note: Mobile browsers often fire mouse events 300-500ms after touchend
-  // We use requestAnimationFrame to defer the state reset until after
-  // any synthetic mouse events have been processed
-  d3.select('body').on('touchend.tooltip', function () {
-    // Use requestAnimationFrame for better timing than arbitrary setTimeout
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        // Double RAF ensures we're past any synthetic mouse events
-        if (touchState.active && tooltip.style('display') !== 'none') {
-          touchState.active = false;
-        }
-      });
-    });
   });
 }
 
@@ -412,7 +257,8 @@ function animateChronologicalReveal(images, visits) {
   const individualDuration = 200; // Duration for each park's bounce animation
   const startTime = performance.now();
 
-  // Create a lookup map for faster park image access
+  // OPTIMIZATION #3: Map-based O(1) park lookup
+  // Instead of filtering through all images for each park (O(n)), use a Map for instant lookup
   const parkImageMap = new Map();
   images.each(function(d) {
     parkImageMap.set(d.parkCode, {
@@ -421,10 +267,12 @@ function animateChronologicalReveal(images, visits) {
     });
   });
 
-  // Track the last processed index to avoid redundant iteration
+  // OPTIMIZATION #4: Track last processed index to avoid O(n²) iteration
+  // Instead of checking all parks 0->currentIndex every frame, only process new ones
   let lastProcessedIndex = 0;
 
-  // Track all currently animating parks in a single array
+  // OPTIMIZATION #1: Track all currently animating parks in a single array
+  // Single unified RAF loop instead of 40+ concurrent loops (one per park)
   const animatingParks = [];
 
   function easeOutElastic(t) {
@@ -436,7 +284,8 @@ function animateChronologicalReveal(images, visits) {
     return t * t;
   }
 
-  // Single animation loop that updates ALL animating parks
+  // OPTIMIZATION #1: Single animation loop that updates ALL animating parks
+  // Batches all park animations into one RAF loop instead of separate loops per park
   function updateAnimatingParks(currentTime) {
     // Update all parks that are currently animating
     for (let i = animatingParks.length - 1; i >= 0; i--) {
@@ -451,6 +300,7 @@ function animateChronologicalReveal(images, visits) {
       // Remove from array if animation is complete
       if (localProgress >= 1) {
         parkAnim.park.element.attr('transform', null);
+        parkAnim.park.element.style('will-change', 'auto'); // OPTIMIZATION #5: Clean up hint
         animatingParks.splice(i, 1);
       }
     }
@@ -469,11 +319,12 @@ function animateChronologicalReveal(images, visits) {
     const easedProgress = easeInQuad(progress);
     const currentIndex = Math.floor(easedProgress * totalParks);
 
-    // Reveal only NEW parks since last frame (optimization: avoid redundant iteration)
+    // OPTIMIZATION #4: Reveal only NEW parks since last frame
+    // Only iterate over parks added since the last frame, not all from the beginning
     for (let i = lastProcessedIndex; i < currentIndex; i++) {
       const parkCode = chronologicalParks[i];
 
-      // Get the park image element and its data from the lookup map
+      // OPTIMIZATION #3: Get park from lookup map (O(1) instead of O(n) filter)
       const park = parkImageMap.get(parkCode);
 
       if (park) {
@@ -482,6 +333,9 @@ function animateChronologicalReveal(images, visits) {
 
         // Remove the inset shadow filter immediately
         park.element.attr('filter', '');
+
+        // OPTIMIZATION #5: Hint to browser that this element will animate (hardware acceleration)
+        park.element.style('will-change', 'transform');
 
         // Add to animating parks array
         animatingParks.push({
