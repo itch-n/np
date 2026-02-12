@@ -2,13 +2,13 @@
 // Imports
 // ============================================================================
 
-import {createDropShadowFilter, createInsetShadowFilter} from './svgFilters.js';
+import {createInsetShadowFilter} from './svgFilters.js';
 
 // ============================================================================
 // Configuration
 // ============================================================================
 
-const MAP_CONFIG = {
+const CONFIG = {
   width: 900,
   height: 500,
   simulationIterations: 5,
@@ -16,23 +16,8 @@ const MAP_CONFIG = {
     lower48: 16,
     others: 10
   },
-  shadow: {
-    blur: 2,
-    offsetX: 0,
-    offsetY: 2,
-    opacity: 0.3
-  },
-  fade: {
-    opacity: 0.25,
-    hueRotation: 60,
-    saturation: 0.6,
-    brightness: 1.1
-  }
+  animationDuration: 1500 // Duration in ms for counter and reveal animations
 };
-
-// Overseas parks (Alaska, Hawaii, Virgin Islands) - smaller radius
-const osParks = ["dena", "gaar", "glba", "katm", "npsa", "hale", "havo",
-  "kefj", "lacl", "wrst", "kova", "viis"];
 
 // ============================================================================
 // Map Rendering Functions
@@ -67,6 +52,9 @@ function createParkNodes(places, projection, config) {
     const coords = projection([+d.longitude, +d.latitude]);
     if (!coords) return null;
 
+    // Overseas parks (Alaska, Hawaii, Virgin Islands) - smaller radius
+    const osParks = ["dena", "gaar", "glba", "katm", "npsa", "hale", "havo",
+      "kefj", "lacl", "wrst", "kova", "viis"];
     const radius = osParks.includes(d.parkCode)
       ? config.parkRadius.others
       : config.parkRadius.lower48;
@@ -100,7 +88,10 @@ function runForceSimulation(nodes, config) {
 /**
  * Renders park images on the map
  */
-function renderParkImages(map, nodes, featuredParks, config) {
+function renderParkImages(map, nodes, visits) {
+  // Create set of featured parks (parks that have been visited)
+  const featuredParks = new Set(visits.map(v => v.parkCode));
+
   const images = map.selectAll('image.place')
     .data(nodes)
     .enter()
@@ -172,6 +163,7 @@ function waitForTransition(element, propertyName) {
         resolve();
       }
     }
+
     element.addEventListener('transitionend', handleTransitionEnd);
   });
 }
@@ -189,7 +181,7 @@ function createTooltip() {
   const tipImg = tooltipContent.append('img').attr('alt', 'preview');
   const tipName = tooltipContent.append('div').attr('class', 'tooltip__name');
 
-  return { tooltip, tipImg, tipName };
+  return {tooltip, tipImg, tipName};
 }
 
 /**
@@ -315,7 +307,7 @@ function setupTouchInteractions(images, tooltip, tipImg, tipName, touchState) {
   // Note: Mobile browsers often fire mouse events 300-500ms after touchend
   // We use requestAnimationFrame to defer the state reset until after
   // any synthetic mouse events have been processed
-  d3.select('body').on('touchend.tooltip', function() {
+  d3.select('body').on('touchend.tooltip', function () {
     // Use requestAnimationFrame for better timing than arbitrary setTimeout
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -334,8 +326,8 @@ function setupTouchInteractions(images, tooltip, tipImg, tipName, touchState) {
 
 // Initialize projection
 const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
-  .scale(MAP_CONFIG.width)
-  .translate([MAP_CONFIG.width / 2, MAP_CONFIG.height / 2.2]);
+  .scale(CONFIG.width)
+  .translate([CONFIG.width / 2, CONFIG.height / 2.2]);
 
 const path = d3.geoPath().projection(projection);
 
@@ -343,13 +335,13 @@ const path = d3.geoPath().projection(projection);
 const svg = d3.select("#content")
   .append("svg")
   .attr('id', 'map')
-  .attr('viewBox', `0 0 ${MAP_CONFIG.width} ${MAP_CONFIG.height}`)
+  .attr('viewBox', `0 0 ${CONFIG.width} ${CONFIG.height}`)
   .attr('preserveAspectRatio', 'xMidYMid meet');
 
 // Create SVG filters
 const defs = svg.append('defs');
-createDropShadowFilter(defs, MAP_CONFIG);
-createInsetShadowFilter(defs, MAP_CONFIG);
+// createDropShadowFilter(defs, MAP_CONFIG); // Not currently used
+createInsetShadowFilter(defs, CONFIG);
 
 // Create map group
 const map = svg.append('g').attr('class', 'map');
@@ -359,27 +351,22 @@ Promise.all([
   d3.json("https://unpkg.com/us-atlas@3.0.0/states-10m.json"),
   d3.json("./data/parks.json"),
   d3.json("./data/visits.json")
-]).then(async ([usa, places, visits]) => {
+]).then(async ([usa, parks, visits]) => {
   // Draw map layers
   drawBaseMap(map, usa, path);
   drawStateBorders(map, usa, path);
 
   // Render visits table
-  const parksLookup = {};
-  places.forEach(park => {
-    parksLookup[park.parkCode] = `${shortenParkName(park.name)}, ${park.state}`;
-  });
-  renderVisitsTable(visits, parksLookup);
+  renderVisitsTable(visits, parks);
 
   // Process park data
-  const nodes = createParkNodes(places, projection, MAP_CONFIG);
-  runForceSimulation(nodes, MAP_CONFIG);
+  const nodes = createParkNodes(parks, projection, CONFIG);
+  runForceSimulation(nodes, CONFIG);
 
   // Render park images
-  const featuredParks = new Set(visits.map(v => v.parkCode));
-  const images = renderParkImages(map, nodes, featuredParks, MAP_CONFIG);
+  const images = renderParkImages(map, nodes, visits);
 
-  // Animation sequence: wait for images → fade in map → pause → reveal
+  // Animation sequence: wait for images → fade in map → reveal
   await waitForImages(images);
   svg.classed('loaded', true);
 
@@ -390,8 +377,8 @@ Promise.all([
   updateParksCounter(visits);
 
   // Setup tooltip
-  const { tooltip, tipImg, tipName } = createTooltip();
-  const touchState = { active: false, currentTarget: null };
+  const {tooltip, tipImg, tipName} = createTooltip();
+  const touchState = {active: false, currentTarget: null};
 
   setupMouseInteractions(images, tooltip, tipImg, tipName, touchState);
   setupTouchInteractions(images, tooltip, tipImg, tipName, touchState);
@@ -421,7 +408,7 @@ function animateChronologicalReveal(images, visits) {
     .map(v => v.parkCode);
 
   const totalParks = chronologicalParks.length;
-  const duration = 1500; // Same as counter animation
+  const duration = CONFIG.animationDuration;
   const individualDuration = 200; // Duration for each park's bounce animation
   const startTime = performance.now();
 
@@ -505,7 +492,7 @@ function animateChronologicalReveal(images, visits) {
 /**
  * Updates the parks visited counter in the header with an animated count-up
  */
-function updateParksCounter(visits, delay = 0) {
+function updateParksCounter(visits) {
   const counterElement = d3.select('.top__counter-visited');
 
   if (!visits || visits.length === 0) {
@@ -517,44 +504,41 @@ function updateParksCounter(visits, delay = 0) {
   const uniqueParks = new Set(visits.map(v => v.parkCode));
   const targetCount = uniqueParks.size;
 
-  // Wait for delay before starting animation
-  setTimeout(() => {
-    // Animate counter from 0 to target
-    const duration = 1500; // 1.5 seconds
-    const startTime = performance.now();
+  // Animate counter from 0 to target
+  const duration = CONFIG.animationDuration;
+  const startTime = performance.now();
 
-    function easeInQuad(t) {
-      return t * t;
+  function easeInQuad(t) {
+    return t * t;
+  }
+
+  function animateCount(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // Apply ease-in easing
+    const easedProgress = easeInQuad(progress);
+    const currentCount = Math.floor(easedProgress * targetCount);
+
+    counterElement.text(currentCount);
+
+    if (progress < 1) {
+      requestAnimationFrame(animateCount);
+    } else {
+      // Ensure we end exactly at target
+      counterElement.text(targetCount);
+
+      // Trigger flourish animation
+      counterElement.classed('complete', true);
+
+      // Remove class after animation completes to allow re-triggering
+      setTimeout(() => {
+        counterElement.classed('complete', false);
+      }, 700);
     }
+  }
 
-    function animateCount(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Apply ease-in easing
-      const easedProgress = easeInQuad(progress);
-      const currentCount = Math.floor(easedProgress * targetCount);
-
-      counterElement.text(currentCount);
-
-      if (progress < 1) {
-        requestAnimationFrame(animateCount);
-      } else {
-        // Ensure we end exactly at target
-        counterElement.text(targetCount);
-
-        // Trigger flourish animation
-        counterElement.classed('complete', true);
-
-        // Remove class after animation completes to allow re-triggering
-        setTimeout(() => {
-          counterElement.classed('complete', false);
-        }, 700);
-      }
-    }
-
-    requestAnimationFrame(animateCount);
-  }, delay);
+  requestAnimationFrame(animateCount);
 }
 
 // ============================================================================
@@ -595,7 +579,13 @@ function formatDate(dateString) {
 /**
  * Renders the visits table
  */
-function renderVisitsTable(visits, parksLookup) {
+function renderVisitsTable(visits, parks) {
+  // Create lookup function
+  function getParkName(parkCode) {
+    const park = parks.find(p => p.parkCode === parkCode);
+    return park ? `${shortenParkName(park.name)}, ${park.state}` : parkCode;
+  }
+
   const container = d3.select('#visits-table');
 
   if (!visits || visits.length === 0) {
@@ -637,7 +627,7 @@ function renderVisitsTable(visits, parksLookup) {
       .attr('class', 'year-image-card__image')
       .attr('src', `./img/years/${year}.svg`)
       .attr('alt', `${year} highlight`)
-      .on('error', function() {
+      .on('error', function () {
         d3.select(this.parentNode).style('display', 'none');
       });
 
@@ -657,8 +647,8 @@ function renderVisitsTable(visits, parksLookup) {
     wrapper.append('img')
       .attr('class', 'visit-card__image')
       .attr('src', d => d.cancellationImage)
-      .attr('alt', d => parksLookup[d.parkCode] || d.parkCode)
-      .on('error', function() {
+      .attr('alt', d => getParkName(d.parkCode))
+      .on('error', function () {
         d3.select(this).attr('src', PLACEHOLDER_IMAGE);
       });
 
@@ -669,7 +659,7 @@ function renderVisitsTable(visits, parksLookup) {
     // Add park name
     content.append('div')
       .attr('class', 'visit-card__park')
-      .text(d => parksLookup[d.parkCode] || d.parkCode);
+      .text(d => getParkName(d.parkCode));
 
     // Add date
     content.append('div')
