@@ -2,7 +2,7 @@
 // Imports
 // ============================================================================
 
-import { createDropShadowFilter, createInsetShadowFilter } from './svgFilters.js';
+import {createDropShadowFilter, createInsetShadowFilter} from './svgFilters.js';
 
 // ============================================================================
 // Configuration
@@ -29,12 +29,6 @@ const MAP_CONFIG = {
     brightness: 1.1
   }
 };
-
-// Animation timing constants
-const ANIMATION_DELAY = 300; // Delay before park reveal animation starts (ms)
-
-// Featured parks derived from visits.json
-let featuredParks = new Set();
 
 // Overseas parks (Alaska, Hawaii, Virgin Islands) - smaller radius
 const osParks = ["dena", "gaar", "glba", "katm", "npsa", "hale", "havo",
@@ -104,16 +98,9 @@ function runForceSimulation(nodes, config) {
 }
 
 /**
- * Determines if a park is featured (visited)
- */
-function isFeatured(parkCode) {
-  return featuredParks.has(parkCode);
-}
-
-/**
  * Renders park images on the map
  */
-function renderParkImages(map, nodes, config) {
+function renderParkImages(map, nodes, featuredParks, config) {
   const images = map.selectAll('image.place')
     .data(nodes)
     .enter()
@@ -126,7 +113,7 @@ function renderParkImages(map, nodes, config) {
     .attr('preserveAspectRatio', 'xMidYMid slice')
     .attr('filter', 'url(#inset-shadow)') // ALL parks start with inset shadow
     .classed('place', true)
-    .classed('featured', d => isFeatured(d.parkCode)) // Mark featured parks for later reveal
+    .classed('featured', d => featuredParks.has(d.parkCode)) // Mark featured parks for later reveal
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
     });
@@ -145,6 +132,48 @@ function shortenParkName(name) {
   return name
     .replace(/\s+National Park(?:\s+&\s+Preserve)?$/i, '')
     .replace(/\s+National\s+and\s+State\s+Parks$/i, '');
+}
+
+/**
+ * Waits for all images in a D3 selection to load
+ */
+function waitForImages(images) {
+  return new Promise(resolve => {
+    const imageNodes = images.nodes();
+    let loadedCount = 0;
+    const totalImages = imageNodes.length;
+
+    function checkComplete() {
+      loadedCount++;
+      if (loadedCount === totalImages) {
+        resolve();
+      }
+    }
+
+    imageNodes.forEach(img => {
+      if (img.complete) {
+        checkComplete();
+      } else {
+        img.addEventListener('load', checkComplete);
+        img.addEventListener('error', checkComplete);
+      }
+    });
+  });
+}
+
+/**
+ * Waits for an element's CSS transition to complete
+ */
+function waitForTransition(element, propertyName) {
+  return new Promise(resolve => {
+    function handleTransitionEnd(e) {
+      if (e.propertyName === propertyName && e.target === element) {
+        element.removeEventListener('transitionend', handleTransitionEnd);
+        resolve();
+      }
+    }
+    element.addEventListener('transitionend', handleTransitionEnd);
+  });
 }
 
 // ============================================================================
@@ -330,59 +359,35 @@ Promise.all([
   d3.json("https://unpkg.com/us-atlas@3.0.0/states-10m.json"),
   d3.json("./data/parks.json"),
   d3.json("./data/visits.json")
-]).then(([usa, places, visits]) => {
-  // Populate featured parks from visits data
-  featuredParks = new Set(visits.map(v => v.parkCode));
-
+]).then(async ([usa, places, visits]) => {
   // Draw map layers
   drawBaseMap(map, usa, path);
   drawStateBorders(map, usa, path);
+
+  // Render visits table
+  const parksLookup = {};
+  places.forEach(park => {
+    parksLookup[park.parkCode] = `${shortenParkName(park.name)}, ${park.state}`;
+  });
+  renderVisitsTable(visits, parksLookup);
 
   // Process park data
   const nodes = createParkNodes(places, projection, MAP_CONFIG);
   runForceSimulation(nodes, MAP_CONFIG);
 
   // Render park images
-  const images = renderParkImages(map, nodes, MAP_CONFIG);
+  const featuredParks = new Set(visits.map(v => v.parkCode));
+  const images = renderParkImages(map, nodes, featuredParks, MAP_CONFIG);
 
-  // Wait for all park images to load before animating map in
-  const imageNodes = images.nodes();
-  let loadedCount = 0;
-  const totalImages = imageNodes.length;
+  // Animation sequence: wait for images → fade in map → pause → reveal
+  await waitForImages(images);
+  svg.classed('loaded', true);
 
-  function checkAllImagesLoaded() {
-    loadedCount++;
-    if (loadedCount === totalImages) {
-      // All images loaded, trigger map fade-in animation
-      svg.classed('loaded', true);
+  await waitForTransition(svg.node(), 'opacity');
 
-      // Wait for map fade-in transition to complete, then start reveal animations
-      svg.node().addEventListener('transitionend', function handleTransitionEnd(e) {
-        // Only respond to the opacity transition on the svg element itself
-        if (e.propertyName === 'opacity' && e.target === svg.node()) {
-          svg.node().removeEventListener('transitionend', handleTransitionEnd);
-
-          // Wait additional delay before starting chronological reveal
-          setTimeout(() => {
-            // Start both animations simultaneously
-            animateChronologicalReveal(images, visits);
-            updateParksCounter(visits);
-          }, ANIMATION_DELAY);
-        }
-      });
-    }
-  }
-
-  imageNodes.forEach(img => {
-    if (img.complete) {
-      // Image already loaded (cached)
-      checkAllImagesLoaded();
-    } else {
-      // Wait for image to load
-      img.addEventListener('load', checkAllImagesLoaded);
-      img.addEventListener('error', checkAllImagesLoaded); // Count errors as "loaded" to not block animation
-    }
-  });
+  // Start synchronized animations
+  animateChronologicalReveal(images, visits);
+  updateParksCounter(visits);
 
   // Setup tooltip
   const { tooltip, tipImg, tipName } = createTooltip();
@@ -672,33 +677,4 @@ function renderVisitsTable(visits, parksLookup) {
       .text(d => formatDate(d.date));
   });
 }
-
-/**
- * Loads visits data and renders the table
- */
-function loadVisitsTable() {
-  Promise.all([
-    d3.json('./data/parks.json'),
-    d3.json('./data/visits.json')
-  ])
-    .then(([parks, visits]) => {
-      // Create lookup map: parkCode -> shortened park name with state
-      const parksLookup = {};
-      parks.forEach(park => {
-        parksLookup[park.parkCode] = `${shortenParkName(park.name)}, ${park.state}`;
-      });
-
-      // Counter will be updated when map animation completes
-      // (see checkAllImagesLoaded function above)
-
-      renderVisitsTable(visits, parksLookup);
-    })
-    .catch(error => {
-      console.log('Error loading data:', error);
-      d3.select('#visits-table').html(NO_VISITS_MESSAGE);
-    });
-}
-
-// Load visits table
-loadVisitsTable();
 
