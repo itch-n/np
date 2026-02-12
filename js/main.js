@@ -412,8 +412,20 @@ function animateChronologicalReveal(images, visits) {
   const individualDuration = 200; // Duration for each park's bounce animation
   const startTime = performance.now();
 
-  // Track which parks have been revealed
-  const revealed = new Set();
+  // Create a lookup map for faster park image access
+  const parkImageMap = new Map();
+  images.each(function(d) {
+    parkImageMap.set(d.parkCode, {
+      element: d3.select(this),
+      data: d
+    });
+  });
+
+  // Track the last processed index to avoid redundant iteration
+  let lastProcessedIndex = 0;
+
+  // Track all currently animating parks in a single array
+  const animatingParks = [];
 
   function easeOutElastic(t) {
     const c4 = (2 * Math.PI) / 3;
@@ -424,6 +436,31 @@ function animateChronologicalReveal(images, visits) {
     return t * t;
   }
 
+  // Single animation loop that updates ALL animating parks
+  function updateAnimatingParks(currentTime) {
+    // Update all parks that are currently animating
+    for (let i = animatingParks.length - 1; i >= 0; i--) {
+      const parkAnim = animatingParks[i];
+      const localElapsed = currentTime - parkAnim.startTime;
+      const localProgress = Math.min(localElapsed / individualDuration, 1);
+      const scale = easeOutElastic(localProgress);
+
+      parkAnim.park.element.attr('transform',
+        `translate(${parkAnim.cx}, ${parkAnim.cy}) scale(${scale}) translate(${-parkAnim.cx}, ${-parkAnim.cy})`);
+
+      // Remove from array if animation is complete
+      if (localProgress >= 1) {
+        parkAnim.park.element.attr('transform', null);
+        animatingParks.splice(i, 1);
+      }
+    }
+
+    // Continue if there are still parks animating
+    if (animatingParks.length > 0) {
+      requestAnimationFrame(updateAnimatingParks);
+    }
+  }
+
   function animateReveal(currentTime) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
@@ -432,57 +469,50 @@ function animateChronologicalReveal(images, visits) {
     const easedProgress = easeInQuad(progress);
     const currentIndex = Math.floor(easedProgress * totalParks);
 
-    // Reveal parks up to current index with bounce effect
-    for (let i = 0; i < currentIndex; i++) {
+    // Reveal only NEW parks since last frame (optimization: avoid redundant iteration)
+    for (let i = lastProcessedIndex; i < currentIndex; i++) {
       const parkCode = chronologicalParks[i];
 
-      // Skip if already revealed
-      if (revealed.has(parkCode)) continue;
-      revealed.add(parkCode);
+      // Get the park image element and its data from the lookup map
+      const park = parkImageMap.get(parkCode);
 
-      // Get the park image element and its data
-      const parkImage = images.filter(d => d.parkCode === parkCode);
-      const parkData = parkImage.datum();
-
-      if (parkData) {
-        const cx = parkData.x;
-        const cy = parkData.y;
-        const startTimeLocal = currentTime;
+      if (park) {
+        const cx = park.data.x;
+        const cy = park.data.y;
 
         // Remove the inset shadow filter immediately
-        parkImage.attr('filter', '');
+        park.element.attr('filter', '');
 
-        // Animate this specific park with bounce
-        function animateParkPop(time) {
-          const localElapsed = time - startTimeLocal;
-          const localProgress = Math.min(localElapsed / individualDuration, 1);
-          const scale = easeOutElastic(localProgress);
+        // Add to animating parks array
+        animatingParks.push({
+          park,
+          cx,
+          cy,
+          startTime: currentTime
+        });
 
-          parkImage.attr('transform', `translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})`);
-
-          if (localProgress < 1) {
-            requestAnimationFrame(animateParkPop);
-          } else {
-            // Set final transform to identity (scale 1)
-            parkImage.attr('transform', null);
-          }
+        // Start the unified animation loop if not already running
+        if (animatingParks.length === 1) {
+          requestAnimationFrame(updateAnimatingParks);
         }
-
-        requestAnimationFrame(animateParkPop);
       }
     }
+
+    // Update the last processed index
+    lastProcessedIndex = currentIndex;
 
     if (progress < 1) {
       requestAnimationFrame(animateReveal);
     } else {
       // Ensure all parks are revealed at the end
-      chronologicalParks.forEach(parkCode => {
-        if (!revealed.has(parkCode)) {
-          const parkImage = images.filter(d => d.parkCode === parkCode);
-          parkImage.attr('filter', '');
-          parkImage.attr('transform', null);
+      for (let i = lastProcessedIndex; i < totalParks; i++) {
+        const parkCode = chronologicalParks[i];
+        const park = parkImageMap.get(parkCode);
+        if (park) {
+          park.element.attr('filter', '');
+          park.element.attr('transform', null);
         }
-      });
+      }
     }
   }
 
