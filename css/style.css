@@ -67,10 +67,8 @@ html {
   scroll-behavior: smooth;
   color: var(--color-text-primary);
   font-size: 16px;
-}
 
-@media (max-width: 767px) {
-  html {
+  @media (max-width: 767px) {
     font-size: 14px;
   }
 }
@@ -157,42 +155,50 @@ p {
   color: var(--color-primary-dark);
   display: inline-block;
   transition: transform var(--transition-fast);
-  border-radius: 40%;
+  border-radius: 50%;
   padding: 2px 6px;
 }
 
 /* Subtle flourish animation when counter completes */
 @keyframes counterComplete {
   0% {
-    box-shadow: 0 0 0 0 rgba(92, 139, 95, 0);
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(130, 166, 134, 0), inset 0 0 0 0 rgba(130, 166, 134, 0);
   }
   15% {
-    box-shadow: 0 0 20px 8px rgba(130, 166, 134, 0.6);
+    transform: scale(1.15);
+    box-shadow: 0 0 20px 8px rgba(130, 166, 134, 0.6), inset 0 0 16px 4px rgba(130, 166, 134, 0.4);
   }
   30% {
-    box-shadow: 0 0 12px 4px rgba(130, 166, 134, 0.3);
+    transform: scale(0.95);
+    box-shadow: 0 0 12px 4px rgba(130, 166, 134, 0.3), inset 0 0 8px 2px rgba(130, 166, 134, 0.2);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(92, 139, 95, 0);
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(130, 166, 134, 0), inset 0 0 0 0 rgba(130, 166, 134, 0);
   }
 }
 
 .top__counter-visited.complete {
-  animation: counterComplete 3s ease-out;
+  animation: counterComplete 2s ease-out;
 }
 
 .top__counter-separator {
   margin: 0 4px;
 }
 
+.top__counter-text-visited {
+  @media (max-width: 479px) {
+    display: none;
+  }
+}
+
 .top__avatar {
   width: 60px;
   height: 60px;
   object-fit: cover;
-}
 
-@media (max-width: 767px) {
-  .top__avatar {
+  @media (max-width: 767px) {
     width: 40px;
     height: 40px;
   }
@@ -205,6 +211,9 @@ p {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  @media (max-width: 479px) {
+    display: none;
+  }
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -379,6 +388,14 @@ image.place {
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg);
   align-items: stretch;
+
+  @media (max-width: 1023px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 479px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .visit-card {
@@ -497,12 +514,6 @@ image.place {
   opacity: 0;
 }
 
-
-@media (max-width: 1023px) {
-  .visits-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 @media (max-width: 767px) {
   .visits-year-group {
     margin-bottom: 16px;
@@ -531,11 +542,5 @@ image.place {
 
   .visit-card__date {
     font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 479px) {
-  .visits-grid {
-    grid-template-columns: repeat(1, 1fr);
   }
 }
