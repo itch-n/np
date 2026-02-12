@@ -1,90 +1,84 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 300">
-  <!-- Coastal landscape with forest and water -->
+  <!-- Desert sunrise - peachy beige with dusty rose -->
   <defs>
     <linearGradient id="sky-2026" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#C8E6C9;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#D4E8D0;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="water-2026" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#9BBFB7;stop-opacity:0.6" />
-      <stop offset="100%" style="stop-color:#6FA396;stop-opacity:0.8" />
+      <stop offset="0%" style="stop-color:#F5E5D8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#E8D5C8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D8C5B8;stop-opacity:1" />
     </linearGradient>
   </defs>
 
   <rect width="1024" height="300" fill="url(#sky-2026)" rx="12"/>
 
-  <!-- Distant forested hills -->
-  <path d="M 0 150 L 256 140 L 512 145 L 768 138 L 1024 142 L 1024 300 L 0 300 Z"
-        fill="#82A686" opacity="0.4"/>
+  <!-- Rising sun -->
+  <circle cx="900" cy="110" r="50" fill="#FFE8D8" opacity="0.8"/>
+  <circle cx="900" cy="110" r="42" fill="#FFF5EA" opacity="0.9"/>
 
-  <!-- Mid-distance shoreline -->
-  <path d="M 0 180 L 384 175 L 640 178 L 1024 173 L 1024 300 L 0 300 Z"
-        fill="#7FA57D" opacity="0.6"/>
+  <!-- Distant mountain range -->
+  <path d="M 0 165 L 200 140 L 380 150 L 560 135 L 740 145 L 900 155 L 1024 160 L 1024 300 L 0 300 Z"
+        fill="#B8A898" opacity="0.4"/>
 
-  <!-- Water/bay with teal tones -->
-  <path d="M 0 220 L 512 215 L 768 218 L 1024 213 L 1024 300 L 0 300 Z"
-        fill="url(#water-2026)"/>
+  <!-- Mid-range rocky hills -->
+  <path d="M 0 195 L 300 180 L 600 190 L 900 185 L 1024 195 L 1024 300 L 0 300 Z"
+        fill="#A89888" opacity="0.5"/>
 
-  <!-- Deeper water gradient -->
-  <path d="M 0 250 L 640 245 L 1024 248 L 1024 300 L 0 300 Z"
-        fill="#78A596" opacity="0.4"/>
+  <!-- Desert floor -->
+  <path d="M 0 235 L 1024 240 L 1024 300 L 0 300 Z"
+        fill="#C8B8A8"/>
 
-  <!-- Small waves -->
-  <g opacity="0.3" stroke="#EDF5EA" stroke-width="1.5" fill="none">
-    <path d="M 64 230 Q 90 228 115 230"/>
-    <path d="M 230 228 Q 256 226 282 228"/>
-    <path d="M 410 232 Q 435 230 461 232"/>
-    <path d="M 602 229 Q 627 227 653 229"/>
-    <path d="M 794 233 Q 819 231 845 233"/>
-    <path d="M 934 231 Q 960 229 986 231"/>
+  <!-- Subtle ground texture -->
+  <ellipse cx="250" cy="270" rx="90" ry="15" fill="#B8A898" opacity="0.4"/>
+  <ellipse cx="650" cy="275" rx="110" ry="18" fill="#B8A898" opacity="0.4"/>
+
+  <!-- Saguaro cacti - iconic silhouettes -->
+  <g opacity="0.75">
+    <!-- Large saguaro 1 - classic arms up -->
+    <rect x="190" y="225" width="18" height="70" rx="9" fill="#685858"/>
+    <rect x="172" y="245" width="15" height="35" rx="7" fill="#685858" transform="rotate(-80 179 245)"/>
+    <rect x="211" y="240" width="15" height="38" rx="7" fill="#685858" transform="rotate(80 218 240)"/>
+    <ellipse cx="199" cy="223" rx="9" ry="5" fill="#685858"/>
+
+    <!-- Medium saguaro 2 - single arm -->
+    <rect x="710" y="235" width="16" height="60" rx="8" fill="#685858"/>
+    <rect x="693" y="252" width="14" height="32" rx="7" fill="#685858" transform="rotate(-75 700 252)"/>
+    <ellipse cx="718" cy="233" rx="8" ry="4" fill="#685858"/>
+
+    <!-- Tall saguaro 3 - center, no arms -->
+    <rect x="425" y="210" width="17" height="85" rx="8" fill="#685858"/>
+    <ellipse cx="433" cy="208" rx="8" ry="5" fill="#685858"/>
+
+    <!-- Smaller saguaro 4 -->
+    <rect x="560" y="250" width="14" height="45" rx="7" fill="#685858"/>
+    <rect x="547" y="262" width="12" height="25" rx="6" fill="#685858" transform="rotate(-78 553 262)"/>
+    <ellipse cx="567" cy="248" rx="7" ry="4" fill="#685858"/>
+
+    <!-- Distant small saguaro -->
+    <rect x="320" y="215" width="10" height="35" rx="5" fill="#786868" opacity="0.7"/>
+    <rect x="312" y="225" width="8" height="20" rx="4" fill="#786868" opacity="0.7" transform="rotate(-70 316 225)"/>
   </g>
 
-  <!-- Rocks in water -->
+  <!-- Small desert plants and rocks -->
   <g opacity="0.6">
-    <ellipse cx="384" cy="242" rx="23" ry="12" fill="#6B8E6F"/>
-    <ellipse cx="614" cy="238" rx="28" ry="14" fill="#6B8E6F"/>
-    <ellipse cx="832" cy="245" rx="19" ry="10" fill="#6B8E6F"/>
+    <!-- Barrel cactus clusters -->
+    <ellipse cx="310" cy="280" rx="12" ry="8" fill="#786868"/>
+    <ellipse cx="325" cy="282" rx="10" ry="7" fill="#786868"/>
+
+    <ellipse cx="850" cy="278" rx="14" ry="9" fill="#786868"/>
+    <ellipse cx="865" cy="280" rx="11" ry="8" fill="#786868"/>
+
+    <!-- Desert shrubs -->
+    <ellipse cx="480" cy="275" rx="16" ry="10" fill="#887878"/>
+    <ellipse cx="640" cy="277" rx="13" ry="9" fill="#887878"/>
   </g>
 
-  <!-- Coastal trees (left side) -->
-  <g opacity="0.8">
-    <!-- Tall coastal tree 1 -->
-    <rect x="124" y="185" width="6" height="35" fill="#5D4E3F"/>
-    <ellipse cx="128" cy="195" rx="20" ry="28" fill="#6B8E6F"/>
-    <ellipse cx="128" cy="185" rx="15" ry="20" fill="#6B8E6F"/>
-
-    <!-- Tree 2 -->
-    <rect x="201" y="190" width="6" height="30" fill="#5D4E3F"/>
-    <ellipse cx="205" cy="198" rx="18" ry="25" fill="#6B8E6F"/>
-
-    <!-- Tree 3 -->
-    <rect x="60" y="195" width="5" height="25" fill="#5D4E3F"/>
-    <ellipse cx="64" cy="202" rx="15" ry="20" fill="#6B8E6F"/>
-
-    <!-- Coastal pine -->
-    <polygon points="282,205 262,215 301,215" fill="#4A5E4C"/>
-    <polygon points="282,198 269,208 294,208" fill="#4A5E4C"/>
-    <rect x="278" y="215" width="6" height="15" fill="#5D4E3F"/>
+  <!-- Small scattered rocks -->
+  <g opacity="0.4">
+    <ellipse cx="120" cy="268" rx="8" ry="4" fill="#A89888"/>
+    <ellipse cx="920" cy="270" rx="10" ry="5" fill="#A89888"/>
+    <ellipse cx="770" cy="265" rx="7" ry="4" fill="#A89888"/>
   </g>
 
-  <!-- Coastal trees (right side) -->
-  <g opacity="0.7">
-    <!-- Tree cluster right -->
-    <ellipse cx="922" cy="192" rx="25" ry="30" fill="#6B8E6F"/>
-    <rect x="918" y="188" width="6" height="32" fill="#5D4E3F"/>
-
-    <ellipse cx="870" cy="198" rx="18" ry="24" fill="#6B8E6F"/>
-    <rect x="867" y="195" width="5" height="25" fill="#5D4E3F"/>
-  </g>
-
-  <!-- Small shrubs on shoreline -->
-  <g opacity="0.5">
-    <circle cx="486" cy="208" r="5" fill="#5E7361"/>
-    <circle cx="691" cy="210" r="4" fill="#5E7361"/>
-    <circle cx="538" cy="206" r="4" fill="#5E7361"/>
-  </g>
-
-  <!-- Year text with shadow -->
-  <text x="514" y="172" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#6B8E6F" text-anchor="middle" opacity="0.3">2026</text>
-  <text x="512" y="170" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2026</text>
+  <!-- Year text -->
+  <text x="514" y="172" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="700" fill="#A89888" text-anchor="middle" opacity="0.25">2026</text>
+  <text x="512" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="700" fill="#FCFAF8" text-anchor="middle">2026</text>
 </svg>

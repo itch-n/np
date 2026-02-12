@@ -1,77 +1,48 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 300">
-  <!-- Mountain landscape with evergreen forest -->
+  <!-- Tropical volcanic - warm tans with muted greens -->
   <defs>
     <linearGradient id="sky-2021" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#B8D8E8;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#D4E8D0;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#E8D5C9;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#D8C5B9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C8B5A9;stop-opacity:1" />
     </linearGradient>
   </defs>
 
   <rect width="1024" height="300" fill="url(#sky-2021)" rx="12"/>
 
-  <!-- Distant mountain peaks - cooler blue-grey -->
-  <path d="M 0 180 L 192 120 L 320 90 L 448 110 L 576 80 L 704 100 L 832 120 L 1024 140 L 1024 300 L 0 300 Z"
-        fill="#9BB5C1" opacity="0.4"/>
+  <!-- Sun -->
+  <circle cx="820" cy="80" r="45" fill="#F5E5D8" opacity="0.7"/>
+  <circle cx="820" cy="80" r="38" fill="#FFF5EA" opacity="0.8"/>
 
-  <!-- Mid mountains - blue-green -->
-  <path d="M 0 200 L 256 150 L 448 170 L 640 140 L 896 165 L 1024 180 L 1024 300 L 0 300 Z"
-        fill="#7A9FA8" opacity="0.5"/>
+  <!-- Distant volcanic mountain -->
+  <path d="M 0 180 L 300 110 L 512 80 L 700 120 L 1024 160 L 1024 300 L 0 300 Z"
+        fill="#A89888" opacity="0.4"/>
 
-  <!-- Closer mountains -->
-  <path d="M 0 230 L 192 190 L 384 210 L 576 185 L 768 205 L 1024 215 L 1024 300 L 0 300 Z"
-        fill="#7FA57D" opacity="0.7"/>
+  <!-- Closer volcanic slopes -->
+  <path d="M 0 210 L 350 160 L 600 190 L 900 170 L 1024 195 L 1024 300 L 0 300 Z"
+        fill="#988878" opacity="0.6"/>
 
-  <!-- Forest floor -->
-  <path d="M 0 260 L 1024 260 L 1024 300 L 0 300 Z"
-        fill="#6B8E6F"/>
+  <!-- Foreground lava rock -->
+  <ellipse cx="180" cy="260" rx="60" ry="25" fill="#786858" opacity="0.5"/>
+  <ellipse cx="650" cy="270" rx="80" ry="30" fill="#786858" opacity="0.5"/>
+  <ellipse cx="920" cy="265" rx="65" ry="28" fill="#786858" opacity="0.5"/>
 
-  <!-- Pine trees (evergreen forest) -->
-  <g opacity="0.8">
-    <!-- Tree 1 -->
-    <polygon points="154,250 134,270 173,270" fill="#4A5E4C"/>
-    <polygon points="154,240 141,255 166,255" fill="#4A5E4C"/>
-    <rect x="150" y="270" width="6" height="20" fill="#5D4E3F"/>
+  <!-- Simple palm silhouettes -->
+  <g opacity="0.6">
+    <line x1="240" y1="280" x2="240" y2="230" stroke="#685848" stroke-width="4"/>
+    <path d="M 240 235 Q 220 225 210 230" stroke="#685848" stroke-width="3" fill="none"/>
+    <path d="M 240 235 Q 260 220 270 222" stroke="#685848" stroke-width="3" fill="none"/>
+    <path d="M 240 235 Q 230 240 220 245" stroke="#685848" stroke-width="3" fill="none"/>
+    <path d="M 240 235 Q 250 238 265 242" stroke="#685848" stroke-width="3" fill="none"/>
 
-    <!-- Tree 2 -->
-    <polygon points="256,245 237,265 275,265" fill="#4A5E4C"/>
-    <polygon points="256,235 243,250 269,250" fill="#4A5E4C"/>
-    <rect x="252" y="265" width="6" height="25" fill="#5D4E3F"/>
-
-    <!-- Tree 3 -->
-    <polygon points="358,255 339,275 378,275" fill="#4A5E4C"/>
-    <polygon points="358,245 346,260 371,260" fill="#4A5E4C"/>
-    <rect x="354" y="275" width="6" height="15" fill="#5D4E3F"/>
-
-    <!-- Tree 4 -->
-    <polygon points="486,248 467,268 506,268" fill="#4A5E4C"/>
-    <polygon points="486,238 474,253 499,253" fill="#4A5E4C"/>
-    <rect x="482" y="268" width="6" height="22" fill="#5D4E3F"/>
-
-    <!-- Tree 5 -->
-    <polygon points="614,252 595,272 634,272" fill="#4A5E4C"/>
-    <polygon points="614,242 602,257 627,257" fill="#4A5E4C"/>
-    <rect x="610" y="272" width="6" height="18" fill="#5D4E3F"/>
-
-    <!-- Tree 6 -->
-    <polygon points="742,246 723,266 762,266" fill="#4A5E4C"/>
-    <polygon points="742,236 730,251 755,251" fill="#4A5E4C"/>
-    <rect x="738" y="266" width="6" height="24" fill="#5D4E3F"/>
-
-    <!-- Tree 7 -->
-    <polygon points="870,254 851,274 890,274" fill="#4A5E4C"/>
-    <polygon points="870,244 858,259 883,259" fill="#4A5E4C"/>
-    <rect x="866" y="274" width="6" height="16" fill="#5D4E3F"/>
+    <line x1="780" y1="275" x2="780" y2="235" stroke="#685848" stroke-width="4"/>
+    <path d="M 780 240 Q 760 232 750 236" stroke="#685848" stroke-width="3" fill="none"/>
+    <path d="M 780 240 Q 800 228 810 232" stroke="#685848" stroke-width="3" fill="none"/>
+    <path d="M 780 240 Q 770 245 760 250" stroke="#685848" stroke-width="3" fill="none"/>
+    <path d="M 780 240 Q 790 243 805 247" stroke="#685848" stroke-width="3" fill="none"/>
   </g>
 
-  <!-- Smaller distant trees -->
-  <g opacity="0.5">
-    <polygon points="192,220 179,235 205,235" fill="#5E7361"/>
-    <polygon points="435,215 422,230 448,230" fill="#5E7361"/>
-    <polygon points="666,218 653,233 679,233" fill="#5E7361"/>
-    <polygon points="922,222 909,237 934,237" fill="#5E7361"/>
-  </g>
-
-  <!-- Year text with shadow -->
-  <text x="514" y="172" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#6B8E6F" text-anchor="middle" opacity="0.3">2021</text>
-  <text x="512" y="170" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2021</text>
+  <!-- Year text -->
+  <text x="514" y="172" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="700" fill="#988878" text-anchor="middle" opacity="0.25">2021</text>
+  <text x="512" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="700" fill="#FCFAF8" text-anchor="middle">2021</text>
 </svg>

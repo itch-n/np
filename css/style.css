@@ -47,7 +47,7 @@
   --transition-base: 0.3s ease;
   --transition-slow: 0.4s ease;
 
-  --card-sliding-overlay-color: rgba(255, 255, 255, 0.7);
+  --card-sliding-overlay-color: rgba(255, 255, 255, 0.6);
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -334,15 +334,6 @@ image.place {
 /* ------------------------------------------------------------------------------- */
 /* Visits Table */
 /* ------------------------------------------------------------------------------- */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .visits-year-group {
   margin-bottom: 32px;
 }

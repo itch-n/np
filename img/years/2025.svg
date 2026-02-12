@@ -1,67 +1,76 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 300">
-  <!-- Desert landscape with rock formations -->
+  <!-- Alpine forest - deep saturated greens with cool grays -->
   <defs>
     <linearGradient id="sky-2025" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#E8D4C8;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#F0E6DC;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#B8D4BB;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#C8DCC8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D8E4D8;stop-opacity:1" />
     </linearGradient>
   </defs>
 
   <rect width="1024" height="300" fill="url(#sky-2025)" rx="12"/>
 
-  <!-- Distant mesas - warm terracotta -->
-  <path d="M 0 170 L 0 160 L 230 160 L 256 170 L 320 170 L 346 165 L 576 165 L 614 170 L 1024 170 L 1024 300 L 0 300 Z"
-        fill="#C8A890" opacity="0.4"/>
+  <!-- Distant snow-capped peaks -->
+  <path d="M 0 140 L 180 95 L 350 85 L 512 75 L 680 90 L 850 100 L 1024 115 L 1024 300 L 0 300 Z"
+        fill="#9CB8A0" opacity="0.4"/>
 
-  <!-- Mid-distance plateaus - rust tones -->
-  <path d="M 0 195 L 192 195 L 211 185 L 358 185 L 378 195 L 640 195 L 666 190 L 896 190 L 915 195 L 1024 195 L 1024 300 L 0 300 Z"
-        fill="#B89878" opacity="0.5"/>
+  <!-- Snow caps on peaks -->
+  <path d="M 300 85 L 350 85 L 335 100 L 315 100 Z" fill="#EDF5EA" opacity="0.7"/>
+  <path d="M 480 75 L 540 75 L 525 92 L 495 92 Z" fill="#EDF5EA" opacity="0.7"/>
 
-  <!-- Desert floor with dunes - sandy with green accent -->
-  <path d="M 0 240 L 256 235 L 512 245 L 768 238 L 1024 242 L 1024 300 L 0 300 Z"
-        fill="#D4B89C" opacity="0.5"/>
+  <!-- Mid-range mountains with forest -->
+  <path d="M 0 165 L 230 130 L 450 145 L 650 125 L 880 140 L 1024 155 L 1024 300 L 0 300 Z"
+        fill="#7A9A7E" opacity="0.55"/>
 
-  <path d="M 0 260 L 384 255 L 640 262 L 1024 258 L 1024 300 L 0 300 Z"
-        fill="#9FA886"/>
+  <!-- Foreground forest hills -->
+  <path d="M 0 200 L 300 180 L 600 195 L 900 185 L 1024 200 L 1024 300 L 0 300 Z"
+        fill="#6A8A6E" opacity="0.7"/>
 
-  <!-- Rock formations (arches style) -->
-  <g opacity="0.7">
-    <!-- Large arch -->
-    <path d="M 666 205 L 666 235 L 678 240 L 730 240 L 742 235 L 742 205 Z"
-          fill="#A8826C"/>
-    <ellipse cx="704" cy="205" rx="38" ry="15" fill="#F0E6DC"/>
+  <!-- Forest base -->
+  <path d="M 0 240 L 1024 245 L 1024 300 L 0 300 Z"
+        fill="#5C8B5F"/>
 
-    <!-- Rock pillar -->
-    <rect x="358" y="215" width="45" height="45" fill="#B89878"/>
-    <ellipse cx="381" cy="215" rx="22" ry="8" fill="#B89878"/>
+  <!-- Conifer trees - various sizes for depth -->
+  <g opacity="0.75">
+    <!-- Large foreground trees -->
+    <polygon points="180,250 155,280 205,280" fill="#3A5A3E"/>
+    <polygon points="180,238 165,260 195,260" fill="#3A5A3E"/>
+    <polygon points="180,228 170,245 190,245" fill="#3A5A3E"/>
 
-    <!-- Small spire -->
-    <polygon points="192,245 173,265 211,265" fill="#9FA886"/>
-    <rect x="186" y="240" width="13" height="5" fill="#9FA886"/>
+    <polygon points="420,255 395,285 445,285" fill="#3A5A3E"/>
+    <polygon points="420,243 405,265 435,265" fill="#3A5A3E"/>
+    <polygon points="420,233 410,248 430,248" fill="#3A5A3E"/>
+
+    <polygon points="710,252 685,282 735,282" fill="#3A5A3E"/>
+    <polygon points="710,240 695,262 725,262" fill="#3A5A3E"/>
+    <polygon points="710,230 700,247 720,247" fill="#3A5A3E"/>
+
+    <polygon points="920,257 895,287 945,287" fill="#3A5A3E"/>
+    <polygon points="920,245 905,267 935,267" fill="#3A5A3E"/>
+    <polygon points="920,235 910,252 930,252" fill="#3A5A3E"/>
   </g>
 
-  <!-- Desert plants (yucca/joshua tree style) -->
-  <g opacity="0.6">
-    <!-- Plant 1 -->
-    <line x1="870" y1="250" x2="870" y2="275" stroke="#6F8E68" stroke-width="4"/>
-    <line x1="870" y1="260" x2="883" y2="255" stroke="#6F8E68" stroke-width="3"/>
-    <line x1="870" y1="260" x2="858" y2="255" stroke="#6F8E68" stroke-width="3"/>
+  <!-- Mid-ground smaller trees -->
+  <g opacity="0.55">
+    <polygon points="320,210 305,228 335,228" fill="#4A6A4E"/>
+    <polygon points="320,202 310,216 330,216" fill="#4A6A4E"/>
 
-    <!-- Plant 2 -->
-    <line x1="538" y1="252" x2="538" y2="272" stroke="#6F8E68" stroke-width="3"/>
-    <line x1="538" y1="258" x2="548" y2="254" stroke="#6F8E68" stroke-width="2"/>
-    <line x1="538" y1="258" x2="528" y2="254" stroke="#6F8E68" stroke-width="2"/>
+    <polygon points="560,215 545,233 575,233" fill="#4A6A4E"/>
+    <polygon points="560,207 550,221 570,221" fill="#4A6A4E"/>
+
+    <polygon points="810,212 795,230 825,230" fill="#4A6A4E"/>
+    <polygon points="810,204 800,218 820,218" fill="#4A6A4E"/>
   </g>
 
-  <!-- Distant shrubs -->
-  <g opacity="0.4">
-    <circle cx="128" cy="248" r="4" fill="#8A9878"/>
-    <circle cx="307" cy="252" r="3" fill="#8A9878"/>
-    <circle cx="794" cy="246" r="4" fill="#8A9878"/>
-    <circle cx="960" cy="250" r="3" fill="#8A9878"/>
+  <!-- Distant tree line -->
+  <g opacity="0.35">
+    <polygon points="150,175 142,186 158,186" fill="#5A7A5E"/>
+    <polygon points="380,170 372,181 388,181" fill="#5A7A5E"/>
+    <polygon points="640,168 632,179 648,179" fill="#5A7A5E"/>
+    <polygon points="880,172 872,183 888,183" fill="#5A7A5E"/>
   </g>
 
-  <!-- Year text with shadow -->
-  <text x="514" y="172" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#A8826C" text-anchor="middle" opacity="0.3">2025</text>
-  <text x="512" y="170" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">2025</text>
+  <!-- Year text -->
+  <text x="514" y="172" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="700" fill="#6A8A6E" text-anchor="middle" opacity="0.25">2025</text>
+  <text x="512" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="700" fill="#FCFAF8" text-anchor="middle">2025</text>
 </svg>

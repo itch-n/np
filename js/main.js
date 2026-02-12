@@ -91,9 +91,6 @@ function runForceSimulation(nodes, config) {
  * Renders park images on the map
  */
 function renderParkImages(map, nodes, visits) {
-  // Create set of featured parks (parks that have been visited)
-  const featuredParks = new Set(visits.map(v => v.parkCode));
-
   const images = map.selectAll('image.place')
     .data(nodes)
     .enter()
@@ -104,9 +101,8 @@ function renderParkImages(map, nodes, visits) {
     .attr('y', d => d.y - d.r)
     .attr('href', d => `img/np/${d.parkCode}.png`)
     .attr('preserveAspectRatio', 'xMidYMid slice')
-    .attr('filter', 'url(#inset-shadow)') // ALL parks start with inset shadow
+    .attr('filter', 'url(#inset-shadow)') // All parks start with inset shadow
     .classed('place', true)
-    .classed('featured', d => featuredParks.has(d.parkCode)) // Mark featured parks for later reveal
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
     });
@@ -166,7 +162,6 @@ const svg = d3.select("#content")
 
 // Create SVG filters
 const defs = svg.append('defs');
-// createDropShadowFilter(defs, MAP_CONFIG); // Not currently used
 createInsetShadowFilter(defs, CONFIG);
 
 // Create map group
@@ -194,7 +189,6 @@ Promise.all([
 
   // Animation sequence: wait for images → reveal
   await waitForImages(images);
-  svg.style('opacity', 1);
 
   // Setup tooltip immediately
   const {tooltip, tipImg, tipName} = createTooltip();
@@ -322,7 +316,7 @@ function animateChronologicalReveal(images, visits) {
           const cx = park.data.x;
           const cy = park.data.y;
 
-          // Remove the inset shadow filter immediately
+          // Remove the inset shadow filter to reveal the park
           park.element.attr('filter', '');
 
           // OPTIMIZATION #5: Hint to browser that this element will animate (hardware acceleration)
