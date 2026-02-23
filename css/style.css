@@ -531,12 +531,20 @@ image.place {
 
 @media (max-width: 479px) {
   .card {
-    height: 52px;
+    height: 46px;
   }
 
   .visit-card {
-    padding: 6px;
-    --bg-image-offset: calc(40px + 12px);  /* cancellation image width + left padding + a bit more */
+    padding: 3px;
+    --bg-image-offset: calc(40px + 6px);  /* cancellation image width + left padding + a bit more */
+  }
+
+  .visit-card__wrapper {
+    gap: 3px;
+  }
+
+  .visit-card__content {
+    gap: 0;
   }
 
   .visit-card__image {
@@ -545,10 +553,10 @@ image.place {
   }
 
   .visit-card__park {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
   }
 
   .visit-card__date {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
   }
 }
