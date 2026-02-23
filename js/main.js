@@ -359,13 +359,13 @@ function animateChronologicalReveal(images, visits) {
         // Ensure counter shows exact final count
         counterElement.text(totalParks);
 
-        // Trigger flourish animation
-        counterElement.classed('complete', true);
-
-        // Remove class after animation completes to allow re-triggering
-        setTimeout(() => {
-          counterElement.classed('complete', false);
-        }, 700);
+        // // Trigger flourish animation
+        // counterElement.classed('complete', true);
+        //
+        // // Remove class after animation completes to allow re-triggering
+        // setTimeout(() => {
+        //   counterElement.classed('complete', false);
+        // }, 700);
 
         // Animation complete - resolve the promise
         resolve();
