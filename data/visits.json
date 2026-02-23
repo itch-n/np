@@ -94,5 +94,11 @@
     "date": "2026-01-23",
     "cancellationImage": "img/cancellations/20260123-sagu.png",
     "visitImage": "../img/visits/20260123-sagu.jpeg"
+  },
+  {
+    "parkCode": "pinn",
+    "date": "2026-02-21",
+    "cancellationImage": "img/cancellations/20260221-pinn.png",
+    "visitImage": "../img/visits/20260221-pinn.png"
   }
 ]

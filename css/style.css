@@ -378,9 +378,9 @@ image.place {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 479px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
+  /*@media (max-width: 479px) {*/
+  /*  grid-template-columns: repeat(1, 1fr);*/
+  /*}*/
 }
 
 .visit-card {
@@ -526,5 +526,29 @@ image.place {
 
   .visit-card__date {
     font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .card {
+    height: 52px;
+  }
+
+  .visit-card {
+    padding: 6px;
+    --bg-image-offset: calc(40px + 12px);  /* cancellation image width + left padding + a bit more */
+  }
+
+  .visit-card__image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .visit-card__park {
+    font-size: 0.7rem;
+  }
+
+  .visit-card__date {
+    font-size: 0.6rem;
   }
 }
