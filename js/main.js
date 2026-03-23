@@ -2,7 +2,7 @@
 // Imports
 // ============================================================================
 
-import {createInsetShadowFilter, createDropShadowFilter, createHoleShadowFilter} from './svgFilters.js';
+import {createInsetShadowFilter, createDropShadowFilter} from './svgFilters.js';
 import {createTooltip, setupMouseInteractions, setupTouchInteractions, shortenParkName} from './tooltip.js';
 
 // ============================================================================
@@ -121,14 +121,17 @@ function renderParkImages(map, nodes, visits) {
 function waitForImages(images) {
   return new Promise(resolve => {
     const imageNodes = images.nodes();
-    let loadedCount = 0;
     const totalImages = imageNodes.length;
 
+    if (totalImages === 0) {
+      resolve();
+      return;
+    }
+
+    let loadedCount = 0;
+
     function checkComplete() {
-      loadedCount++;
-      if (loadedCount === totalImages) {
-        resolve();
-      }
+      if (++loadedCount === totalImages) resolve();
     }
 
     imageNodes.forEach(img => {
@@ -165,7 +168,6 @@ const svg = d3.select("#content")
 const defs = svg.append('defs');
 createInsetShadowFilter(defs, CONFIG);
 createDropShadowFilter(defs, CONFIG);
-createHoleShadowFilter(defs, CONFIG);
 
 // Create map group
 const map = svg.append('g').attr('class', 'map');

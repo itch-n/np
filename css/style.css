@@ -272,6 +272,7 @@ svg {
 image.place {
   touch-action: none;
   cursor: pointer;
+  transition: opacity 0.4s ease;
 }
 
 #content {
