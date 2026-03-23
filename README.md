@@ -119,9 +119,15 @@ If the visit is in a year with no existing card in `img/years/`, create one. Use
 
 ### 5. Adding a new park (rare)
 
-All 63 current U.S. National Parks are already in `data/parks.json`. Only needed if a new park has been designated.
+All current U.S. National Parks are already in `data/parks.json`. Only needed if a new park has been designated.
 
 Fields: `name`, `parkCode` (4-letter lowercase NPS code), `latitude`, `longitude`, `state` (2-letter abbreviation).
+
+The data originated from the [NPS Developer API](https://developer.nps.gov/api/v1/parks) (free API key required). The API returns `fullName` and `states` (comma-separated); they were simplified to `name` and the primary `state` for this project. To look up coordinates or the park code for a new park, query:
+
+```
+https://developer.nps.gov/api/v1/parks?parkCode={code}&api_key=YOUR_KEY
+```
 
 If coordinates need adjustment to avoid overlap or water placement, document the original value in a `_comment` field:
 
@@ -140,10 +146,4 @@ You must also add a park emblem image at `img/np/{parkCode}.png` (96x103px PNG).
 
 Alaska, Hawaii, and territory parks are automatically rendered at a smaller radius - no special handling needed.
 
-Finally, update the hardcoded total in `index.html`:
-
-```html
-<span class="top__counter-text-63">63</span>
-```
-
-Change `63` to the new total and rename the class to match (e.g. `top__counter-text-64`).
+The header counter total is derived from `parks.json` at runtime - no manual update needed.

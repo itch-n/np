@@ -2,7 +2,7 @@
 // Imports
 // ============================================================================
 
-import {createInsetShadowFilter, createDropShadowFilter} from './svgFilters.js';
+import {createInsetShadowFilter, createDropShadowFilter, createHoleShadowFilter} from './svgFilters.js';
 import {createTooltip, setupMouseInteractions, setupTouchInteractions, shortenParkName} from './tooltip.js';
 
 // ============================================================================
@@ -101,7 +101,7 @@ function renderParkImages(map, nodes, visits) {
     .attr('y', d => d.y - d.r)
     .attr('href', d => `img/np/${d.parkCode}.png`)
     .attr('preserveAspectRatio', 'xMidYMid slice')
-    .attr('filter', 'url(#inset-shadow)') // All parks start with inset shadow
+    .attr('filter', 'url(#inset-shadow)') // Unvisited parks start recessed
     .classed('place', true)
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
@@ -164,6 +164,7 @@ const svg = d3.select("#content")
 const defs = svg.append('defs');
 createInsetShadowFilter(defs, CONFIG);
 createDropShadowFilter(defs, CONFIG);
+createHoleShadowFilter(defs, CONFIG);
 
 // Create map group
 const map = svg.append('g').attr('class', 'map');
@@ -174,11 +175,15 @@ Promise.all([
   d3.json("./data/parks.json"),
   d3.json("./data/visits.json")
 ]).then(async ([usa, parks, visits]) => {
+  // Set total park count from data
+  d3.select('#parks-total').text(parks.length);
+
   // Draw map layers
   drawBaseMap(map, usa, path);
   drawStateBorders(map, usa, path);
 
-  // Render visits table
+  // Render stats line and visits table
+  renderStatsLine(visits, parks);
   renderVisitsTable(visits, parks);
 
   // Process park data
@@ -198,10 +203,25 @@ Promise.all([
   setupMouseInteractions(images, tooltip, tipImg, tipName, touchState);
   setupTouchInteractions(images, tooltip, tipImg, tipName, touchState);
 
+  const replayBtn = document.getElementById('replay-btn');
+
+  function startAnimation() {
+    if (replayBtn) replayBtn.disabled = true;
+    animateChronologicalReveal(images, visits).then(() => {
+      if (replayBtn) replayBtn.disabled = false;
+    });
+  }
+
+  if (replayBtn) {
+    replayBtn.addEventListener('click', () => {
+      images.attr('filter', 'url(#inset-shadow)');
+      d3.select('.top__counter-visited').text('0');
+      startAnimation();
+    });
+  }
+
   // Wait before starting reveal animation
-  setTimeout(() => {
-    animateChronologicalReveal(images, visits);
-  }, CONFIG.animationStartDelay);
+  setTimeout(startAnimation, CONFIG.animationStartDelay);
 });
 
 // ============================================================================
@@ -359,13 +379,13 @@ function animateChronologicalReveal(images, visits) {
         // Ensure counter shows exact final count
         counterElement.text(totalParks);
 
-        // // Trigger flourish animation
-        // counterElement.classed('complete', true);
-        //
-        // // Remove class after animation completes to allow re-triggering
-        // setTimeout(() => {
-        //   counterElement.classed('complete', false);
-        // }, 700);
+        // Trigger flourish animation
+        counterElement.classed('complete', true);
+
+        // Remove class after animation completes to allow re-triggering
+        setTimeout(() => {
+          counterElement.classed('complete', false);
+        }, 700);
 
         // Animation complete - resolve the promise
         resolve();
@@ -374,6 +394,32 @@ function animateChronologicalReveal(images, visits) {
 
     requestAnimationFrame(animateReveal);
   });
+}
+
+// ============================================================================
+// Stats Line
+// ============================================================================
+
+function renderStatsLine(visits, parks) {
+  if (!visits || visits.length === 0) return;
+
+  const parkMap = new Map(parks.map(p => [p.parkCode, p]));
+
+  const visitedCodes = new Set(visits.map(v => v.parkCode));
+  const parkCount = visitedCodes.size;
+
+  const stateSet = new Set();
+  visitedCodes.forEach(code => {
+    const park = parkMap.get(code);
+    if (park) stateSet.add(park.state);
+  });
+
+  const sorted = [...visits].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const lastDate = formatDate(sorted[0].date);
+
+  d3.select('#stats-line').text(
+    `${parkCount} parks  \u2022  ${stateSet.size} states  \u2022  last visit ${lastDate}`
+  );
 }
 
 // ============================================================================
@@ -434,7 +480,7 @@ function renderVisitsTable(visits, parks) {
   // Group visits by year
   const visitsByYear = {};
   sortedVisits.forEach(visit => {
-    const year = new Date(visit.date).getFullYear();
+    const year = visit.date.substring(0, 4);
     if (!visitsByYear[year]) {
       visitsByYear[year] = [];
     }
