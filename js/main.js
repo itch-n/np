@@ -102,6 +102,7 @@ function renderParkImages(map, nodes, visits) {
     .attr('href', d => `img/np/${d.parkCode}.png`)
     .attr('preserveAspectRatio', 'xMidYMid slice')
     .attr('filter', 'url(#inset-shadow)') // Unvisited parks start recessed
+    .attr('opacity', 0)
     .classed('place', true)
     .on('error', function () {
       d3.select(this).attr('visibility', 'hidden');
@@ -195,6 +196,9 @@ Promise.all([
 
   // Animation sequence: wait for images → reveal
   await waitForImages(images);
+
+  // Show all shields at once now that they're all loaded
+  images.attr('opacity', 1);
 
   // Setup tooltip immediately
   const {tooltip, tipImg, tipName} = createTooltip();
