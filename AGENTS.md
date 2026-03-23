@@ -18,3 +18,4 @@ Look up NPS park codes using the field `parkCode` in `data/parks.json`. All entr
 | Grand Teton | `grte` | Yosemite | `yose` |
 | Haleakala | `hale` | Zion | `zion` |
 | Hawaii Volcanoes | `havo` | Big Bend | `bibe` |
+| Petrified Forest | `pefo` | | |

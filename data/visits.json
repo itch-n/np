@@ -106,5 +106,11 @@
     "date": "2026-03-20",
     "cancellationImage": "img/cancellations/20260320-pefo.png",
     "visitImage": "../img/visits/20260320-pefo.jpg"
+  },
+  {
+    "parkCode": "grca",
+    "date": "2026-03-21",
+    "cancellationImage": "img/cancellations/20260321-grca.png",
+    "visitImage": "../img/visits/20260321-grca.jpg"
   }
 ]

@@ -99,12 +99,14 @@ Chronological order is conventional but not required.
 - **Format:** PNG
 - **Dimensions:** 160x160px (2x for the 80px display size)
 - The rubber cancellation stamp from the park's passport stamp, displayed as the primary visual in the visit card
+- **Tip:** If the scanned stamp has overlapping stamps or noise, Gemini image generation does a great job producing a clean recreation. Prompt it with the park name, date, and location text from the original stamp.
 
 ### 3. Add the visit photo
 
 - **Path:** `img/visits/YYYYMMDD-{parkCode}.{ext}` (jpg, jpeg, or png)
 - **Dimensions:** 500px wide, height flexible - the image is cropped from the center via `background-size: cover`, so only the middle strip is visible at card height (92px). Landscape or square crops work best; tall portrait images lose most of their content.
 - Used as a blurred background image on the visit card, revealed on hover
+- **Tip:** To make photos pop, apply a gentle filter before saving: `magick input.jpg -brightness-contrast 3x18 -modulate 100,140,100 -unsharp 0x0.6+0.5+0 output.jpg` (boosts contrast, saturation, and adds light sharpening)
 
 ### 4. Create a year card SVG (new years only)
 
