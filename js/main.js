@@ -173,7 +173,7 @@ const map = svg.append('g').attr('class', 'map');
 
 // Load data and render
 Promise.all([
-  d3.json("https://unpkg.com/us-atlas@3.0.0/states-10m.json"),
+  d3.json("./vendor/states-10m.json"),
   d3.json("./data/parks.json"),
   d3.json("./data/visits.json")
 ]).then(async ([usa, parks, visits]) => {
