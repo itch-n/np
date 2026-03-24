@@ -101,7 +101,6 @@ function renderParkImages(map, nodes, visits) {
     .attr('y', d => d.y - d.r)
     .attr('href', d => `img/np/${d.parkCode}.png`)
     .attr('preserveAspectRatio', 'xMidYMid slice')
-    .attr('filter', 'url(#inset-shadow)') // Unvisited parks start recessed
     .attr('opacity', 0)
     .classed('place', true)
     .on('error', function () {
@@ -220,14 +219,29 @@ Promise.all([
 
   if (replayBtn) {
     replayBtn.addEventListener('click', () => {
-      images.attr('filter', 'url(#inset-shadow)');
+      images.classed('visited', false);
       d3.select('.top__counter-visited').text('0');
-      // getBoundingClientRect() forces a synchronous style/layout flush so the
-      // filter reset is committed before the next paint. One RAF then guarantees
-      // the reset is painted before the animation starts overwriting filters.
-      // See: https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering
-      images.nodes()[0]?.getBoundingClientRect();
-      requestAnimationFrame(startAnimation);
+      // Safari-specific bug: SVG filter compositor layer caching
+      //
+      // When Safari promotes an SVG element to a GPU compositor layer due to a
+      // filter, it caches that layer and does not invalidate it when the filter
+      // changes - even when getComputedStyle() correctly reports the new value.
+      // The style engine knows about the change; the compositor ignores it.
+      //
+      // Attempts that did NOT work:
+      //   - Double requestAnimationFrame (compositor cache not flushed)
+      //   - getBoundingClientRect() before RAF (forces layout, not paint)
+      //   - Switching from SVG filter attribute to CSS class (same compositor issue)
+      //
+      // What works: set filter:none as an inline style, which is a genuine filter
+      // change that the compositor cannot ignore. This drops the cached layer.
+      // Removing the inline style in the next RAF lets CSS restore inset-shadow
+      // cleanly, and the animation starts one RAF later.
+      images.style('filter', 'none');
+      requestAnimationFrame(() => {
+        images.style('filter', null);
+        requestAnimationFrame(startAnimation);
+      });
     });
   }
 
@@ -350,8 +364,8 @@ function animateChronologicalReveal(images, visits) {
           const cx = park.data.x;
           const cy = park.data.y;
 
-          // Apply drop shadow filter to make emblem look like solid wood
-          park.element.attr('filter', 'url(#drop-shadow)');
+          // Switch to visited state via CSS class (more reliable in WebKit than attr mutation)
+          park.element.classed('visited', true);
 
           // OPTIMIZATION #5: Hint to browser that this element will animate (hardware acceleration)
           park.element.style('will-change', 'transform');
@@ -382,7 +396,7 @@ function animateChronologicalReveal(images, visits) {
           const parkCode = chronologicalParks[i];
           const park = parkImageMap.get(parkCode);
           if (park) {
-            park.element.attr('filter', 'url(#drop-shadow)');
+            park.element.classed('visited', true);
             park.element.attr('transform', null);
           }
         }

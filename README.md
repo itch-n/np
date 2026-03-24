@@ -54,7 +54,23 @@ css/
 generate-year-cards-prompt.md   # prompt for regenerating year card SVGs
 ```
 
-## Adding a visit
+## Technical notes
+
+### Safari SVG filter compositor caching
+
+The replay button resets all park emblems from their "visited" state (drop shadow) back to "unvisited" (inset shadow) before re-running the animation. This reset is trivial in every browser except Safari, which has a bug: when an SVG element is promoted to a GPU compositor layer due to a CSS filter, Safari caches that layer and does not invalidate it when the filter changes - even when `getComputedStyle()` correctly reports the new value. The style engine knows about the change; the compositor ignores it.
+
+Several approaches were attempted and failed:
+
+- **Double `requestAnimationFrame`** - the compositor cache is not flushed between frames
+- **`getBoundingClientRect()` before RAF** - forces a layout flush but not a paint
+- **CSS class toggling instead of attribute mutation** - goes through a different code path but hits the same compositor cache
+
+The fix is to set `filter: none` as an inline style after the reset. An inline style overrides CSS and represents a genuine filter change that the compositor cannot cache-skip. The inline style is then removed in the next RAF (restoring the CSS inset-shadow), and the animation starts one RAF after that.
+
+This was diagnosed by adding `getComputedStyle(el).filter` logging at each stage, which confirmed the computed value was correct throughout - ruling out every other possible cause and pointing directly to the compositor layer.
+
+
 
 **Checklist:**
 

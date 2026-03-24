@@ -273,6 +273,11 @@ image.place {
   touch-action: none;
   cursor: pointer;
   transition: opacity 0.4s ease;
+  filter: url(#inset-shadow);
+}
+
+image.place.visited {
+  filter: url(#drop-shadow);
 }
 
 #content {
