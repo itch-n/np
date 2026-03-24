@@ -222,12 +222,12 @@ Promise.all([
     replayBtn.addEventListener('click', () => {
       images.attr('filter', 'url(#inset-shadow)');
       d3.select('.top__counter-visited').text('0');
-      // Double-RAF ensures the filter reset is committed to a paint frame
-      // before the animation starts overwriting filters (fixes Safari timing).
-      // A single RAF runs before style/layout/paint for that frame, so mutations
-      // aren't visible until the next frame - exactly when the second RAF fires.
+      // getBoundingClientRect() forces a synchronous style/layout flush so the
+      // filter reset is committed before the next paint. One RAF then guarantees
+      // the reset is painted before the animation starts overwriting filters.
       // See: https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering
-      requestAnimationFrame(() => requestAnimationFrame(startAnimation));
+      images.nodes()[0]?.getBoundingClientRect();
+      requestAnimationFrame(startAnimation);
     });
   }
 
