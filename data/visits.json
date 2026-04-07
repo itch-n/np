@@ -112,5 +112,11 @@
     "date": "2026-03-21",
     "cancellationImage": "img/cancellations/20260321-grca.png",
     "visitImage": "../img/visits/20260321-grca.jpg"
+  },
+  {
+    "parkCode": "chis",
+    "date": "2026-04-05",
+    "cancellationImage": "img/cancellations/20260405-chis.png",
+    "visitImage": "../img/visits/20260405-chis.jpeg"
   }
 ]
