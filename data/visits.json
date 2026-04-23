@@ -118,5 +118,17 @@
     "date": "2026-04-05",
     "cancellationImage": "img/cancellations/20260405-chis.png",
     "visitImage": "../img/visits/20260405-chis.jpeg"
+  },
+  {
+    "parkCode": "arch",
+    "date": "2026-04-18",
+    "cancellationImage": "img/cancellations/20260418-arch.png",
+    "visitImage": "../img/visits/20260418-arch.jpeg"
+  },
+  {
+    "parkCode": "cany",
+    "date": "2026-04-19",
+    "cancellationImage": "img/cancellations/20260419-cany.png",
+    "visitImage": "../img/visits/20260419-cany.jpeg"
   }
 ]
