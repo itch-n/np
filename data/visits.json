@@ -130,5 +130,11 @@
     "date": "2026-04-19",
     "cancellationImage": "img/cancellations/20260419-cany.png",
     "visitImage": "../img/visits/20260419-cany.jpeg"
+  },
+  {
+    "parkCode": "jotr",
+    "date": "2026-05-09",
+    "cancellationImage": "img/cancellations/20260509-jotr.png",
+    "visitImage": "../img/visits/20260509-jotr.jpeg"
   }
 ]

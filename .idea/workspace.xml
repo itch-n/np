@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="142d7c70-6ac5-4a9e-b532-fde70ad5cefc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/img/cancellations/20260418-arch.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/cancellations/20260419-cany.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20260418-arch.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/visits/20260419-cany.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/visits.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/visits.json" afterDir="false" />
-    </list>
+    <list default="true" id="142d7c70-6ac5-4a9e-b532-fde70ad5cefc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -145,7 +138,7 @@
       <workItem from="1774243783302" duration="1311000" />
       <workItem from="1774301130706" duration="9397000" />
       <workItem from="1775578412375" duration="2837000" />
-      <workItem from="1776921777467" duration="1312000" />
+      <workItem from="1776921777467" duration="2796000" />
     </task>
     <servers />
   </component>
