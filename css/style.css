@@ -373,7 +373,7 @@ image.place.visited {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 16px;
+  padding: 5px 14px;
   border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.9rem;
@@ -381,7 +381,7 @@ image.place.visited {
   color: var(--color-text-tertiary);
   transition: background var(--transition-fast), color var(--transition-fast);
   line-height: 1;
-  min-height: 36px;
+  min-height: 28px;
 }
 
 .year-btn:hover {
@@ -411,10 +411,6 @@ image.place.visited {
 /* ------------------------------------------------------------------------------- */
 /* Visits Table */
 /* ------------------------------------------------------------------------------- */
-.visits-year-group {
-  margin-bottom: var(--spacing-sm);
-}
-
 /* Shared card styles */
 .card {
   background: #FFFFFF;

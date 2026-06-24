@@ -443,13 +443,13 @@ function setupYearFilter(images, visits) {
       container.selectAll('.year-btn').classed('year-btn--active', d => d === year);
       if (year === 'all') {
         images.classed('visited', d => visitedParks.has(d.parkCode));
-        d3.selectAll('.visits-year-group').style('display', null);
+        d3.selectAll('.visit-card').style('display', null);
       } else {
         const yearParks = new Set(
           visits.filter(v => v.date.slice(0, 4) === year).map(v => v.parkCode)
         );
         images.classed('visited', d => yearParks.has(d.parkCode));
-        d3.selectAll('.visits-year-group').each(function () {
+        d3.selectAll('.visit-card').each(function () {
           d3.select(this).style('display', this.dataset.year === year ? null : 'none');
         });
       }
@@ -458,7 +458,7 @@ function setupYearFilter(images, visits) {
   return {
     reset() {
       container.selectAll('.year-btn').classed('year-btn--active', d => d === 'all');
-      d3.selectAll('.visits-year-group').style('display', null);
+      d3.selectAll('.visit-card').style('display', null);
     }
   };
 }
@@ -524,11 +524,7 @@ function formatDate(dateString) {
   });
 }
 
-/**
- * Renders the visits table
- */
 function renderVisitsTable(visits, parks) {
-  // Create lookup function
   function getParkName(parkCode) {
     const park = parks.find(p => p.parkCode === parkCode);
     return park ? `${shortenParkName(park.name)}, ${park.state}` : parkCode;
@@ -541,65 +537,34 @@ function renderVisitsTable(visits, parks) {
     return;
   }
 
-  // Sort visits by date (most recent first)
-  const sortedVisits = visits.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedVisits = [...visits].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const grid = container.append('div').attr('class', 'visits-grid');
 
-  // Group visits by year
-  const visitsByYear = {};
-  sortedVisits.forEach(visit => {
-    const year = visit.date.substring(0, 4);
-    if (!visitsByYear[year]) {
-      visitsByYear[year] = [];
-    }
-    visitsByYear[year].push(visit);
-  });
+  const cards = grid.selectAll('.visit-card')
+    .data(sortedVisits)
+    .enter()
+    .append('div')
+    .attr('class', 'card visit-card')
+    .attr('data-year', d => d.date.slice(0, 4))
+    .style('--visit-bg-image', d => (d.visitImage && d.visitImage !== 'null') ? `url('${d.visitImage}')` : 'none');
 
-  // Get years in descending order
-  const years = Object.keys(visitsByYear).sort((a, b) => b - a);
+  const wrapper = cards.append('div').attr('class', 'visit-card__wrapper');
 
-  // Render each year group
-  years.forEach(year => {
-    const yearGroup = container.append('div')
-      .attr('class', 'visits-year-group')
-      .attr('data-year', year);
+  wrapper.append('img')
+    .attr('class', 'visit-card__image')
+    .attr('src', d => d.cancellationImage)
+    .attr('alt', d => getParkName(d.parkCode))
+    .on('error', function () {
+      d3.select(this).attr('src', PLACEHOLDER_IMAGE);
+    });
 
-    const grid = yearGroup.append('div')
-      .attr('class', 'visits-grid');
+  const content = wrapper.append('div').attr('class', 'visit-card__content');
 
-    // Create cards for all visits
-    const cards = grid.selectAll('.visit-card')
-      .data(visitsByYear[year])
-      .enter()
-      .append('div')
-      .attr('class', 'card visit-card')
-      .style('--visit-bg-image', d => (d.visitImage && d.visitImage !== 'null') ? `url('${d.visitImage}')` : 'none');
+  content.append('div')
+    .attr('class', 'visit-card__park')
+    .text(d => getParkName(d.parkCode));
 
-    // Add wrapper for image and content
-    const wrapper = cards.append('div')
-      .attr('class', 'visit-card__wrapper');
-
-    // Add cancellation image
-    wrapper.append('img')
-      .attr('class', 'visit-card__image')
-      .attr('src', d => d.cancellationImage)
-      .attr('alt', d => getParkName(d.parkCode))
-      .on('error', function () {
-        d3.select(this).attr('src', PLACEHOLDER_IMAGE);
-      });
-
-    // Add content container
-    const content = wrapper.append('div')
-      .attr('class', 'visit-card__content');
-
-    // Add park name
-    content.append('div')
-      .attr('class', 'visit-card__park')
-      .text(d => getParkName(d.parkCode));
-
-    // Add date
-    content.append('div')
-      .attr('class', 'visit-card__date')
-      .text(d => formatDate(d.date));
-  });
+  content.append('div')
+    .attr('class', 'visit-card__date')
+    .text(d => formatDate(d.date));
 }
-
