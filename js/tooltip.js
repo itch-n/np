@@ -42,32 +42,27 @@ export function showTooltip(tooltip, tipImg, tipName, parkData) {
 }
 
 /**
- * Positions tooltip based on cursor/touch position
+ * Positions tooltip anchored to the given DOM element
  */
-export function positionTooltip(tooltip, x, y, padding = 0) {
+export function positionTooltip(tooltip, element, padding = 0) {
   const tipNode = tooltip.node();
   const tipW = tipNode.offsetWidth;
   const tipH = tipNode.offsetHeight;
 
-  // Use visual viewport when available (accounts for zoom on mobile)
-  const vv = window.visualViewport;
-  const viewportWidth = vv ? vv.width : window.innerWidth;
-  const viewportHeight = vv ? vv.height : window.innerHeight;
-  const offsetX = vv ? vv.offsetLeft : 0;
-  const offsetY = vv ? vv.offsetTop : 0;
+  const rect = element.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
 
-  // Adjust coordinates relative to visual viewport
-  const relativeX = x - offsetX;
-  const relativeY = y - offsetY;
+  // Default: to the right of the icon, top-aligned
+  let x = rect.right + 4;
+  let y = rect.top;
 
-  const flipX = (relativeX + tipW > viewportWidth - padding);
-  const flipY = (relativeY + tipH > viewportHeight - padding);
+  if (x + tipW > viewportWidth - padding) x = rect.left - tipW - 4;
+  if (y + tipH > viewportHeight - padding) y = rect.bottom - tipH;
 
   tooltip
-    .style('--tx', `${x}px`)
-    .style('--ty', `${y}px`)
-    .classed('flip-x', flipX)
-    .classed('flip-y', flipY);
+    .style('left', `${x}px`)
+    .style('top', `${y}px`);
 }
 
 /**
@@ -89,11 +84,7 @@ export function setupMouseInteractions(images, tooltip, tipImg, tipName, touchSt
     .on('mouseover', (event, d) => {
       if (!touchState.active) {
         showTooltip(tooltip, tipImg, tipName, d);
-      }
-    })
-    .on('mousemove', (event) => {
-      if (!touchState.active) {
-        positionTooltip(tooltip, event.clientX, event.clientY);
+        positionTooltip(tooltip, event.currentTarget);
       }
     })
     .on('mouseout', () => {
@@ -138,9 +129,8 @@ export function setupTouchInteractions(images, tooltip, tipImg, tipName, touchSt
 
     showTooltip(tooltip, tipImg, tipName, d);
 
-    const touch = event.touches[0];
     tooltip.style('display', 'block'); // Show first to get dimensions
-    positionTooltip(tooltip, touch.clientX, touch.clientY, 10);
+    positionTooltip(tooltip, event.currentTarget, 10);
   });
 
   // Hide tooltip when tapping outside

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-See the **"Adding a visit"** section in [README.md](README.md) for the full checklist, file naming conventions, JSON schema, year card instructions, and guidance on adding new parks.
+See the **"Adding a visit"** section in [README.md](README.md) for the full checklist, file naming conventions, JSON schema, and guidance on adding new parks.
 
 ## Park codes reference
 

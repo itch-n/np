@@ -208,6 +208,7 @@ Promise.all([
   setupMouseInteractions(images, tooltip, tipImg, tipName, touchState);
   setupTouchInteractions(images, tooltip, tipImg, tipName, touchState);
 
+  const yearFilter = setupYearFilter(images, visits);
   const replayBtn = document.getElementById('replay-btn');
 
   function startAnimation() {
@@ -219,6 +220,7 @@ Promise.all([
 
   if (replayBtn) {
     replayBtn.addEventListener('click', () => {
+      yearFilter.reset();
       images.classed('visited', false);
       d3.select('.top__counter-visited').text('0');
       // Safari-specific bug: SVG filter compositor layer caching
@@ -422,6 +424,46 @@ function animateChronologicalReveal(images, visits) {
 }
 
 // ============================================================================
+// Year Filter
+// ============================================================================
+
+function setupYearFilter(images, visits) {
+  const years = [...new Set(visits.map(v => v.date.slice(0, 4)))].sort();
+  const visitedParks = new Set(visits.map(v => v.parkCode));
+  const container = d3.select('#year-filter');
+
+  container.selectAll('button')
+    .data(['all', ...years])
+    .enter()
+    .append('button')
+    .attr('class', 'year-btn')
+    .classed('year-btn--active', (d, i) => i === 0)
+    .text(d => d === 'all' ? 'All' : d)
+    .on('click', (event, year) => {
+      container.selectAll('.year-btn').classed('year-btn--active', d => d === year);
+      if (year === 'all') {
+        images.classed('visited', d => visitedParks.has(d.parkCode));
+        d3.selectAll('.visits-year-group').style('display', null);
+      } else {
+        const yearParks = new Set(
+          visits.filter(v => v.date.slice(0, 4) === year).map(v => v.parkCode)
+        );
+        images.classed('visited', d => yearParks.has(d.parkCode));
+        d3.selectAll('.visits-year-group').each(function () {
+          d3.select(this).style('display', this.dataset.year === year ? null : 'none');
+        });
+      }
+    });
+
+  return {
+    reset() {
+      container.selectAll('.year-btn').classed('year-btn--active', d => d === 'all');
+      d3.selectAll('.visits-year-group').style('display', null);
+    }
+  };
+}
+
+// ============================================================================
 // Stats Line
 // ============================================================================
 
@@ -517,25 +559,12 @@ function renderVisitsTable(visits, parks) {
 
   // Render each year group
   years.forEach(year => {
-    // Add year group container
     const yearGroup = container.append('div')
-      .attr('class', 'visits-year-group');
+      .attr('class', 'visits-year-group')
+      .attr('data-year', year);
 
-    // Create grid for this year
     const grid = yearGroup.append('div')
       .attr('class', 'visits-grid');
-
-    // Add year image card as first item in grid
-    const yearImageCard = grid.append('div')
-      .attr('class', 'card year-image-card');
-
-    yearImageCard.append('img')
-      .attr('class', 'year-image-card__image')
-      .attr('src', `./img/years/${year}.svg`)
-      .attr('alt', `${year} highlight`)
-      .on('error', function () {
-        d3.select(this.parentNode).style('display', 'none');
-      });
 
     // Create cards for all visits
     const cards = grid.selectAll('.visit-card')

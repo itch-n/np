@@ -18,9 +18,9 @@
   --color-bg-primary: #FCFAF8;
 
   --color-map-water: #F8F4EE;
-  --color-map-land: #EDF5EA;
-  --color-map-nation-boundaries: #82A686;
-  --color-map-state-boundaries: #B8D4BB;
+  --color-map-land: var(--color-primary-lightest);
+  --color-map-nation-boundaries: var(--color-primary);
+  --color-map-state-boundaries: var(--color-primary-light);
 
   /* Spacing Scale (4px base unit) */
   --spacing-xs: 4px;
@@ -105,7 +105,7 @@ p {
   max-width: 1020px;
   margin-left: auto;
   margin-right: auto;
-  padding: 20px 0;
+  padding: 12px 0;
 }
 
 @media (max-width: 1023px) {
@@ -119,7 +119,7 @@ p {
 @media (max-width: 767px) {
   .top,
   .site-footer {
-    padding: 10px 0;
+    padding: 8px 0;
   }
 }
 
@@ -158,6 +158,11 @@ p {
   transition: transform var(--transition-fast);
   border-radius: 50%;
   padding: 2px 6px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* Subtle flourish animation when counter completes */
@@ -312,10 +317,6 @@ image.place.visited {
   pointer-events: none;
   display: none;
   z-index: 2000;
-  --tx: 0px;
-  --ty: 0px;
-  transform: translate(var(--tx), var(--ty));
-  will-change: transform;
 }
 
 .tooltip__content {
@@ -350,16 +351,52 @@ image.place.visited {
   text-wrap-mode: wrap;
 }
 
-.tooltip.flip-x {
-  transform: translate(calc(var(--tx) - 100%), var(--ty));
+/* ------------------------------------------------------------------------------- */
+/* Year Filter */
+/* ------------------------------------------------------------------------------- */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  padding: var(--spacing-md) 0 var(--spacing-sm);
 }
 
-.tooltip.flip-y {
-  transform: translate(var(--tx), calc(var(--ty) - 100%));
+#year-filter {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
 }
 
-.tooltip.flip-x.flip-y {
-  transform: translate(calc(var(--tx) - 100%), calc(var(--ty) - 100%));
+.year-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  line-height: 1;
+  min-height: 36px;
+}
+
+.year-btn:hover {
+  background: var(--color-primary-lightest);
+  color: var(--color-text-secondary);
+}
+
+.year-btn--active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.year-btn--active:hover {
+  background: var(--color-primary-dark);
+  color: #fff;
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -369,14 +406,13 @@ image.place.visited {
   font-size: 0.85rem;
   color: var(--color-text-tertiary);
   letter-spacing: 0.2px;
-  padding-bottom: var(--spacing-xl);
 }
 
 /* ------------------------------------------------------------------------------- */
 /* Visits Table */
 /* ------------------------------------------------------------------------------- */
 .visits-year-group {
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-sm);
 }
 
 /* Shared card styles */
@@ -401,13 +437,6 @@ image.place.visited {
   box-shadow: var(--shadow-lg);
 }
 
-.year-image-card__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
 .visits-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -417,10 +446,6 @@ image.place.visited {
   @media (max-width: 1023px) {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  /*@media (max-width: 479px) {*/
-  /*  grid-template-columns: repeat(1, 1fr);*/
-  /*}*/
 }
 
 .visit-card {

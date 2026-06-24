@@ -8,7 +8,8 @@ An interactive map visualization of U.S. National Parks visits, built with D3.js
 
 - Renders all 63 U.S. National Parks as circular emblems on an Albers USA projection (including territories)
 - Animates a chronological reveal of visited parks with a stamp effect on page load
-- Shows a visits table below the map, grouped by year with illustrated year cards
+- Year filter to explore visits by year, synced across the map and visits table
+- Shows a visits table below the map with cancellation stamps and visit photos
 - Hover (or tap on mobile) any park emblem to see its name and state
 
 ## Tech stack
@@ -41,7 +42,6 @@ img/
   np/              # park emblem PNGs, one per park (named by parkCode)
   cancellations/   # cancellation stamp PNGs, one per visit
   visits/          # visit photos, one per visit
-  years/           # year card SVGs shown at the start of each year group
 
 js/
   main.js          # map rendering, animation, visits table
@@ -50,8 +50,6 @@ js/
 
 css/
   style.css
-
-generate-year-cards-prompt.md   # prompt for regenerating year card SVGs
 ```
 
 ## Technical notes
@@ -77,7 +75,6 @@ This was diagnosed by adding `getComputedStyle(el).filter` logging at each stage
 - [ ] Add entry to `data/visits.json`
 - [ ] Add cancellation stamp image: `img/cancellations/YYYYMMDD-{parkCode}.png`
 - [ ] Add visit photo: `img/visits/YYYYMMDD-{parkCode}.{ext}`
-- [ ] If the year is new (no prior visits that year), create a year card SVG: `img/years/YYYY.svg`
 - [ ] If the park is not yet in `data/parks.json`, add it (rare - all 63 parks are already present)
 
 ### 1. Update `data/visits.json`
@@ -124,16 +121,7 @@ Chronological order is conventional but not required.
 - Used as a blurred background image on the visit card, revealed on hover
 - **Tip:** To make photos pop, apply a gentle filter before saving: `magick input.jpg -brightness-contrast 3x18 -modulate 100,140,100 -unsharp 0x0.6+0.5+0 output.jpg` (boosts contrast, saturation, and adds light sharpening)
 
-### 4. Create a year card SVG (new years only)
-
-If the visit is in a year with no existing card in `img/years/`, create one. Use the prompt in [`generate-year-cards-prompt.md`](generate-year-cards-prompt.md). Key specs:
-
-- **File:** `img/years/YYYY.svg`
-- **Dimensions:** viewBox `0 0 1024 300` (~3.4:1 landscape, displayed at full card width × 92px height)
-- Base the theme on the types of parks visited that year (check `data/visits.json`)
-- Must be visually distinct from existing year cards - different color palette and landscape theme
-
-### 5. Adding a new park (rare)
+### 4. Adding a new park (rare)
 
 All current U.S. National Parks are already in `data/parks.json`. Only needed if a new park has been designated.
 
