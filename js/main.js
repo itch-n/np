@@ -428,7 +428,7 @@ function animateChronologicalReveal(images, visits) {
 // ============================================================================
 
 function setupYearFilter(images, visits) {
-  const years = [...new Set(visits.map(v => v.date.slice(0, 4)))].sort();
+  const years = [...new Set(visits.map(v => v.date.slice(0, 4)))].sort((a, b) => b - a);
   const visitedParks = new Set(visits.map(v => v.parkCode));
   const container = d3.select('#year-filter');
 
