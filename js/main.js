@@ -14,8 +14,8 @@ const CONFIG = {
   height: 500,
   simulationIterations: 5,
   parkRadius: {
-    lower48: 16,
-    others: 10
+    lower48: 12,
+    others: 8
   },
   animationDuration: 1500, // Duration in ms for counter and reveal animations
   animationStartDelay: 300 // Delay in ms before starting reveal animation
@@ -77,9 +77,9 @@ function createParkNodes(places, projection, config) {
  */
 function runForceSimulation(nodes, config) {
   const sim = d3.forceSimulation(nodes)
-    .force('x', d3.forceX(d => d.px))
-    .force('y', d3.forceY(d => d.py))
-    .force('collide', d3.forceCollide().radius(d => d.r + 1))
+    .force('x', d3.forceX(d => d.px).strength(0.8))
+    .force('y', d3.forceY(d => d.py).strength(0.8))
+    .force('collide', d3.forceCollide().radius(d => d.r - 1))
     .stop();
 
   for (let i = 0; i < config.simulationIterations; i++) {
