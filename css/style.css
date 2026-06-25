@@ -426,20 +426,16 @@ image.place.visited {
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base);
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28);
+  transition: none;
   height: auto;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 2.5 / 1;
   /* Creates an isolated stacking context to prevent compositing layer changes
      in one card from causing repaints in other cards. Without this, animating
      a card can trigger opacity flickering in adjacent cards on mobile devices
      due to browser compositor optimizations. Alternative of using
      `transform: translateZ(0)` would work but is less semantic. */
   isolation: isolate;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-lg);
 }
 
 .visits-grid {
@@ -487,21 +483,24 @@ image.place.visited {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 50%;
-  background: rgba(255, 255, 255, 0.75);
-  transition: transform var(--transition-base);
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.8);
+  transition: opacity var(--transition-base), transform var(--transition-base);
 }
 
 .visit-card:hover .visit-card__wrapper::before {
   transform: translateX(-100%);
 }
 
-/* Cancellation stamp: left half */
+/* Cancellation stamp: left third */
 .visit-card__image {
-  width: 50%;
   height: 100%;
+  width: auto;
+  aspect-ratio: 1;
   object-fit: contain;
-  padding: 8px;
+  padding: 4px;
   flex-shrink: 0;
   animation: fadeIn var(--transition-base);
   transition: transform var(--transition-base);
@@ -516,20 +515,24 @@ image.place.visited {
 .visit-card__content {
   position: absolute;
   bottom: 0;
-  left: 50%;
+  left: 40%;
   right: 0;
-  padding: 6px 8px;
-  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.55) 50%);
+  padding: 4px 6px;
+  background: linear-gradient(to right, transparent 30%, rgba(0, 0, 0, 0.6) 70%);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   align-items: flex-end;
-  transition: opacity var(--transition-base), transform var(--transition-base);
+  transition: opacity var(--transition-base);
+}
+
+.visit-card:hover .visit-card__content {
+  opacity: 0;
 }
 
 .visit-card__park {
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #fff;
   line-height: 1.2;
   white-space: nowrap;
