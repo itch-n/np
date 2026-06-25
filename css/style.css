@@ -46,8 +46,6 @@
   --transition-fast: 0.2s ease;
   --transition-base: 0.3s ease;
   --transition-slow: 0.4s ease;
-
-  --card-sliding-overlay-color: rgba(255, 255, 255, 0.6);
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -429,8 +427,9 @@ image.place.visited {
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-  height: 92px;
+  transition: box-shadow var(--transition-base);
+  height: auto;
+  aspect-ratio: 2 / 1;
   /* Creates an isolated stacking context to prevent compositing layer changes
      in one card from causing repaints in other cards. Without this, animating
      a card can trigger opacity flickering in adjacent cards on mobile devices
@@ -440,7 +439,6 @@ image.place.visited {
 }
 
 .card:hover {
-  transform: translateY(-4px) scale(1.02);
   box-shadow: var(--shadow-lg);
 }
 
@@ -457,175 +455,95 @@ image.place.visited {
 
 .visit-card {
   display: flex;
-  padding: 6px;
-  --bg-image-offset: calc(80px + 12px); /* cancellation image width + padding */
+  padding: 0;
 }
 
-/* background image container */
+/* Visit photo: full card, always */
 .visit-card::before {
   content: '';
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  left: var(--bg-image-offset);
+  left: 0;
   background-image: var(--visit-bg-image, none);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-top-left-radius: 0;
-  border-top-right-radius: inherit;
-  border-bottom-right-radius: inherit;
-  border-bottom-left-radius: 0;
   z-index: 0;
-  filter: blur(1px);
-  transition: filter var(--transition-base);
   animation: fadeIn var(--transition-base);
 }
 
-.visit-card:hover::before {
-  filter: blur(0px);
-}
-
-/* Wrapper for image and content */
+/* Wrapper for stamp and text overlay */
 .visit-card__wrapper {
   display: flex;
-  gap: 6px;
   position: relative;
-  z-index: 3;
   flex: 1;
 }
 
-/* Sliding gradient overlay */
-.visit-card__wrapper::after {
+.visit-card__wrapper::before {
   content: '';
   position: absolute;
-  top: -12px;
-  bottom: -12px;
-  width: 200%;
-  background: linear-gradient(to right, var(--card-sliding-overlay-color) 0%, var(--card-sliding-overlay-color) 50%, transparent 100%);
-  z-index: -1;
-  transform-origin: right;
-  pointer-events: none;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  background: rgba(255, 255, 255, 0.75);
   transition: transform var(--transition-base);
-  /* GPU acceleration optimizations to prevent mobile flickering:
-     - will-change: Hints browser to create compositor layer upfront, avoiding
-       mid-animation layer promotion that causes visual glitches
-     - translate3d(0,0,0): Forces GPU compositing from initial render. Simple
-       2D transforms (translateX) use CPU rendering which causes jank when
-       upgrading to GPU during animation. This "null transform" hack ensures
-       consistent hardware acceleration throughout the animation lifecycle. */
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
 }
 
-.visit-card:hover .visit-card__wrapper::after {
-  /* Use translate3d instead of translateX to maintain consistent GPU compositing.
-     Mixing 2D and 3D transforms would cause the browser to switch rendering modes. */
-  transform: translate3d(-100%, 0, 0);
+.visit-card:hover .visit-card__wrapper::before {
+  transform: translateX(-100%);
 }
 
+/* Cancellation stamp: left half */
 .visit-card__image {
-  width: 80px;
-  height: 80px;
+  width: 50%;
+  height: 100%;
   object-fit: contain;
+  padding: 8px;
   flex-shrink: 0;
   animation: fadeIn var(--transition-base);
+  transition: transform var(--transition-base);
+  mix-blend-mode: multiply;
 }
 
+.visit-card:hover .visit-card__image {
+  transform: translateX(-100%);
+}
+
+/* Text overlay: always visible */
 .visit-card__content {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  right: 0;
+  padding: 6px 8px;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.55) 50%);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-xs);
-  min-width: 0;
-  padding-left: var(--spacing-xs);
-  flex: 1;
+  gap: 2px;
+  align-items: flex-end;
+  transition: opacity var(--transition-base), transform var(--transition-base);
 }
 
 .visit-card__park {
   font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--color-text-secondary);
-  line-height: 1.3;
-  text-align: center;
+  font-size: 0.8rem;
+  color: #fff;
+  line-height: 1.2;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  transition: opacity var(--transition-base);
 }
 
 .visit-card__date {
-  font-size: 0.85rem;
-  color: var(--color-text-tertiary);
-  text-align: center;
-  transition: opacity var(--transition-base);
-}
-
-.visit-card:hover .visit-card__park,
-.visit-card:hover .visit-card__date {
-  opacity: 0;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 @media (max-width: 680px) {
   .visits-grid {
     gap: 8px;
-  }
-
-  .card {
-    height: 72px;
-  }
-
-  .visit-card {
-    padding: 6px;
-    --bg-image-offset: calc(60px + 12px);  /* cancellation image width + left padding + a bit more */
-  }
-
-  .visit-card__image {
-    width: 60px;
-    height: 60px;
-  }
-
-  .visit-card__park {
-    font-size: 0.9rem;
-  }
-
-  .visit-card__date {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .card {
-    height: 46px;
-  }
-
-  .visit-card {
-    padding: 3px;
-    --bg-image-offset: calc(40px + 6px);  /* cancellation image width + left padding + a bit more */
-  }
-
-  .visit-card__wrapper {
-    gap: 3px;
-  }
-
-  .visit-card__content {
-    gap: 0;
-  }
-
-  .visit-card__image {
-    width: 40px;
-    height: 40px;
-  }
-
-  .visit-card__park {
-    font-size: 0.6rem;
-  }
-
-  .visit-card__date {
-    font-size: 0.5rem;
   }
 }

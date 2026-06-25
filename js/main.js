@@ -563,8 +563,4 @@ function renderVisitsTable(visits, parks) {
   content.append('div')
     .attr('class', 'visit-card__park')
     .text(d => getParkName(d.parkCode));
-
-  content.append('div')
-    .attr('class', 'visit-card__date')
-    .text(d => formatDate(d.date));
 }
