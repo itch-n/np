@@ -136,5 +136,17 @@
     "date": "2026-05-09",
     "cancellationImage": "img/cancellations/20260509-jotr.png",
     "visitImage": "../img/visits/20260509-jotr.jpeg"
+  },
+  {
+    "parkCode": "grte",
+    "date": "2026-06-20",
+    "cancellationImage": "img/cancellations/20260620-grte.png",
+    "visitImage": "../img/visits/20260620-grte.jpeg"
+  },
+  {
+    "parkCode": "yell",
+    "date": "2026-06-21",
+    "cancellationImage": "img/cancellations/20260621-yell.png",
+    "visitImage": "../img/visits/20260621-yell.jpeg"
   }
 ]
