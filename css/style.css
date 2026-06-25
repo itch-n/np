@@ -429,7 +429,7 @@ image.place.visited {
   box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28);
   transition: none;
   height: auto;
-  aspect-ratio: 2.5 / 1;
+  aspect-ratio: 2.2 / 1;
   /* Creates an isolated stacking context to prevent compositing layer changes
      in one card from causing repaints in other cards. Without this, animating
      a card can trigger opacity flickering in adjacent cards on mobile devices
@@ -440,12 +440,21 @@ image.place.visited {
 
 .visits-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-lg);
   align-items: stretch;
 
-  @media (max-width: 680px) {
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 600px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  @media (max-width: 380px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
@@ -486,7 +495,7 @@ image.place.visited {
   height: 100%;
   width: auto;
   aspect-ratio: 1;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   transition: opacity var(--transition-base), transform var(--transition-base);
 }
 
@@ -515,7 +524,7 @@ image.place.visited {
 .visit-card__content {
   position: absolute;
   bottom: 0;
-  left: 40%;
+  left: calc(100% / 2.2);
   right: 0;
   padding: 4px 6px;
   background: linear-gradient(to right, transparent 30%, rgba(0, 0, 0, 0.6) 70%);
@@ -545,8 +554,3 @@ image.place.visited {
   color: rgba(255, 255, 255, 0.8);
 }
 
-@media (max-width: 680px) {
-  .visits-grid {
-    gap: 8px;
-  }
-}
