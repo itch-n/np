@@ -498,6 +498,7 @@ image.place.visited {
   z-index: 2;
   border-radius: var(--radius-md);
   transform-origin: left center;
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   transition: transform var(--transition-base) 0.3s, box-shadow var(--transition-base);
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
@@ -509,6 +510,7 @@ image.place.visited {
   inset: 0;
   background: #fff;
   border-radius: var(--radius-md);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -519,9 +521,17 @@ image.place.visited {
   background-color: var(--color-map-water);
   border-radius: var(--radius-md);
   transform: rotateY(180deg);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
+.visit-card:hover .visit-card__flap {
+  transform: rotateY(-180deg);
+  box-shadow: 8px 0 24px rgba(0, 0, 0, 0.35);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+/* Park emblem on the backface */
 .visit-card__emblem {
   position: absolute;
   inset: 0;
@@ -530,14 +540,9 @@ image.place.visited {
   padding: 4px;
   object-fit: contain;
   transform: rotateY(180deg);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   z-index: 1;
-}
-
-.visit-card:hover .visit-card__flap {
-  transform: rotateY(-180deg);
-  box-shadow: 8px 0 24px rgba(0, 0, 0, 0.35);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 /* Cancellation stamp: fills the flap */
@@ -548,6 +553,7 @@ image.place.visited {
   padding: 4px;
   position: relative;
   animation: fadeIn var(--transition-base);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
