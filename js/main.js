@@ -550,7 +550,9 @@ function renderVisitsTable(visits, parks) {
 
   const wrapper = cards.append('div').attr('class', 'visit-card__wrapper');
 
-  wrapper.append('img')
+  const flap = cards.append('div').attr('class', 'visit-card__flap');
+
+  flap.append('img')
     .attr('class', 'visit-card__image')
     .attr('src', d => d.cancellationImage)
     .attr('alt', d => getParkName(d.parkCode))
