@@ -50,8 +50,9 @@ export function positionTooltip(tooltip, element, padding = 0) {
   const tipH = tipNode.offsetHeight;
 
   const rect = element.getBoundingClientRect();
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
+  const vv = window.visualViewport;
+  const viewportWidth = vv ? vv.width : window.innerWidth;
+  const viewportHeight = vv ? vv.height : window.innerHeight;
 
   // Default: to the right of the icon, top-aligned
   let x = rect.right + 4;
