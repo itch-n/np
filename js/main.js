@@ -79,7 +79,7 @@ function runForceSimulation(nodes, config) {
   const sim = d3.forceSimulation(nodes)
     .force('x', d3.forceX(d => d.px).strength(0.8))
     .force('y', d3.forceY(d => d.py).strength(0.8))
-    .force('collide', d3.forceCollide().radius(d => d.r - 1))
+    .force('collide', d3.forceCollide().radius(d => d.r))
     .stop();
 
   for (let i = 0; i < config.simulationIterations; i++) {
