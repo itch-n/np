@@ -433,11 +433,11 @@ function setupYearFilter(images, visits) {
   const container = d3.select('#year-filter');
 
   container.selectAll('button')
-    .data(['all', ...years])
+    .data([...years, 'all'])
     .enter()
     .append('button')
     .attr('class', 'year-btn')
-    .classed('year-btn--active', (d, i) => i === 0)
+    .classed('year-btn--active', (d, i, nodes) => i === nodes.length - 1)
     .text(d => d === 'all' ? 'All' : d)
     .on('click', (event, year) => {
       container.selectAll('.year-btn').classed('year-btn--active', d => d === year);

@@ -114,6 +114,16 @@ Chronological order is conventional but not required.
 - The rubber cancellation stamp from the park's passport stamp, displayed as the primary visual in the visit card
 - **Tip:** If the scanned stamp has overlapping stamps or noise, Gemini image generation does a great job producing a clean recreation. Prompt it with the park name, date, and location text from the original stamp.
 
+**Required: remove the white background.** The card design renders stamps on a warm cream background - any white in the image will show as an opaque white square rather than transparent. After placing the file, run:
+
+```sh
+magick img/cancellations/YYYYMMDD-{parkCode}.png \
+  -alpha set -fuzz 20% -transparent white \
+  img/cancellations/YYYYMMDD-{parkCode}.png
+```
+
+The `-fuzz 20%` threshold removes near-white pixels (antialising, slight off-white) while preserving the stamp ink. If the stamp has very light ink colours, lower to `10%`. If stubborn white patches remain, raise to `25%`.
+
 ### 3. Add the visit photo
 
 - **Path:** `img/visits/YYYYMMDD-{parkCode}.{ext}` (jpg, jpeg, or png)

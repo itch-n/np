@@ -287,12 +287,10 @@ image.place {
   cursor: pointer;
   transition: opacity 0.4s ease;
   filter: url(#inset-shadow);
-  opacity: 0.4;
 }
 
 image.place.visited {
   filter: url(#drop-shadow);
-  opacity: 1;
 }
 
 #content {
@@ -389,7 +387,7 @@ image.place.visited {
   font-family: inherit;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-lightest);
   transition: background var(--transition-fast), color var(--transition-fast);
   line-height: 1;
   min-height: 28px;
@@ -526,7 +524,7 @@ image.place.visited {
   content: '';
   position: absolute;
   inset: 0;
-  background: #fff;
+  background: var(--color-map-water);
   border-radius: var(--radius-md);
   backface-visibility: hidden;
   transform: translateZ(0);
@@ -536,7 +534,7 @@ image.place.visited {
   content: '';
   position: absolute;
   inset: 0;
-  background-color: var(--color-map-water);
+  background-color: #D4C9A8;
   border-radius: var(--radius-md);
   transform: rotateY(180deg) translateZ(0);
   backface-visibility: hidden;
