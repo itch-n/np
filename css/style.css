@@ -434,7 +434,7 @@ image.place.visited {
      a card can trigger opacity flickering in adjacent cards on mobile devices
      due to browser compositor optimizations. Alternative of using
      `transform: translateZ(0)` would work but is less semantic. */
-  isolation: isolate;
+  will-change: transform;
 }
 
 .visits-grid {
@@ -498,7 +498,6 @@ image.place.visited {
   z-index: 2;
   border-radius: var(--radius-md);
   transform-origin: left center;
-  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   transition: transform var(--transition-base) 0.3s, box-shadow var(--transition-base);
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
@@ -510,8 +509,8 @@ image.place.visited {
   inset: 0;
   background: #fff;
   border-radius: var(--radius-md);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .visit-card__flap::after {
@@ -520,8 +519,7 @@ image.place.visited {
   inset: 0;
   background-color: var(--color-map-water);
   border-radius: var(--radius-md);
-  transform: rotateY(180deg);
-  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg) translateZ(0);
   backface-visibility: hidden;
 }
 
@@ -539,8 +537,7 @@ image.place.visited {
   height: 100%;
   padding: 4px;
   object-fit: contain;
-  transform: rotateY(180deg);
-  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg) translateZ(1px);
   backface-visibility: hidden;
   z-index: 1;
 }
@@ -553,8 +550,8 @@ image.place.visited {
   padding: 4px;
   position: relative;
   animation: fadeIn var(--transition-base);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  transform: translateZ(1px);
 }
 
 /* Text overlay: always visible */
