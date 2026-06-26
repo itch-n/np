@@ -65,8 +65,10 @@ html {
   scroll-behavior: smooth;
   color: var(--color-text-primary);
   font-size: 16px;
+}
 
-  @media (max-width: 767px) {
+@media (max-width: 767px) {
+  html {
     font-size: 14px;
   }
 }
@@ -215,7 +217,10 @@ p {
 }
 
 .top__counter-text-visited {
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
+  .top__counter-text-visited {
     display: none;
   }
 }
@@ -224,8 +229,10 @@ p {
   width: 60px;
   height: 60px;
   object-fit: cover;
+}
 
-  @media (max-width: 767px) {
+@media (max-width: 767px) {
+  .top__avatar {
     width: 40px;
     height: 40px;
   }
@@ -238,7 +245,10 @@ p {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
+  .top__brand {
     font-size: 0.9rem;
   }
 }
@@ -427,6 +437,7 @@ image.place.visited {
   border-radius: var(--radius-md);
   box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28);
   transition: none;
+  width: 100%;
   aspect-ratio: 2.2 / 1;
   /* Creates an isolated stacking context to prevent compositing layer changes
      in one card from causing repaints in other cards. Without this, animating
@@ -438,26 +449,32 @@ image.place.visited {
 
 .visits-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--spacing-lg);
-  align-items: stretch;
+  align-items: start;
+}
 
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(3, 1fr);
+@media (max-width: 900px) {
+  .visits-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
 
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 600px) {
+  .visits-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--spacing-md);
   }
+}
 
-  @media (max-width: 380px) {
-    grid-template-columns: repeat(1, 1fr);
+@media (max-width: 380px) {
+  .visits-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 }
 
 .visit-card {
-  display: flex;
+  display: block;
   padding: 0;
   perspective: 600px;
 }
@@ -481,9 +498,11 @@ image.place.visited {
 
 /* Wrapper for stamp and text overlay */
 .visit-card__wrapper {
-  display: flex;
-  position: relative;
-  flex: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 /* Flap: white panel + stamp rotate together as one unit */
@@ -492,8 +511,7 @@ image.place.visited {
   top: 0;
   left: 0;
   height: 100%;
-  width: auto;
-  aspect-ratio: 1;
+  width: calc(100% / 2.2);
   z-index: 2;
   border-radius: var(--radius-md);
   transform-origin: left center;
