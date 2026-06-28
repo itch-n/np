@@ -572,7 +572,7 @@ image.place.visited {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 0.4em 0.6em;
+  padding: 0.2em 0.5em;
   background: linear-gradient(to right, transparent 40%, #000 60%);
   display: flex;
   flex-direction: column;
