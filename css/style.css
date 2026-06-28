@@ -32,10 +32,10 @@
   --spacing-3xl: 40px;
 
   /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-full: 50%;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-full: 0;
 
   /* Shadows - Brown-tinted with directional lighting from top-left */
   --shadow-sm: 1px 3px 8px rgba(0, 0, 0, 0.1);
@@ -508,7 +508,7 @@ image.place.visited {
   height: 100%;
   width: calc(100% / 2.5);
   z-index: 2;
-  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  border-radius: 0 50% 50% 0;
   transform-origin: left center;
   transform-style: preserve-3d;
   transition: transform var(--transition-base) 0.3s, box-shadow var(--transition-base);
@@ -519,8 +519,8 @@ image.place.visited {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(248, 244, 238, 0.85);
-  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 0 50% 50% 0;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
@@ -530,7 +530,7 @@ image.place.visited {
   position: absolute;
   inset: 0;
   background-color: #D4C9A8;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  border-radius: 50% 0 0 50%;
   transform: rotateY(180deg) translateZ(0);
   backface-visibility: hidden;
 }
@@ -570,10 +570,10 @@ image.place.visited {
 .visit-card__content {
   position: absolute;
   bottom: 0;
-  left: calc(100% / 2.5);
+  left: 0;
   right: 0;
-  padding: 6px 8px;
-  background: linear-gradient(to right, transparent 25%, #000 50%);
+  padding: 0.4em 0.6em;
+  background: linear-gradient(to right, transparent 40%, #000 60%);
   display: flex;
   flex-direction: column;
   gap: 1px;
