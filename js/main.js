@@ -527,7 +527,7 @@ function formatDate(dateString) {
 function renderVisitsTable(visits, parks) {
   function getParkName(parkCode) {
     const park = parks.find(p => p.parkCode === parkCode);
-    return park ? `${shortenParkName(park.name)}, ${park.state}` : parkCode;
+    return park ? shortenParkName(park.name) : parkCode;
   }
 
   const container = d3.select('#visits-table');
