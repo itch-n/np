@@ -439,7 +439,7 @@ image.place.visited {
   box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28);
   transition: none;
   width: 100%;
-  aspect-ratio: 2.2 / 1;
+  aspect-ratio: 2.5 / 1;
   /* Creates an isolated stacking context to prevent compositing layer changes
      in one card from causing repaints in other cards. Without this, animating
      a card can trigger opacity flickering in adjacent cards on mobile devices
@@ -450,25 +450,19 @@ image.place.visited {
 
 .visits-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--spacing-lg);
   align-items: start;
 }
 
-@media (max-width: 900px) {
-  .visits-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 600px) {
+@media (max-width: 750px) {
   .visits-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--spacing-md);
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 400px) {
   .visits-grid {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
@@ -512,7 +506,7 @@ image.place.visited {
   top: 0;
   left: 0;
   height: 100%;
-  width: calc(100% / 2.2);
+  width: calc(100% / 2.5);
   z-index: 2;
   border-radius: var(--radius-md) 0 0 var(--radius-md);
   transform-origin: left center;
@@ -576,10 +570,10 @@ image.place.visited {
 .visit-card__content {
   position: absolute;
   bottom: 0;
-  left: calc(100% / 2.2);
+  left: calc(100% / 2.5);
   right: 0;
-  padding: 4px 6px;
-  background: linear-gradient(to right, transparent 0%, #000 50%);
+  padding: 6px 8px;
+  background: linear-gradient(to right, transparent 33%, #000 66%);
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -598,10 +592,6 @@ image.place.visited {
   text-overflow: ellipsis;
 }
 
-.visit-card__date {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.8);
-}
 
 @media (max-width: 600px) {
   .visit-card__park {
