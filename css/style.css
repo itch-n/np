@@ -31,12 +31,6 @@
   --spacing-2xl: 32px;
   --spacing-3xl: 40px;
 
-  /* Border Radius */
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-full: 0;
-
   /* Shadows - Brown-tinted with directional lighting from top-left */
   --shadow-sm: 1px 3px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 1px 4px 14px rgba(0, 0, 0, 0.15);
@@ -274,7 +268,6 @@ p {
 /* Map Container */
 /* ------------------------------------------------------------------------------- */
 .wrapper {
-  border-radius: var(--radius-lg);
   overflow: hidden;
   line-height: 0;
   box-shadow: var(--shadow-md);
@@ -342,7 +335,6 @@ image.place.visited {
   box-shadow: var(--shadow-md);
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(4px);
-  border-radius: var(--radius-lg);
   padding: 8px;
 }
 
@@ -391,7 +383,6 @@ image.place.visited {
   border: none;
   cursor: pointer;
   padding: 5px 14px;
-  border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.9rem;
   font-weight: 600;
@@ -442,7 +433,6 @@ image.place.visited {
 .card {
   background: #FFFFFF;
   position: relative;
-  border-radius: var(--radius-md);
   box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28);
   transition: none;
   width: 100%;
@@ -494,7 +484,6 @@ image.place.visited {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
-  border-radius: var(--radius-md);
   animation: fadeIn var(--transition-base);
 }
 
@@ -585,7 +574,6 @@ image.place.visited {
   flex-direction: column;
   gap: 1px;
   align-items: flex-end;
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
   transition: opacity var(--transition-base);
 }
 
