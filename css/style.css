@@ -382,6 +382,7 @@ image.place.visited {
   background: none;
   border: none;
   cursor: pointer;
+  touch-action: manipulation;
   padding: 5px 14px;
   font-family: inherit;
   font-size: 0.9rem;
