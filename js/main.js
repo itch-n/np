@@ -453,6 +453,10 @@ function setupYearFilter(images, visits) {
           d3.select(this).style('display', this.dataset.year === year ? null : 'none');
         });
       }
+      // Safari compositor cache bust: same fix as the replay button.
+      // iOS Safari caches the SVG filter layer and won't repaint on class change alone.
+      images.style('filter', 'none');
+      requestAnimationFrame(() => images.style('filter', null));
     });
 
   return {
