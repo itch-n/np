@@ -148,5 +148,11 @@
     "date": "2026-06-21",
     "cancellationImage": "img/cancellations/20260621-yell.png",
     "visitImage": "../img/visits/20260621-yell.jpeg"
+  },
+  {
+    "parkCode": "olym",
+    "date": "2026-07-24",
+    "cancellationImage": "img/cancellations/20260724-olym.png",
+    "visitImage": "../img/visits/20260724-olym.jpeg"
   }
 ]
