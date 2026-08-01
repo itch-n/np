@@ -202,11 +202,11 @@ Promise.all([
   images.attr('opacity', 1);
 
   // Setup tooltip immediately
-  const {tooltip, tipImg, tipName} = createTooltip();
+  const {tooltip, tipImg, tipName, tipDates} = createTooltip();
   const touchState = {active: false, currentTarget: null};
 
-  setupMouseInteractions(images, tooltip, tipImg, tipName, touchState);
-  setupTouchInteractions(images, tooltip, tipImg, tipName, touchState);
+  setupMouseInteractions(images, tooltip, tipImg, tipName, tipDates, visits, touchState);
+  setupTouchInteractions(images, tooltip, tipImg, tipName, tipDates, visits, touchState);
 
   const yearFilter = setupYearFilter(images, visits);
   const replayBtn = document.getElementById('replay-btn');

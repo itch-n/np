@@ -28,16 +28,30 @@ export function createTooltip() {
   const tooltipContent = tooltip.append('div').attr('class', 'tooltip__content');
   const tipImg = tooltipContent.append('img').attr('alt', 'preview');
   const tipName = tooltipContent.append('div').attr('class', 'tooltip__name');
+  const tipDates = tooltipContent.append('div').attr('class', 'tooltip__dates');
 
-  return {tooltip, tipImg, tipName};
+  return {tooltip, tipImg, tipName, tipDates};
 }
 
 /**
  * Shows tooltip with park information
  */
-export function showTooltip(tooltip, tipImg, tipName, parkData) {
+export function showTooltip(tooltip, tipImg, tipName, tipDates, parkData, visits) {
   tipImg.attr('src', `img/np/${parkData.parkCode}.png`);
   tipName.text(`${shortenParkName(parkData.name)}, ${parkData.state}`);
+
+  const parkVisits = (visits || [])
+    .filter(v => v.parkCode === parkData.parkCode)
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  if (parkVisits.length) {
+    const fmt = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+    tipDates.style('display', null).html('');
+    parkVisits.forEach(v => tipDates.append('span').text(fmt(v.date)));
+  } else {
+    tipDates.style('display', 'none');
+  }
+
   tooltip.style('display', 'block');
 }
 
@@ -53,13 +67,20 @@ export function positionTooltip(tooltip, element, padding = 0) {
   const vv = window.visualViewport;
   const viewportWidth = vv ? vv.width : window.innerWidth;
   const viewportHeight = vv ? vv.height : window.innerHeight;
+  // getBoundingClientRect is in layout-viewport coords; position:fixed uses
+  // visual-viewport coords — subtract the visual viewport's offset to reconcile
+  const ox = vv ? vv.offsetLeft : 0;
+  const oy = vv ? vv.offsetTop : 0;
 
-  // Default: to the right of the icon, top-aligned
-  let x = rect.right + 4;
-  let y = rect.top;
+  let x = rect.right - ox + 4;
+  let y = rect.top - oy;
 
-  if (x + tipW > viewportWidth - padding) x = rect.left - tipW - 4;
-  if (y + tipH > viewportHeight - padding) y = rect.bottom - tipH;
+  if (x + tipW > viewportWidth - padding) x = rect.left - ox - tipW - 4;
+  if (y + tipH > viewportHeight - padding) y = rect.bottom - oy - tipH;
+
+  // Clamp so the tooltip always stays fully on screen
+  x = Math.max(padding, Math.min(x, viewportWidth - tipW - padding));
+  y = Math.max(padding, Math.min(y, viewportHeight - tipH - padding));
 
   tooltip
     .style('left', `${x}px`)
@@ -80,11 +101,11 @@ export function hideTooltip(tooltip) {
 /**
  * Sets up mouse hover interactions
  */
-export function setupMouseInteractions(images, tooltip, tipImg, tipName, touchState) {
+export function setupMouseInteractions(images, tooltip, tipImg, tipName, tipDates, visits, touchState) {
   images
     .on('mouseover', (event, d) => {
       if (!touchState.active) {
-        showTooltip(tooltip, tipImg, tipName, d);
+        showTooltip(tooltip, tipImg, tipName, tipDates, d, visits);
         positionTooltip(tooltip, event.currentTarget);
       }
     })
@@ -98,7 +119,7 @@ export function setupMouseInteractions(images, tooltip, tipImg, tipName, touchSt
 /**
  * Sets up touch interactions for mobile devices
  */
-export function setupTouchInteractions(images, tooltip, tipImg, tipName, touchState) {
+export function setupTouchInteractions(images, tooltip, tipImg, tipName, tipDates, visits, touchState) {
   images.on('touchstart', (event, d) => {
     event.preventDefault();
     event.stopPropagation();
@@ -128,7 +149,7 @@ export function setupTouchInteractions(images, tooltip, tipImg, tipName, touchSt
     const y = +currentImage.attr('y') + (+currentImage.attr('height') / 2);
     currentImage.attr('transform', `translate(${x}, ${y}) scale(1.15) translate(${-x}, ${-y})`);
 
-    showTooltip(tooltip, tipImg, tipName, d);
+    showTooltip(tooltip, tipImg, tipName, tipDates, d, visits);
 
     tooltip.style('display', 'block'); // Show first to get dimensions
     positionTooltip(tooltip, event.currentTarget, 10);

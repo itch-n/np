@@ -340,8 +340,8 @@ image.place.visited {
 
 .tooltip img {
   display: block;
-  width: 120px;
-  height: 120px;
+  width: 128px;
+  height: 128px;
   max-width: 90vw;
   max-height: 90vh;
   object-fit: contain;
@@ -353,10 +353,26 @@ image.place.visited {
   font-size: 0.85rem;
   font-weight: 800;
   text-align: center;
-  width: 120px;
+  width: 128px;
   max-width: 90vw;
   text-wrap-style: balance;
   text-wrap-mode: wrap;
+}
+
+.tooltip__dates {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  width: 128px;
+  max-width: 90vw;
+}
+
+.tooltip__dates span {
+  color: var(--color-text-tertiary);
+  font-size: 0.72rem;
+  background: rgba(55, 140, 50, 0.15);
+  padding: 2px 4px;
 }
 
 /* ------------------------------------------------------------------------------- */
