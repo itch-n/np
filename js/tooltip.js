@@ -1,3 +1,5 @@
+import { computePosition, flip, shift, offset } from '../vendor/floating-ui.dom.esm.js';
+
 // ============================================================================
 // Tooltip Module
 // ============================================================================
@@ -58,33 +60,13 @@ export function showTooltip(tooltip, tipImg, tipName, tipDates, parkData, visits
 /**
  * Positions tooltip anchored to the given DOM element
  */
-export function positionTooltip(tooltip, element, padding = 0) {
-  const tipNode = tooltip.node();
-  const tipW = tipNode.offsetWidth;
-  const tipH = tipNode.offsetHeight;
-
-  const rect = element.getBoundingClientRect();
-  const vv = window.visualViewport;
-  const viewportWidth = vv ? vv.width : window.innerWidth;
-  const viewportHeight = vv ? vv.height : window.innerHeight;
-  // getBoundingClientRect is in layout-viewport coords; position:fixed uses
-  // visual-viewport coords — subtract the visual viewport's offset to reconcile
-  const ox = vv ? vv.offsetLeft : 0;
-  const oy = vv ? vv.offsetTop : 0;
-
-  let x = rect.right - ox + 4;
-  let y = rect.top - oy;
-
-  if (x + tipW > viewportWidth - padding) x = rect.left - ox - tipW - 4;
-  if (y + tipH > viewportHeight - padding) y = rect.bottom - oy - tipH;
-
-  // Clamp so the tooltip always stays fully on screen
-  x = Math.max(padding, Math.min(x, viewportWidth - tipW - padding));
-  y = Math.max(padding, Math.min(y, viewportHeight - tipH - padding));
-
-  tooltip
-    .style('left', `${x}px`)
-    .style('top', `${y}px`);
+export async function positionTooltip(tooltip, element, padding = 0) {
+  const { x, y } = await computePosition(element, tooltip.node(), {
+    placement: 'bottom-start',
+    strategy: 'fixed',
+    middleware: [offset(4), flip(), shift({ padding })],
+  });
+  tooltip.style('left', `${x}px`).style('top', `${y}px`);
 }
 
 /**
@@ -103,10 +85,10 @@ export function hideTooltip(tooltip) {
  */
 export function setupMouseInteractions(images, tooltip, tipImg, tipName, tipDates, visits, touchState) {
   images
-    .on('mouseover', (event, d) => {
+    .on('mouseover', async (event, d) => {
       if (!touchState.active) {
         showTooltip(tooltip, tipImg, tipName, tipDates, d, visits);
-        positionTooltip(tooltip, event.currentTarget);
+        await positionTooltip(tooltip, event.currentTarget);
       }
     })
     .on('mouseout', () => {
@@ -120,8 +102,8 @@ export function setupMouseInteractions(images, tooltip, tipImg, tipName, tipDate
  * Sets up touch interactions for mobile devices
  */
 export function setupTouchInteractions(images, tooltip, tipImg, tipName, tipDates, visits, touchState) {
-  images.on('touchstart', (event, d) => {
-    event.preventDefault();
+  images.on('touchstart', async (event, d) => {
+    if (event.cancelable) event.preventDefault();
     event.stopPropagation();
 
     touchState.active = true;
@@ -152,7 +134,7 @@ export function setupTouchInteractions(images, tooltip, tipImg, tipName, tipDate
     showTooltip(tooltip, tipImg, tipName, tipDates, d, visits);
 
     tooltip.style('display', 'block'); // Show first to get dimensions
-    positionTooltip(tooltip, event.currentTarget, 10);
+    await positionTooltip(tooltip, event.currentTarget, 10);
   });
 
   // Hide tooltip when tapping outside

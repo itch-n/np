@@ -319,8 +319,8 @@ image.place.visited {
 /* ------------------------------------------------------------------------------- */
 .tooltip {
   position: fixed;
-  left: 0;
-  top: 0;
+  left: -9999px;
+  top: -9999px;
   pointer-events: none;
   display: none;
   z-index: 2000;
