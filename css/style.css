@@ -340,6 +340,8 @@ image.place.visited {
   display: block;
   width: 128px;
   height: 128px;
+  max-width: 90vw;
+  max-height: 90vh;
   object-fit: contain;
   filter: drop-shadow(1px 2px 0 #9B7760);
 }
@@ -350,6 +352,7 @@ image.place.visited {
   font-weight: 800;
   text-align: center;
   width: 128px;
+  max-width: 90vw;
   text-wrap-style: balance;
   text-wrap-mode: wrap;
 }
@@ -360,6 +363,7 @@ image.place.visited {
   justify-content: center;
   gap: 4px;
   width: 128px;
+  max-width: 90vw;
 }
 
 .tooltip__dates span {
