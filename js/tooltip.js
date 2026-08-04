@@ -67,18 +67,15 @@ export function positionTooltip(tooltip, element, padding = 0) {
   const vv = window.visualViewport;
   const viewportWidth = vv ? vv.width : window.innerWidth;
   const viewportHeight = vv ? vv.height : window.innerHeight;
-  // getBoundingClientRect is in layout-viewport coords; position:fixed uses
-  // visual-viewport coords — subtract the visual viewport's offset to reconcile
   const ox = vv ? vv.offsetLeft : 0;
   const oy = vv ? vv.offsetTop : 0;
 
   let x = rect.right - ox + 4;
-  let y = rect.top - oy;
+  let y = rect.bottom - oy + 4;
 
   if (x + tipW > viewportWidth - padding) x = rect.left - ox - tipW - 4;
-  if (y + tipH > viewportHeight - padding) y = rect.bottom - oy - tipH;
+  if (y + tipH > viewportHeight - padding) y = rect.top - oy - tipH - 4;
 
-  // Clamp so the tooltip always stays fully on screen
   x = Math.max(padding, Math.min(x, viewportWidth - tipW - padding));
   y = Math.max(padding, Math.min(y, viewportHeight - tipH - padding));
 
@@ -121,7 +118,7 @@ export function setupMouseInteractions(images, tooltip, tipImg, tipName, tipDate
  */
 export function setupTouchInteractions(images, tooltip, tipImg, tipName, tipDates, visits, touchState) {
   images.on('touchstart', (event, d) => {
-    event.preventDefault();
+    if (event.cancelable) event.preventDefault();
     event.stopPropagation();
 
     touchState.active = true;
