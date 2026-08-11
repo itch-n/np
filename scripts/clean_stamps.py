@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["google-genai", "Pillow"]
+# ///
 """
 Clean up NPS passport cancellation stamp photos using Gemini, then normalise
 colours so all stamps look consistent against the card's cream background.
 
 Place raw stamp photos in this folder (jpg/png/heic) and run:
-    GEMINI_API_KEY=your_key python3 scripts/clean_stamps.py
+    GEMINI_API_KEY=your_key uv run scripts/clean_stamps.py
 
 Cleaned 160x160 PNGs are saved alongside the originals with a _clean suffix
 for review. Once happy, rename and move to img/cancellations/.

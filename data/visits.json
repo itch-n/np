@@ -154,5 +154,17 @@
     "date": "2026-07-24",
     "cancellationImage": "img/cancellations/20260724-olym.png",
     "visitImage": "../img/visits/20260724-olym.jpeg"
+  },
+  {
+    "parkCode": "redw",
+    "date": "2026-08-06",
+    "cancellationImage": "img/cancellations/20260806-redw.png",
+    "visitImage": "../img/visits/20260806-redw.png"
+  },
+  {
+    "parkCode": "lavo",
+    "date": "2026-08-09",
+    "cancellationImage": "img/cancellations/20260809-lavo.png",
+    "visitImage": "../img/visits/20260809-lavo.jpeg"
   }
 ]
