@@ -17,7 +17,7 @@ const CONFIG = {
     lower48: 12,
     others: 8
   },
-  animationDuration: 1500, // Duration in ms for counter and reveal animations
+  animationDuration: 1000, // Duration in ms for counter and reveal animations
   animationStartDelay: 300 // Delay in ms before starting reveal animation
 };
 
