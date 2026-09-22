@@ -45,6 +45,9 @@ GREEN_DUOTONE_BRIGHT   = 0.85             # luminance multiplier before tint
 GREEN_DUOTONE_MIX      = 0.50             # how strongly the target colour is applied
 BLUE_BRIGHTNESS        = 0.60             # multiplier for blue stamps
 WHITE_BG_FUZZ          = 0.20             # fuzz threshold for background removal
+ORANGE_DUOTONE_TARGET  = (237, 112, 49)   # #ED7031 - NPS orange for warm-ink stamps
+ORANGE_INK_FLOOR       = 0.06             # ink fraction below which pixel is transparent
+ORANGE_INK_RAMP        = 0.16             # ramp width: full opacity at floor + ramp
 # ─────────────────────────────────────────────────────────────────────────────
 
 PROMPT = (
@@ -133,13 +136,38 @@ def normalize_blue(img: Image.Image) -> Image.Image:
     return result
 
 
+def apply_warm_duotone(img: Image.Image) -> Image.Image:
+    """
+    Alpha-based duotone for warm/orange stamps.
+
+    Fuzz-based background removal (used for green/blue) maps thin ink strokes
+    towards white before thresholding, which destroys fine text detail. This
+    function instead derives alpha directly from ink density so thin strokes
+    stay vivid at partial opacity rather than disappearing.
+    """
+    tr, tg, tb = ORANGE_DUOTONE_TARGET
+    rgba = img.convert("RGBA")
+    pixels = []
+    for r, g, b, a in rgba.getdata():
+        if a < 10:
+            pixels.append((0, 0, 0, 0))
+            continue
+        gray = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        ink = 1.0 - gray
+        alpha = max(0.0, min(1.0, (ink - ORANGE_INK_FLOOR) / ORANGE_INK_RAMP))
+        pixels.append((tr, tg, tb, int(alpha * 255)))
+    result = Image.new("RGBA", rgba.size)
+    result.putdata(pixels)
+    return result
+
+
 def colour_label(hue: float) -> str:
     if 80 <= hue <= 210:
         return "green/cyan → duotone"
     elif 210 < hue <= 270:
         return "blue → darken"
     else:
-        return "warm/brown → no colour change"
+        return "warm/orange → alpha duotone"
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -187,14 +215,17 @@ for image_path in images:
     hue = get_dominant_hue(img)
     print(f"  Dominant hue: {hue:.0f}° → {colour_label(hue)}")
 
-    # Remove white background
-    img = remove_white_bg(img)
-
-    # Apply colour normalisation
     if 80 <= hue <= 210:
+        img = remove_white_bg(img)
         img = apply_green_duotone(img)
     elif 210 < hue <= 270:
+        img = remove_white_bg(img)
         img = normalize_blue(img)
+    else:
+        # Warm/orange: alpha-based duotone handles transparency internally.
+        # Skipping remove_white_bg here is intentional - fuzz removal maps light
+        # ink strokes towards white before thresholding, destroying thin text detail.
+        img = apply_warm_duotone(img)
 
     output_path = scripts_dir / f"{image_path.stem}_clean.png"
     img.save(output_path, "PNG")

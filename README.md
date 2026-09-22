@@ -109,12 +109,13 @@ Chronological order is conventional but not required.
 ### 2. Add the cancellation stamp image
 
 - **Path:** `img/cancellations/YYYYMMDD-{parkCode}.png`
-- **Format:** PNG
+- **Format:** PNG with transparent background
 - **Dimensions:** 160x160px (2x for the 80px display size)
 - The rubber cancellation stamp from the park's passport stamp, displayed as the primary visual in the visit card
-- **Tip:** If the scanned stamp has overlapping stamps or noise, Gemini image generation does a great job producing a clean recreation. Prompt it with the park name, date, and location text from the original stamp.
 
-**Required: remove the white background.** The card design renders stamps on a warm cream background - any white in the image will show as an opaque white square rather than transparent. After placing the file, run:
+#### Clean stamps (no overlapping text, blue or green ink)
+
+Remove the white background with ImageMagick:
 
 ```sh
 magick img/cancellations/YYYYMMDD-{parkCode}.png \
@@ -122,7 +123,25 @@ magick img/cancellations/YYYYMMDD-{parkCode}.png \
   img/cancellations/YYYYMMDD-{parkCode}.png
 ```
 
-The `-fuzz 20%` threshold removes near-white pixels (antialising, slight off-white) while preserving the stamp ink. If the stamp has very light ink colours, lower to `10%`. If stubborn white patches remain, raise to `25%`.
+The `-fuzz 20%` threshold removes near-white pixels (antialiasing, slight off-white) while preserving the stamp ink. Lower to `10%` for very light ink; raise to `25%` if white patches remain.
+
+#### Stamps with overlapping printed text, or orange/warm ink
+
+#### Stamps with overlapping printed text, or orange/warm ink
+
+Use `scripts/clean_stamps.py` via `uv run` - it sends the photo to Gemini to strip the background and remove any overlapping passport book text (e.g. "Affix Regional Stamp Here"), then applies colour normalisation matched to the ink hue.
+
+```sh
+# Copy the raw stamp photo into scripts/, then:
+GEMINI_API_KEY=your_key uv run scripts/clean_stamps.py
+# Review the _clean.png output, rename, move to img/cancellations/
+```
+
+Colour treatment applied automatically by detected hue:
+
+- **Green/cyan (80-210°):** duotone to a consistent teal-green
+- **Blue (210-270°):** darken while preserving hue
+- **Warm/orange (other):** alpha-based duotone to `#ED7031` - use this for NPS orange ink. Note: the simple fuzz approach above is not suitable for warm stamps - it maps light ink strokes towards white before thresholding, which destroys thin text detail.
 
 ### 3. Add the visit photo
 

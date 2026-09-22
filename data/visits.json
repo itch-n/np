@@ -166,5 +166,11 @@
     "date": "2026-08-09",
     "cancellationImage": "img/cancellations/20260809-lavo.png",
     "visitImage": "../img/visits/20260809-lavo.jpeg"
+  },
+  {
+    "parkCode": "voya",
+    "date": "2026-09-19",
+    "cancellationImage": "img/cancellations/20260919-voya.png",
+    "visitImage": "../img/visits/20260919-voya.jpeg"
   }
 ]
