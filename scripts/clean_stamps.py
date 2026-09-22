@@ -14,9 +14,9 @@ Cleaned 160x160 PNGs are saved alongside the originals with a _clean suffix
 for review. Once happy, rename and move to img/cancellations/.
 
 Colour treatment applied automatically by detected hue:
-  - Green / cyan (hue 80-210°): duotone to a consistent dark teal-green
+  - Green / cyan (hue 80-210°): duotone to teal-green, lightness normalised to L=52%
   - Blue (hue 210-270°):        darken while preserving hue
-  - Warm / brown / black:       remove white background only
+  - Warm / orange (other):      alpha duotone to #ED7031, normalised to L=50% S=68%
 """
 
 import colorsys
@@ -43,11 +43,14 @@ if not API_KEY:
 GREEN_DUOTONE_TARGET   = (90, 184, 154)   # #5AB89A - consistent teal-green
 GREEN_DUOTONE_BRIGHT   = 0.85             # luminance multiplier before tint
 GREEN_DUOTONE_MIX      = 0.50             # how strongly the target colour is applied
+GREEN_TARGET_L         = 0.52             # target median lightness for green stamps
 BLUE_BRIGHTNESS        = 0.60             # multiplier for blue stamps
 WHITE_BG_FUZZ          = 0.20             # fuzz threshold for background removal
 ORANGE_DUOTONE_TARGET  = (237, 112, 49)   # #ED7031 - NPS orange for warm-ink stamps
 ORANGE_INK_FLOOR       = 0.06             # ink fraction below which pixel is transparent
 ORANGE_INK_RAMP        = 0.16             # ramp width: full opacity at floor + ramp
+WARM_TARGET_L          = 0.50             # target median lightness for warm stamps
+WARM_TARGET_S          = 0.68             # target median saturation for warm stamps
 # ─────────────────────────────────────────────────────────────────────────────
 
 PROMPT = (
@@ -161,6 +164,35 @@ def apply_warm_duotone(img: Image.Image) -> Image.Image:
     return result
 
 
+def normalize_lightness(img: Image.Image, target_l: float, target_s: float = None) -> Image.Image:
+    """Scale median lightness (and optionally saturation) to target values."""
+    rgba = img.convert("RGBA")
+    data = list(rgba.getdata())
+    ls_vals = sorted(l for r,g,b,a in data if a > 200
+                     for _,l,_ in [colorsys.rgb_to_hls(r/255,g/255,b/255)])
+    if not ls_vals:
+        return img
+    scale_l = target_l / ls_vals[len(ls_vals) // 2]
+    scale_s = 1.0
+    if target_s is not None:
+        ss_vals = sorted(s for r,g,b,a in data if a > 200
+                         for _,_,s in [colorsys.rgb_to_hls(r/255,g/255,b/255)])
+        scale_s = target_s / ss_vals[len(ss_vals) // 2] if ss_vals[len(ss_vals) // 2] > 0 else 1.0
+    pixels = []
+    for r, g, b, a in data:
+        if a < 10:
+            pixels.append((0, 0, 0, 0))
+            continue
+        h, l, s = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
+        l = min(1.0, l * scale_l)
+        s = min(1.0, s * scale_s)
+        rn, gn, bn = colorsys.hls_to_rgb(h, l, s)
+        pixels.append((int(rn * 255), int(gn * 255), int(bn * 255), a))
+    result = Image.new("RGBA", rgba.size)
+    result.putdata(pixels)
+    return result
+
+
 def colour_label(hue: float) -> str:
     if 80 <= hue <= 210:
         return "green/cyan → duotone"
@@ -218,6 +250,7 @@ for image_path in images:
     if 80 <= hue <= 210:
         img = remove_white_bg(img)
         img = apply_green_duotone(img)
+        img = normalize_lightness(img, GREEN_TARGET_L)
     elif 210 < hue <= 270:
         img = remove_white_bg(img)
         img = normalize_blue(img)
@@ -226,6 +259,7 @@ for image_path in images:
         # Skipping remove_white_bg here is intentional - fuzz removal maps light
         # ink strokes towards white before thresholding, destroying thin text detail.
         img = apply_warm_duotone(img)
+        img = normalize_lightness(img, WARM_TARGET_L, WARM_TARGET_S)
 
     output_path = scripts_dir / f"{image_path.stem}_clean.png"
     img.save(output_path, "PNG")
