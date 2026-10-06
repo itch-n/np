@@ -4,25 +4,32 @@
 # dependencies = ["google-genai", "Pillow"]
 # ///
 """
-Clean up NPS passport cancellation stamp photos using Gemini, then normalise
-colours so all stamps look consistent against the card's cream background.
+Clean up NPS passport cancellation stamp photos using Gemini, then apply the
+official regional colour for each park via ink-density duotone.
 
-Place raw stamp photos in this folder (jpg/png/heic) and run:
-    GEMINI_API_KEY=your_key uv run scripts/clean_stamps.py
+Modes:
+  Normal:   process raw photos in scripts/, save _clean.png for review
+  Recolor:  reapply regional colours to existing stamps in img/cancellations/
 
-Cleaned 160x160 PNGs are saved alongside the originals with a _clean suffix
-for review. Once happy, rename and move to img/cancellations/.
+Usage:
+    GEMINI_API_KEY=key uv run scripts/clean_stamps.py         # process scripts/
+    uv run scripts/clean_stamps.py --recolor                   # recolor existing stamps
+    GEMINI_API_KEY=key uv run scripts/clean_stamps.py --color 009E54  # override color
 
-Colour treatment applied automatically by detected hue:
-  - Green / cyan (hue 80-210°): duotone to teal-green, lightness normalised to L=52%
-  - Blue (hue 210-270°):        darken while preserving hue
-  - Warm / orange (other):      alpha duotone to #ED7031, normalised to L=50% S=68%
+Name raw photos as YYYYMMDD-{parkCode}.ext so the regional colour is auto-selected.
+Pass --color RRGGBB to override for parks not yet in PARK_REGION.
+
+NPS passport regions:
+  North Atlantic  #A0522D  Mid-Atlantic    #9BCBEB  National Capital #E13833
+  Southeast       #C73977  Midwest         #FFFF00  Southwest        #800080
+  Rocky Mountain  #DAA520  Western         #009E54  Pacific NW/AK    #00008B
 """
 
+import argparse
 import colorsys
 import io
-import math
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -34,23 +41,58 @@ except ImportError:
     print("Missing dependencies. Run: pip install google-genai Pillow")
     sys.exit(1)
 
-API_KEY = os.environ.get("GEMINI_API_KEY")
-if not API_KEY:
-    print("Error: set GEMINI_API_KEY environment variable before running")
-    sys.exit(1)
+# ── Regional colour map ───────────────────────────────────────────────────────
+REGION_COLORS = {
+    "north_atlantic":   (160,  82,  45),  # #A0522D
+    "mid_atlantic":     (155, 203, 235),  # #9BCBEB
+    "national_capital": (225,  56,  51),  # #E13833
+    "southeast":        (199,  57, 119),  # #C73977
+    "midwest":          (255, 255,   0),  # #FFFF00
+    "southwest":        (128,   0, 128),  # #800080
+    "rocky_mountain":   (218, 165,  32),  # #DAA520
+    "western":          (  0, 158,  84),  # #009E54
+    "pacific_nw_ak":    (  0,   0, 139),  # #00008B
+}
 
-# ── Colour normalisation settings ────────────────────────────────────────────
-GREEN_DUOTONE_TARGET   = (90, 184, 154)   # #5AB89A - consistent teal-green
-GREEN_DUOTONE_BRIGHT   = 0.85             # luminance multiplier before tint
-GREEN_DUOTONE_MIX      = 0.50             # how strongly the target colour is applied
-GREEN_TARGET_L         = 0.52             # target median lightness for green stamps
-BLUE_BRIGHTNESS        = 0.60             # multiplier for blue stamps
-WHITE_BG_FUZZ          = 0.20             # fuzz threshold for background removal
-ORANGE_DUOTONE_TARGET  = (237, 112, 49)   # #ED7031 - NPS orange for warm-ink stamps
-ORANGE_INK_FLOOR       = 0.06             # ink fraction below which pixel is transparent
-ORANGE_INK_RAMP        = 0.16             # ramp width: full opacity at floor + ramp
-WARM_TARGET_L          = 0.50             # target median lightness for warm stamps
-WARM_TARGET_S          = 0.68             # target median saturation for warm stamps
+PARK_REGION = {
+    # North Atlantic (ME, NH, VT, MA, RI, CT, NY, NJ)
+    "acad": "north_atlantic",   # Acadia, ME
+    # Midwest (OH, IN, MI, WI, MN, IA, MO, IL)
+    "voya": "midwest",          # Voyageurs, MN
+    # Southwest (TX, NM, OK, AR, LA)
+    "bibe": "southwest",        # Big Bend, TX
+    # Rocky Mountain (MT, WY, CO, UT, ND, SD, NE, KS)
+    "glac": "rocky_mountain",   # Glacier, MT
+    "grte": "rocky_mountain",   # Grand Teton, WY
+    "yell": "rocky_mountain",   # Yellowstone, WY
+    "arch": "rocky_mountain",   # Arches, UT
+    "cany": "rocky_mountain",   # Canyonlands, UT
+    "care": "rocky_mountain",   # Capitol Reef, UT
+    "brca": "rocky_mountain",   # Bryce Canyon, UT
+    "zion": "rocky_mountain",   # Zion, UT
+    # Western (CA, AZ, HI, NV, Pacific territories)
+    "grca": "western",          # Grand Canyon, AZ
+    "pefo": "western",          # Petrified Forest, AZ
+    "sagu": "western",          # Saguaro, AZ
+    "havo": "western",          # Hawaii Volcanoes, HI
+    "hale": "western",          # Haleakala, HI
+    "yose": "western",          # Yosemite, CA
+    "sequ": "western",          # Sequoia, CA
+    "kica": "western",          # Kings Canyon, CA
+    "deva": "western",          # Death Valley, CA/NV
+    "jotr": "western",          # Joshua Tree, CA
+    "chis": "western",          # Channel Islands, CA
+    "pinn": "western",          # Pinnacles, CA
+    "lavo": "western",          # Lassen Volcanic, CA
+    "redw": "western",          # Redwood, CA
+    # Pacific NW & Alaska (WA, OR, ID, AK)
+    "olym": "pacific_nw_ak",    # Olympic, WA
+    "mora": "pacific_nw_ak",    # Mount Rainier, WA
+}
+
+FALLBACK_COLOR = (237, 112, 49)  # #ED7031 - used when park not in PARK_REGION
+INK_FLOOR = 0.06  # ink fraction below which pixel is transparent
+INK_RAMP  = 0.16  # ramp width: full opacity at floor + ramp
 # ─────────────────────────────────────────────────────────────────────────────
 
 PROMPT = (
@@ -70,85 +112,26 @@ MIME_TYPES = {
 }
 
 
-def get_dominant_hue(img: Image.Image) -> float:
-    """Returns median hue (0-360°) of non-white, non-transparent, saturated pixels."""
-    rgba = img.convert("RGBA")
-    hues = []
-    for r, g, b, a in rgba.getdata():
-        if a < 30:
-            continue
-        if r > 200 and g > 200 and b > 200:
-            continue
-        h, s, _ = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
-        if s > 0.15:
-            hues.append(h * 360)
-    if not hues:
-        return 30.0  # default to warm/brown if no saturated pixels found
-    hues.sort()
-    return hues[len(hues) // 2]
+def extract_park_code(stem: str) -> str | None:
+    m = re.match(r"^\d{8}-([a-z]{4})$", stem)
+    if m:
+        return m.group(1)
+    if re.match(r"^[a-z]{4}$", stem):
+        return stem
+    return None
 
 
-def remove_white_bg(img: Image.Image, fuzz: float = WHITE_BG_FUZZ) -> Image.Image:
-    """Make near-white pixels transparent."""
-    rgba = img.convert("RGBA")
-    threshold = fuzz * math.sqrt(3)
-    pixels = []
-    for r, g, b, a in rgba.getdata():
-        dist = math.sqrt((1 - r / 255) ** 2 + (1 - g / 255) ** 2 + (1 - b / 255) ** 2)
-        pixels.append((r, g, b, 0 if dist < threshold else a))
-    result = Image.new("RGBA", rgba.size)
-    result.putdata(pixels)
-    return result
+def get_target_color(park_code: str | None, override: tuple | None) -> tuple[int, int, int]:
+    if override:
+        return override
+    if park_code and park_code in PARK_REGION:
+        return REGION_COLORS[PARK_REGION[park_code]]
+    return FALLBACK_COLOR
 
 
-def apply_green_duotone(img: Image.Image) -> Image.Image:
-    """Desaturate and tint to a consistent green, preserving transparency."""
-    tr, tg, tb = GREEN_DUOTONE_TARGET
-    mix = GREEN_DUOTONE_MIX
-    bright = GREEN_DUOTONE_BRIGHT
-    rgba = img.convert("RGBA")
-    pixels = []
-    for r, g, b, a in rgba.getdata():
-        if a < 10:
-            pixels.append((0, 0, 0, 0))
-            continue
-        gray = int((0.299 * r + 0.587 * g + 0.114 * b) * bright)
-        pixels.append((
-            min(255, int(gray * (1 - mix) + tr * mix)),
-            min(255, int(gray * (1 - mix) + tg * mix)),
-            min(255, int(gray * (1 - mix) + tb * mix)),
-            a,
-        ))
-    result = Image.new("RGBA", rgba.size)
-    result.putdata(pixels)
-    return result
-
-
-def normalize_blue(img: Image.Image) -> Image.Image:
-    """Darken blue stamps while preserving their hue."""
-    bright = BLUE_BRIGHTNESS
-    rgba = img.convert("RGBA")
-    pixels = []
-    for r, g, b, a in rgba.getdata():
-        if a < 10:
-            pixels.append((0, 0, 0, 0))
-            continue
-        pixels.append((int(r * bright), int(g * bright), int(b * bright), a))
-    result = Image.new("RGBA", rgba.size)
-    result.putdata(pixels)
-    return result
-
-
-def apply_warm_duotone(img: Image.Image) -> Image.Image:
-    """
-    Alpha-based duotone for warm/orange stamps.
-
-    Fuzz-based background removal (used for green/blue) maps thin ink strokes
-    towards white before thresholding, which destroys fine text detail. This
-    function instead derives alpha directly from ink density so thin strokes
-    stay vivid at partial opacity rather than disappearing.
-    """
-    tr, tg, tb = ORANGE_DUOTONE_TARGET
+def apply_duotone(img: Image.Image, target: tuple[int, int, int]) -> Image.Image:
+    """Derive alpha from ink density (1 - luminance) and apply target colour."""
+    tr, tg, tb = target
     rgba = img.convert("RGBA")
     pixels = []
     for r, g, b, a in rgba.getdata():
@@ -157,54 +140,48 @@ def apply_warm_duotone(img: Image.Image) -> Image.Image:
             continue
         gray = (0.299 * r + 0.587 * g + 0.114 * b) / 255
         ink = 1.0 - gray
-        alpha = max(0.0, min(1.0, (ink - ORANGE_INK_FLOOR) / ORANGE_INK_RAMP))
+        alpha = max(0.0, min(1.0, (ink - INK_FLOOR) / INK_RAMP))
         pixels.append((tr, tg, tb, int(alpha * 255)))
     result = Image.new("RGBA", rgba.size)
     result.putdata(pixels)
     return result
 
 
-def normalize_lightness(img: Image.Image, target_l: float, target_s: float = None) -> Image.Image:
-    """Scale median lightness (and optionally saturation) to target values."""
-    rgba = img.convert("RGBA")
-    data = list(rgba.getdata())
-    ls_vals = sorted(l for r,g,b,a in data if a > 200
-                     for _,l,_ in [colorsys.rgb_to_hls(r/255,g/255,b/255)])
-    if not ls_vals:
-        return img
-    scale_l = target_l / ls_vals[len(ls_vals) // 2]
-    scale_s = 1.0
-    if target_s is not None:
-        ss_vals = sorted(s for r,g,b,a in data if a > 200
-                         for _,_,s in [colorsys.rgb_to_hls(r/255,g/255,b/255)])
-        scale_s = target_s / ss_vals[len(ss_vals) // 2] if ss_vals[len(ss_vals) // 2] > 0 else 1.0
-    pixels = []
-    for r, g, b, a in data:
-        if a < 10:
-            pixels.append((0, 0, 0, 0))
-            continue
-        h, l, s = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
-        l = min(1.0, l * scale_l)
-        s = min(1.0, s * scale_s)
-        rn, gn, bn = colorsys.hls_to_rgb(h, l, s)
-        pixels.append((int(rn * 255), int(gn * 255), int(bn * 255), a))
-    result = Image.new("RGBA", rgba.size)
-    result.putdata(pixels)
-    return result
-
-
-def colour_label(hue: float) -> str:
-    if 80 <= hue <= 210:
-        return "green/cyan → duotone"
-    elif 210 < hue <= 270:
-        return "blue → darken"
-    else:
-        return "warm/orange → alpha duotone"
-
-
 # ── Main ──────────────────────────────────────────────────────────────────────
 
+parser = argparse.ArgumentParser(description="Clean NPS passport cancellation stamps")
+parser.add_argument("--color", metavar="RRGGBB", help="Override regional color (hex, no #)")
+parser.add_argument("--recolor", action="store_true", help="Reapply regional colors to img/cancellations/")
+args = parser.parse_args()
+
+color_override = None
+if args.color:
+    h = args.color.lstrip("#")
+    color_override = (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
+
 scripts_dir = Path(__file__).parent
+
+if args.recolor:
+    cancellations_dir = scripts_dir.parent / "img" / "cancellations"
+    stamps = sorted(f for f in cancellations_dir.iterdir()
+                    if f.suffix.lower() == ".png" and not f.name.startswith("."))
+    for stamp_path in stamps:
+        park_code = extract_park_code(stamp_path.stem)
+        target = get_target_color(park_code, color_override)
+        region = PARK_REGION.get(park_code, "unknown") if park_code else "unknown"
+        img = Image.open(stamp_path).convert("RGBA")
+        img = apply_duotone(img, target)
+        print(f"{stamp_path.name}: {park_code or '?'} ({region}) → #{target[0]:02X}{target[1]:02X}{target[2]:02X}")
+        img.save(stamp_path, "PNG")
+    print(f"\nDone {len(stamps)} stamps in {cancellations_dir}")
+    sys.exit(0)
+
+# Normal mode: process raw photos in scripts/
+API_KEY = os.environ.get("GEMINI_API_KEY")
+if not API_KEY:
+    print("Error: set GEMINI_API_KEY environment variable before running")
+    sys.exit(1)
+
 images = sorted(
     f for f in scripts_dir.iterdir()
     if f.suffix.lower() in MIME_TYPES and "_clean" not in f.stem
@@ -217,7 +194,11 @@ if not images:
 client = genai.Client(api_key=API_KEY)
 
 for image_path in images:
-    print(f"Processing {image_path.name} ...")
+    park_code = extract_park_code(image_path.stem)
+    target = get_target_color(park_code, color_override)
+    region = PARK_REGION.get(park_code, "unknown") if park_code else "unknown"
+    print(f"Processing {image_path.name} ({park_code or '?'}, {region}) → #{target[0]:02X}{target[1]:02X}{target[2]:02X}")
+
     image_data = image_path.read_bytes()
     mime_type = MIME_TYPES[image_path.suffix.lower()]
 
@@ -227,39 +208,19 @@ for image_path in images:
             types.Part.from_bytes(data=image_data, mime_type=mime_type),
             PROMPT,
         ],
-        config=types.GenerateContentConfig(
-            response_modalities=["IMAGE"],
-        ),
+        config=types.GenerateContentConfig(response_modalities=["IMAGE"]),
     )
 
     image_part = next(
-        (p for p in response.candidates[0].content.parts if p.inline_data),
-        None,
+        (p for p in response.candidates[0].content.parts if p.inline_data), None
     )
     if not image_part:
-        print(f"  No image returned for {image_path.name} - skipping")
+        print(f"  No image returned - skipping")
         continue
 
     img = Image.open(io.BytesIO(image_part.inline_data.data)).convert("RGBA")
     img = img.resize((160, 160), Image.LANCZOS)
-
-    # Detect hue before removing background (white pixels excluded in analysis)
-    hue = get_dominant_hue(img)
-    print(f"  Dominant hue: {hue:.0f}° → {colour_label(hue)}")
-
-    if 80 <= hue <= 210:
-        img = remove_white_bg(img)
-        img = apply_green_duotone(img)
-        img = normalize_lightness(img, GREEN_TARGET_L)
-    elif 210 < hue <= 270:
-        img = remove_white_bg(img)
-        img = normalize_blue(img)
-    else:
-        # Warm/orange: alpha-based duotone handles transparency internally.
-        # Skipping remove_white_bg here is intentional - fuzz removal maps light
-        # ink strokes towards white before thresholding, destroying thin text detail.
-        img = apply_warm_duotone(img)
-        img = normalize_lightness(img, WARM_TARGET_L, WARM_TARGET_S)
+    img = apply_duotone(img, target)
 
     output_path = scripts_dir / f"{image_path.stem}_clean.png"
     img.save(output_path, "PNG")

@@ -113,35 +113,35 @@ Chronological order is conventional but not required.
 - **Dimensions:** 160x160px (2x for the 80px display size)
 - The rubber cancellation stamp from the park's passport stamp, displayed as the primary visual in the visit card
 
-#### Clean stamps (no overlapping text, blue or green ink)
-
-Remove the white background with ImageMagick:
+Use `scripts/clean_stamps.py` via `uv run` - it sends the photo to Gemini to strip the background and remove any overlapping text, then applies the park's official regional colour.
 
 ```sh
-magick img/cancellations/YYYYMMDD-{parkCode}.png \
-  -alpha set -fuzz 20% -transparent white \
-  img/cancellations/YYYYMMDD-{parkCode}.png
-```
-
-The `-fuzz 20%` threshold removes near-white pixels (antialiasing, slight off-white) while preserving the stamp ink. Lower to `10%` for very light ink; raise to `25%` if white patches remain.
-
-#### Stamps with overlapping printed text, or orange/warm ink
-
-#### Stamps with overlapping printed text, or orange/warm ink
-
-Use `scripts/clean_stamps.py` via `uv run` - it sends the photo to Gemini to strip the background and remove any overlapping passport book text (e.g. "Affix Regional Stamp Here"), then applies colour normalisation matched to the ink hue.
-
-```sh
-# Copy the raw stamp photo into scripts/, then:
+# Name the raw photo YYYYMMDD-{parkCode}.ext, copy to scripts/, then:
 GEMINI_API_KEY=your_key uv run scripts/clean_stamps.py
 # Review the _clean.png output, rename, move to img/cancellations/
 ```
 
-Colour treatment applied automatically by detected hue:
+The script auto-selects the colour from `PARK_REGION` in the script. Pass `--color RRGGBB` to override for parks not yet mapped.
 
-- **Green/cyan (80-210°):** duotone to a consistent teal-green
-- **Blue (210-270°):** darken while preserving hue
-- **Warm/orange (other):** alpha-based duotone to `#ED7031` - use this for NPS orange ink. Note: the simple fuzz approach above is not suitable for warm stamps - it maps light ink strokes towards white before thresholding, which destroys thin text detail.
+To recolor all existing stamps (e.g. after updating `PARK_REGION`):
+
+```sh
+uv run scripts/clean_stamps.py --recolor
+```
+
+NPS passport regional colours:
+
+| Region | Colour | Hex |
+|---|---|---|
+| North Atlantic | Brown | `#D9822B` |
+| Mid-Atlantic | Light Blue | `#9BCBEB` |
+| National Capital | Red | `#E13833` |
+| Southeast | Pink | `#C73977` |
+| Midwest | Orange | `#F4A836` |
+| Southwest | Tan | `#C2B5B2` |
+| Rocky Mountain | Yellow | `#E8B833` |
+| Western | Green | `#009E54` |
+| Pacific NW & Alaska | Blue | `#00A3E0` |
 
 ### 3. Add the visit photo
 
