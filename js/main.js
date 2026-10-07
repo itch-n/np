@@ -12,10 +12,10 @@ import {createTooltip, setupMouseInteractions, setupTouchInteractions, shortenPa
 const CONFIG = {
   width: 900,
   height: 500,
-  simulationIterations: 5,
+  simulationIterations: 2,
   parkRadius: {
-    lower48: 12,
-    others: 8
+    lower48: 16,
+    others: 10
   },
   animationDuration: 1000, // Duration in ms for counter and reveal animations
   animationStartDelay: 300 // Delay in ms before starting reveal animation
