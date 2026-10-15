@@ -178,5 +178,11 @@
     "date": "2026-09-27",
     "cancellationImage": "img/cancellations/20260927-acad.png",
     "visitImage": "../img/visits/20260927-acad.jpeg"
+  },
+  {
+    "parkCode": "jotr",
+    "date": "2026-10-10",
+    "cancellationImage": "img/cancellations/20261010-jotr.png",
+    "visitImage": "../img/visits/20261010-jotr.jpeg"
   }
 ]
