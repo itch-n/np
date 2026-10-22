@@ -77,6 +77,13 @@
     "state": "CA"
   },
   {
+    "name": "Chiricahua National Park",
+    "parkCode": "chir",
+    "latitude": "32.01214618",
+    "longitude": "-109.341607",
+    "state": "AZ"
+  },
+  {
     "name": "Congaree National Park",
     "parkCode": "cong",
     "latitude": "33.79187523",
@@ -252,6 +259,14 @@
     "state": "AK"
   },
   {
+    "name": "Kings Canyon National Park",
+    "parkCode": "kica",
+    "latitude": "37.71277299",
+    "longitude": "-118.587429",
+    "state": "CA",
+    "_comment": "shifted slightly north for better relative positioning to sequ"
+  },
+  {
     "name": "Kobuk Valley National Park",
     "parkCode": "kova",
     "latitude": "67.35631336",
@@ -356,14 +371,6 @@
     "latitude": "32.20909636",
     "longitude": "-110.7574974",
     "state": "AZ"
-  },
-  {
-    "name": "Kings Canyon National Park",
-    "parkCode": "kica",
-    "latitude": "37.71277299",
-    "longitude": "-118.587429",
-    "state": "CA",
-    "_comment": "shifted slightly north for better relative positioning to sequ"
   },
   {
     "name": "Sequoia National Park",

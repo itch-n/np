@@ -6,7 +6,7 @@ An interactive map visualization of U.S. National Parks visits, built with D3.js
 
 ## What it does
 
-- Renders all 63 U.S. National Parks as circular emblems on an Albers USA projection (including territories)
+- Renders every U.S. National Park as a circular emblem on an Albers USA projection (including territories)
 - Animates a chronological reveal of visited parks with a stamp effect on page load
 - Year filter to explore visits by year, synced across the map and visits table
 - Shows a visits table below the map with cancellation stamps and visit photos
@@ -35,7 +35,7 @@ Then open `http://localhost:3000` (or whatever port is shown).
 
 ```
 data/
-  parks.json       # 63 national parks - name, parkCode, lat/lng, state
+  parks.json       # all national parks - name, parkCode, lat/lng, state
   visits.json      # visit records - parkCode, date, image paths
 
 img/
@@ -75,7 +75,7 @@ This was diagnosed by adding `getComputedStyle(el).filter` logging at each stage
 - [ ] Add entry to `data/visits.json`
 - [ ] Add cancellation stamp image: `img/cancellations/YYYYMMDD-{parkCode}.png`
 - [ ] Add visit photo: `img/visits/YYYYMMDD-{parkCode}.{ext}`
-- [ ] If the park is not yet in `data/parks.json`, add it (rare - all 63 parks are already present)
+- [ ] If the park is not yet in `data/parks.json`, add it (rare - only needed for a newly designated park)
 
 ### 1. Update `data/visits.json`
 
@@ -156,7 +156,7 @@ All current U.S. National Parks are already in `data/parks.json`. Only needed if
 
 Fields: `name`, `parkCode` (4-letter lowercase NPS code), `latitude`, `longitude`, `state` (2-letter abbreviation).
 
-The data originated from the [NPS Developer API](https://developer.nps.gov/api/v1/parks) (free API key required). The API returns `fullName` and `states` (comma-separated); they were simplified to `name` and the primary `state` for this project. To look up coordinates or the park code for a new park, query:
+The data originated from the [NPS Developer API](https://developer.nps.gov/api/v1/parks) (free API key required, stored locally as `NPS_API_KEY` in `.env`). The API returns `fullName` and `states` (comma-separated); they were simplified to `name` and the primary `state` for this project. To look up coordinates or the park code for a new park, query:
 
 ```
 https://developer.nps.gov/api/v1/parks?parkCode={code}&api_key=YOUR_KEY
@@ -176,6 +176,8 @@ If coordinates need adjustment to avoid overlap or water placement, document the
 ```
 
 You must also add a park emblem image at `img/np/{parkCode}.png` (96x103px PNG). Without it the park will silently disappear from the map - the code hides missing emblems rather than showing a broken image.
+
+If official emblem art isn't available yet, generate a placeholder with Gemini: pass two or three existing emblems from the same region as style references, ask for the same shield layout with the park name and "NATIONAL PARK • {STATE}", then flood-fill the white background to transparent and resize to 96x103. Replace it once the official art is out.
 
 Alaska, Hawaii, and territory parks are automatically rendered at a smaller radius - no special handling needed.
 
