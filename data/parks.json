@@ -349,7 +349,7 @@
     "latitude": "36.49029208",
     "longitude": "-119.1813607",
     "state": "CA",
-    "_comment": "shifted slightly west so it's not in water. long was -121.1813607"
+    "_comment": "shifted east so it's not in water. long was -121.1813607"
   },
   {
     "name": "Redwood National and State Parks",
