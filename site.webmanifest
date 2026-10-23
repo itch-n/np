@@ -1,12 +1,12 @@
 {
-  "short_name": "",
-  "name": "",
+  "short_name": "Park Passport",
+  "name": "Richard's Park Passport",
   "icons": [{
-    "src": "icon.png",
+    "src": "img/avatar.png",
     "type": "image/png",
-    "sizes": "192x192"
+    "sizes": "296x296"
   }],
-  "start_url": "/?utm_source=homescreen",
-  "background_color": "#fafafa",
-  "theme_color": "#fafafa"
+  "start_url": "./",
+  "background_color": "#FCFAF8",
+  "theme_color": "#FCFAF8"
 }
