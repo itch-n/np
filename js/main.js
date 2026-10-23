@@ -12,7 +12,7 @@ import {createTooltip, setupMouseInteractions, setupTouchInteractions, shortenPa
 const CONFIG = {
   width: 900,
   height: 500,
-  simulationIterations: 2,
+  simulationIterations: 30,
   parkRadius: {
     lower48: 16,
     others: 10
@@ -79,7 +79,7 @@ function runForceSimulation(nodes, config) {
   const sim = d3.forceSimulation(nodes)
     .force('x', d3.forceX(d => d.px).strength(0.8))
     .force('y', d3.forceY(d => d.py).strength(0.8))
-    .force('collide', d3.forceCollide().radius(d => d.r))
+    .force('collide', d3.forceCollide().radius(d => d.r + 2))
     .stop();
 
   for (let i = 0; i < config.simulationIterations; i++) {
