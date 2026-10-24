@@ -14,7 +14,7 @@ const CONFIG = {
   height: 500,
   simulationIterations: 30,
   parkRadius: {
-    lower48: 16,
+    lower48: 14,
     others: 10
   },
   animationDuration: 1000, // Duration in ms for counter and reveal animations
